@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import ThemeToggle from '@/components/ui/ThemeToggle.vue';
+import BrandLogo from '@/components/common/BrandLogo.vue';
 
 const activePreviewTab = ref<'saas' | 'launch' | 'agency'>('saas');
 
@@ -41,15 +42,9 @@ const previewThemes = {
     <!-- Top Editorial Navigation -->
     <header class="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/90 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90">
       <div class="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-2.5">
-          <img src="/logo.svg" alt="LandingFlow" class="h-7 w-7 rounded-md shadow-sm" />
-          <div class="flex items-baseline gap-2">
-            <span class="text-[15px] font-bold tracking-tight text-zinc-900 dark:text-white">LandingFlow</span>
-            <span class="hidden rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 sm:inline-block">
-              Studio v1.0
-            </span>
-          </div>
-        </div>
+        <RouterLink to="/">
+          <BrandLogo size="md" subtitle="STUDIO v1.0" />
+        </RouterLink>
 
         <nav class="hidden items-center gap-7 text-[13px] font-medium text-zinc-600 dark:text-zinc-300 md:flex">
           <a href="#architecture" class="transition hover:text-zinc-950 dark:hover:text-white">Architecture</a>

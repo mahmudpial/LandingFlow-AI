@@ -8,6 +8,7 @@ import { extractErrorMessage, extractFieldErrors } from '@/services/api';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import ThemeToggle from '@/components/ui/ThemeToggle.vue';
+import BrandLogo from '@/components/common/BrandLogo.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -53,9 +54,8 @@ async function handleSubmit(): Promise<void> {
   <div class="grid min-h-screen bg-[#FAFAFA] text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100 lg:grid-cols-12">
     <!-- Left Editorial Column (Adapts to Light & Dark Mode) -->
     <div class="hidden flex-col justify-between border-r border-zinc-200 bg-zinc-100/80 p-12 text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 lg:col-span-5 lg:flex">
-      <RouterLink to="/" class="flex items-center gap-2.5">
-        <img src="/logo.svg" alt="LandingFlow" class="h-7 w-7 rounded-md" />
-        <span class="text-[15px] font-bold tracking-tight text-zinc-900 dark:text-white">LandingFlow Studio</span>
+      <RouterLink to="/">
+        <BrandLogo size="md" subtitle="STUDIO" />
       </RouterLink>
 
       <div class="my-auto max-w-md">
@@ -94,9 +94,8 @@ async function handleSubmit(): Promise<void> {
       </div>
 
       <div class="mx-auto w-full max-w-md animate-fade-up">
-        <RouterLink to="/" class="mb-6 inline-flex items-center gap-2 lg:hidden">
-          <img src="/logo.svg" alt="LandingFlow" class="h-7 w-7 rounded-md" />
-          <span class="text-base font-bold text-zinc-900 dark:text-white">LandingFlow Studio</span>
+        <RouterLink to="/" class="mb-6 inline-flex lg:hidden">
+          <BrandLogo size="md" subtitle="STUDIO" />
         </RouterLink>
 
         <div>

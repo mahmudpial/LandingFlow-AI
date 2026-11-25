@@ -1,18 +1,34 @@
+@config "./tailwind.config.js";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:root,
+html.light {
   color-scheme: light;
+  --lf-bg: #F8F7F4;
+  --lf-surface: #FFFFFF;
+  --lf-subtle: #F1EFEA;
+  --lf-text: #09090B;
+  --lf-muted: #52525B;
+  --lf-border: #E4E4E7;
 }
 
 html.dark {
   color-scheme: dark;
+  --lf-bg: #09090B;
+  --lf-surface: #121215;
+  --lf-subtle: #18181B;
+  --lf-text: #F4F4F5;
+  --lf-muted: #A1A1AA;
+  --lf-border: #27272A;
 }
 
 @layer base {
   body {
-    @apply bg-[#FAFAFA] text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100 font-sans antialiased transition-colors duration-200;
+    background-color: var(--lf-bg);
+    color: var(--lf-text);
+    @apply font-sans antialiased transition-colors duration-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -38,8 +54,8 @@ html.dark {
   .bg-architectural-grid {
     background-size: 32px 32px;
     background-image:
-      linear-gradient(to right, rgba(9, 9, 11, 0.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(9, 9, 11, 0.04) 1px, transparent 1px);
+      linear-gradient(to right, rgba(9, 9, 11, 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(9, 9, 11, 0.045) 1px, transparent 1px);
   }
 
   html.dark .bg-architectural-grid {
@@ -49,7 +65,7 @@ html.dark {
   }
 
   .bg-studio-canvas {
-    background-color: #F4F4F5;
+    background-color: #EFECE6;
     background-image: radial-gradient(rgba(9, 9, 11, 0.14) 1px, transparent 1px);
     background-size: 16px 16px;
   }

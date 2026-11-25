@@ -5,6 +5,7 @@ import { useToastStore } from '@/stores/toast';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import ThemeToggle from '@/components/ui/ThemeToggle.vue';
+import BrandLogo from '@/components/common/BrandLogo.vue';
 
 const toastStore = useToastStore();
 
@@ -61,9 +62,8 @@ async function handleResetPassword(): Promise<void> {
     </div>
 
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
-      <RouterLink to="/" class="flex items-center justify-center gap-2.5">
-        <img src="/logo.svg" alt="LandingFlow" class="h-8 w-8 rounded-md" />
-        <span class="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">LandingFlow Studio</span>
+      <RouterLink to="/" class="flex justify-center">
+        <BrandLogo size="lg" subtitle="STUDIO" />
       </RouterLink>
       <h1 class="mt-6 text-center text-2xl font-bold text-zinc-900 dark:text-white">
         {{ step === 'request' ? 'Reset your password' : 'Enter new password' }}

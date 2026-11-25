@@ -7,6 +7,7 @@ import { useToastStore } from '@/stores/toast';
 import { useThemeStore } from '@/stores/theme';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import ThemeToggle from '@/components/ui/ThemeToggle.vue';
+import BrandLogo from '@/components/common/BrandLogo.vue';
 import {
   Search,
   Plus,
@@ -118,15 +119,9 @@ async function handleLogout(): Promise<void> {
     >
       <!-- Workspace Switcher Header (48px) -->
       <div class="flex h-12 items-center justify-between border-b border-zinc-200/80 px-3.5 dark:border-zinc-800">
-        <RouterLink to="/dashboard" class="flex items-center gap-2">
-          <img src="/logo.svg" alt="LandingFlow" class="h-5 w-5 rounded" />
-          <span class="text-[13px] font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
-            {{ authStore.user?.company_name || 'LandingFlow' }}
-          </span>
+        <RouterLink to="/dashboard">
+          <BrandLogo size="sm" subtitle="PRO" />
         </RouterLink>
-        <span class="rounded border border-zinc-200 bg-white px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-          PRO
-        </span>
       </div>
 
       <!-- Quick Command Search Trigger -->

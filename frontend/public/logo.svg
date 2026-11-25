@@ -1,7 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="7" fill="#09090B"/>
-  <rect x="0.5" y="0.5" width="31" height="31" rx="6.5" stroke="#FFFFFF" stroke-opacity="0.16"/>
-  <path d="M9 8.5H19.5V11.5H12.2V14.8H18V17.8H12.2V23.5H9V8.5Z" fill="#FFFFFF"/>
-  <rect x="20.5" y="8.5" width="3" height="3" rx="0.75" fill="#E11D48"/>
-  <rect x="20.5" y="14.8" width="3" height="8.7" rx="0.75" fill="#FFFFFF" fill-opacity="0.32"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <defs>
+    <linearGradient id="lf-obsidian" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#18181B"/>
+      <stop offset="100%" stop-color="#09090B"/>
+    </linearGradient>
+    <linearGradient id="lf-vermilion" x1="20" y1="8" x2="34" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F43F5E"/>
+      <stop offset="100%" stop-color="#E11D48"/>
+    </linearGradient>
+  </defs>
+  <!-- Outer Precision Bezel -->
+  <rect width="40" height="40" rx="10" fill="url(#lf-obsidian)"/>
+  <rect x="0.75" y="0.75" width="38.5" height="38.5" rx="9.25" stroke="#FFFFFF" stroke-opacity="0.18" stroke-width="1.5"/>
+  <!-- Inner Architectural Isometric Fold (L + F) -->
+  <path d="M11 10.5C11 9.67157 11.6716 9 12.5 9H15.5C16.3284 9 17 9.67157 17 10.5V25H27.5C28.3284 25 29 25.6716 29 26.5V29.5C29 30.3284 28.3284 31 27.5 31H12.5C11.6716 31 11 30.3284 11 29.5V10.5Z" fill="#FFFFFF"/>
+  <!-- Floating Editorial Fold Wing -->
+  <path d="M20 9H28.5C29.3284 9 30 9.67157 30 10.5V13.5C30 14.3284 29.3284 15 28.5 15H20V9Z" fill="url(#lf-vermilion)"/>
+  <path d="M20 17.5H26.5C27.3284 17.5 28 18.1716 28 19V20.5C28 21.3284 27.3284 22 26.5 22H20V17.5Z" fill="#FFFFFF" fill-opacity="0.55"/>
 </svg>

@@ -2,6 +2,8 @@
 export default {
   darkMode: 'class',
   content: [
+    "/Users/pialmahmud/Documents/AWS/LandingFlow-AI/frontend/index.html",
+    "/Users/pialmahmud/Documents/AWS/LandingFlow-AI/frontend/src/**/*.{vue,js,ts,jsx,tsx}",
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
