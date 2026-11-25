@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" fill="none">
+  <rect width="600" height="340" fill="#132A1E"/>
+  <line x1="48" y1="74" x2="552" y2="74" stroke="#FAF9F5" stroke-opacity="0.14"/>
+  <text x="48" y="54" fill="#86EFAC" font-family="monospace" font-size="11" letter-spacing="2">ADVISORY &amp; STUDIO EDITION</text>
+  <rect x="48" y="96" width="380" height="20" rx="4" fill="#FAF9F5"/>
+  <rect x="48" y="124" width="290" height="14" rx="3" fill="#A7F3D0" fill-opacity="0.7"/>
+  <!-- Two Editorial Case Cards -->
+  <rect x="48" y="172" width="242" height="128" rx="10" fill="#FAF9F5"/>
+  <text x="68" y="200" fill="#15803D" font-family="monospace" font-size="11" font-weight="bold">CASE 01</text>
+  <rect x="68" y="214" width="170" height="12" rx="3" fill="#111318"/>
+  <rect x="68" y="236" width="190" height="7" rx="3" fill="#575653"/>
+  <rect x="68" y="250" width="140" height="7" rx="3" fill="#575653"/>
+
+  <rect x="310" y="172" width="242" height="128" rx="10" fill="#1B3B2B" stroke="#86EFAC" stroke-opacity="0.25"/>
+  <text x="330" y="200" fill="#86EFAC" font-family="monospace" font-size="11" font-weight="bold">CASE 02</text>
+  <rect x="330" y="214" width="170" height="12" rx="3" fill="#FAF9F5"/>
+  <rect x="330" y="236" width="190" height="7" rx="3" fill="#D1FAE5" fill-opacity="0.7"/>
+  <rect x="330" y="250" width="140" height="7" rx="3" fill="#D1FAE5" fill-opacity="0.7"/>
+</svg>

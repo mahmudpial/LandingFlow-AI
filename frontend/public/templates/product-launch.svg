@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" fill="none">
+  <rect width="600" height="340" fill="#18181B"/>
+  <rect x="36" y="28" width="528" height="284" rx="12" fill="#27272A" stroke="#3F3F46"/>
+  <!-- Left Editorial Split -->
+  <rect x="64" y="64" width="96" height="16" rx="4" fill="#D94E28"/>
+  <rect x="64" y="96" width="210" height="18" rx="4" fill="#FAF9F5"/>
+  <rect x="64" y="122" width="180" height="18" rx="4" fill="#FAF9F5"/>
+  <rect x="64" y="154" width="196" height="8" rx="3" fill="#A1A1AA"/>
+  <rect x="64" y="168" width="160" height="8" rx="3" fill="#A1A1AA"/>
+  <rect x="64" y="198" width="116" height="32" rx="6" fill="#FAF9F5"/>
+  <!-- Right Hardware/Product Frame -->
+  <rect x="320" y="60" width="216" height="220" rx="10" fill="#111318" stroke="#52525B"/>
+  <circle cx="338" cy="76" r="4" fill="#D94E28"/>
+  <circle cx="350" cy="76" r="4" fill="#52525B"/>
+  <rect x="338" y="96" width="180" height="104" rx="6" fill="#27272A"/>
+  <path d="M398 148L422 132V164L398 148Z" fill="#D94E28"/>
+  <rect x="338" y="216" width="120" height="10" rx="3" fill="#FAF9F5"/>
+  <rect x="338" y="234" width="150" height="6" rx="3" fill="#71717A"/>
+</svg>

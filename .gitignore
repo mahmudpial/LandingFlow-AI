@@ -1,0 +1,63 @@
+# Dependencies
+/backend/vendor/
+/frontend/node_modules/
+node_modules/
+vendor/
+
+# Documentation & Markdown (Only track root README.md)
+/docs/
+*.md
+!/README.md
+
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+/backend/.env
+/backend/.env.*
+!/backend/.env.example
+/frontend/.env
+/frontend/.env.*
+!/frontend/.env.example
+
+# Databases
+*.sqlite
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
+/backend/database/*.sqlite
+!/backend/database/.gitignore
+
+# Laravel Storage & Cache
+/backend/bootstrap/cache/*.php
+/backend/storage/app/private/*
+/backend/storage/app/public/*
+!/backend/storage/app/public/.gitignore
+/backend/storage/framework/cache/*
+/backend/storage/framework/sessions/*
+/backend/storage/framework/testing/*
+/backend/storage/framework/views/*
+/backend/storage/logs/*.log
+/backend/public/hot
+/backend/public/storage
+
+# Frontend Build & Test Artifacts
+/frontend/dist/
+/frontend/coverage/
+/frontend/playwright-report/
+/frontend/test-results/
+.phpunit.result.cache
+/backend/.phpunit.cache/
+
+# IDE & OS Files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# AWS & Credentials
+*.pem
+*.key
+aws-credentials*
