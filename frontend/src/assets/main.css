@@ -3,20 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #09090B;
-  --color-secondary: #E11D48;
-  --color-accent: #059669;
-  --color-bg: #FAFAFA;
-  --color-surface: #FFFFFF;
-  --color-subtle: #F4F4F5;
-  --color-text: #09090B;
-  --color-muted: #52525B;
-  --color-border: #E4E4E7;
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 @layer base {
   body {
-    @apply bg-brand-bg text-brand-text font-sans antialiased;
+    @apply bg-[#FAFAFA] text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100 font-sans antialiased transition-colors duration-200;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
@@ -35,14 +31,36 @@
     background-size: 20px 20px;
   }
 
+  html.dark .bg-dot-matrix {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  }
+
+  .bg-architectural-grid {
+    background-size: 32px 32px;
+    background-image:
+      linear-gradient(to right, rgba(9, 9, 11, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(9, 9, 11, 0.04) 1px, transparent 1px);
+  }
+
+  html.dark .bg-architectural-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  }
+
   .bg-studio-canvas {
     background-color: #F4F4F5;
     background-image: radial-gradient(rgba(9, 9, 11, 0.14) 1px, transparent 1px);
     background-size: 16px 16px;
   }
 
+  html.dark .bg-studio-canvas {
+    background-color: #09090B;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  }
+
   .kbd-shortcut {
-    @apply inline-flex h-5 items-center rounded border border-zinc-200 bg-zinc-100 px-1.5 font-mono text-[10px] font-medium text-zinc-600 shadow-sm;
+    @apply inline-flex h-5 items-center rounded border border-zinc-200 bg-zinc-100 px-1.5 font-mono text-[10px] font-medium text-zinc-600 shadow-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300;
   }
 }
 

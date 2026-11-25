@@ -12,6 +12,7 @@ import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseTextarea from '@/components/ui/BaseTextarea.vue';
 import BaseBadge from '@/components/ui/BaseBadge.vue';
 import BaseModal from '@/components/ui/BaseModal.vue';
+import ThemeToggle from '@/components/ui/ThemeToggle.vue';
 import {
   ArrowLeft,
   Monitor,
@@ -217,23 +218,23 @@ const sectionLabels: Record<SectionKey, string> = {
 </script>
 
 <template>
-  <div class="flex h-screen flex-col overflow-hidden bg-[#F4F4F5] text-zinc-900 select-none">
-    <!-- Top Framer/Webflow-Grade Studio Header (48px) -->
-    <header class="flex h-12 shrink-0 items-center justify-between border-b border-zinc-200 bg-white px-3">
+  <div class="flex h-screen flex-col overflow-hidden bg-[#F4F4F5] text-zinc-900 select-none dark:bg-[#09090B] dark:text-zinc-100">
+    <!-- Top Studio Header (48px) -->
+    <header class="flex h-12 shrink-0 items-center justify-between border-b border-zinc-200 bg-white px-3 dark:border-zinc-800 dark:bg-zinc-900">
       <!-- Left: Back, Project Title, Layout Switcher -->
       <div class="flex items-center gap-2.5">
         <RouterLink
           to="/projects"
-          class="inline-flex h-7 items-center gap-1.5 rounded border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900"
+          class="inline-flex h-7 items-center gap-1.5 rounded border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-700 transition hover:bg-zinc-100 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700 dark:hover:text-white"
         >
           <ArrowLeft class="h-3.5 w-3.5" />
           <span>Projects</span>
         </RouterLink>
 
-        <div class="h-4 w-px bg-zinc-200" />
+        <div class="h-4 w-px bg-zinc-200 dark:bg-zinc-800" />
 
         <div v-if="projectStore.currentProject" class="flex items-center gap-2">
-          <span class="max-w-[160px] truncate text-xs font-semibold text-zinc-900 sm:max-w-[220px]">
+          <span class="max-w-[160px] truncate text-xs font-semibold text-zinc-900 dark:text-zinc-100 sm:max-w-[220px]">
             {{ projectStore.currentProject.name }}
           </span>
           <BaseBadge :variant="projectStore.currentProject.status">
@@ -245,7 +246,7 @@ const sectionLabels: Record<SectionKey, string> = {
           v-if="projectStore.currentProject"
           :value="projectStore.currentProject.template_id"
           aria-label="Switch layout system"
-          class="hidden h-7 rounded border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-700 focus:border-zinc-900 focus:outline-none md:block"
+          class="hidden h-7 rounded border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-700 focus:border-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 md:block"
           @change="handleTemplateSwitch"
         >
           <option
@@ -260,14 +261,14 @@ const sectionLabels: Record<SectionKey, string> = {
 
       <!-- Center: Breakpoint Pill Bar & Undo/Redo -->
       <div class="hidden items-center gap-2 sm:flex">
-        <div class="flex items-center rounded-md border border-zinc-200 bg-zinc-100/80 p-0.5">
+        <div class="flex items-center rounded-md border border-zinc-200 bg-zinc-100/80 p-0.5 dark:border-zinc-700 dark:bg-zinc-950">
           <button
             type="button"
             class="flex h-6 items-center gap-1 rounded px-2 text-[11px] font-medium transition"
             :class="
               editorStore.viewport === 'desktop'
-                ? 'bg-white text-zinc-950 shadow-2xs'
-                : 'text-zinc-500 hover:text-zinc-800'
+                ? 'bg-white text-zinc-950 shadow-sm dark:bg-zinc-800 dark:text-white'
+                : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
             "
             title="Desktop Breakpoint"
             @click="editorStore.viewport = 'desktop'"
@@ -280,8 +281,8 @@ const sectionLabels: Record<SectionKey, string> = {
             class="flex h-6 items-center gap-1 rounded px-2 text-[11px] font-medium transition"
             :class="
               editorStore.viewport === 'tablet'
-                ? 'bg-white text-zinc-950 shadow-2xs'
-                : 'text-zinc-500 hover:text-zinc-800'
+                ? 'bg-white text-zinc-950 shadow-sm dark:bg-zinc-800 dark:text-white'
+                : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
             "
             title="Tablet Breakpoint (768px)"
             @click="editorStore.viewport = 'tablet'"
@@ -294,8 +295,8 @@ const sectionLabels: Record<SectionKey, string> = {
             class="flex h-6 items-center gap-1 rounded px-2 text-[11px] font-medium transition"
             :class="
               editorStore.viewport === 'mobile'
-                ? 'bg-white text-zinc-950 shadow-2xs'
-                : 'text-zinc-500 hover:text-zinc-800'
+                ? 'bg-white text-zinc-950 shadow-sm dark:bg-zinc-800 dark:text-white'
+                : 'text-zinc-500 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-zinc-200'
             "
             title="Mobile Breakpoint (375px)"
             @click="editorStore.viewport = 'mobile'"
@@ -305,11 +306,11 @@ const sectionLabels: Record<SectionKey, string> = {
           </button>
         </div>
 
-        <div class="flex items-center rounded-md border border-zinc-200 bg-white p-0.5">
+        <div class="flex items-center rounded-md border border-zinc-200 bg-white p-0.5 dark:border-zinc-700 dark:bg-zinc-950">
           <button
             type="button"
             :disabled="!editorStore.canUndo"
-            class="rounded p-1 text-zinc-600 hover:bg-zinc-100 disabled:opacity-30"
+            class="rounded p-1 text-zinc-600 hover:bg-zinc-100 disabled:opacity-30 dark:text-zinc-300 dark:hover:bg-zinc-800"
             title="Undo"
             aria-label="Undo"
             @click="editorStore.undo"
@@ -319,7 +320,7 @@ const sectionLabels: Record<SectionKey, string> = {
           <button
             type="button"
             :disabled="!editorStore.canRedo"
-            class="rounded p-1 text-zinc-600 hover:bg-zinc-100 disabled:opacity-30"
+            class="rounded p-1 text-zinc-600 hover:bg-zinc-100 disabled:opacity-30 dark:text-zinc-300 dark:hover:bg-zinc-800"
             title="Redo"
             aria-label="Redo"
             @click="editorStore.redo"
@@ -329,13 +330,15 @@ const sectionLabels: Record<SectionKey, string> = {
         </div>
       </div>
 
-      <!-- Right: Save & Publish -->
+      <!-- Right: ThemeToggle, Save & Publish -->
       <div class="flex items-center gap-1.5">
+        <ThemeToggle />
+
         <RouterLink
           v-if="projectStore.currentProject?.status === 'published'"
           :to="`/p/${projectStore.currentProject.slug}`"
           target="_blank"
-          class="hidden h-7 items-center gap-1 rounded border border-zinc-200 px-2 font-mono text-[11px] text-zinc-600 hover:bg-zinc-50 md:inline-flex"
+          class="hidden h-7 items-center gap-1 rounded border border-zinc-200 px-2 font-mono text-[11px] text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 md:inline-flex"
         >
           <span>/p/{{ projectStore.currentProject.slug }}</span>
           <ArrowUpRight class="h-3 w-3" />
@@ -363,9 +366,9 @@ const sectionLabels: Record<SectionKey, string> = {
     <!-- Main Studio Split Area -->
     <div v-if="editorStore.content && editorStore.theme" class="flex flex-1 overflow-hidden">
       <!-- Left Inspector Panel (330px) -->
-      <aside class="flex w-80 shrink-0 flex-col border-r border-zinc-200 bg-white sm:w-[340px]">
+      <aside class="flex w-80 shrink-0 flex-col border-r border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900 sm:w-[340px]">
         <!-- Segmented Inspector Tabs -->
-        <div class="grid grid-cols-4 border-b border-zinc-200 bg-zinc-50/80 p-1 font-mono text-[11px] font-medium">
+        <div class="grid grid-cols-4 border-b border-zinc-200 bg-zinc-50/80 p-1 font-mono text-[11px] font-medium dark:border-zinc-800 dark:bg-zinc-950">
           <button
             v-for="tab in (['sections', 'theme', 'media', 'seo'] as const)"
             :key="tab"
@@ -373,8 +376,8 @@ const sectionLabels: Record<SectionKey, string> = {
             class="rounded py-1.5 uppercase tracking-wider transition"
             :class="
               activeTab === tab
-                ? 'bg-zinc-900 text-white shadow-2xs'
-                : 'text-zinc-500 hover:text-zinc-900'
+                ? 'bg-zinc-900 text-white shadow-sm dark:bg-zinc-100 dark:text-zinc-950'
+                : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
             "
             @click="activeTab = tab"
           >
@@ -388,20 +391,20 @@ const sectionLabels: Record<SectionKey, string> = {
           <div v-if="activeTab === 'sections'" class="space-y-5">
             <div>
               <div class="mb-2 flex items-center justify-between">
-                <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Layer Stack (10)
                 </span>
-                <span class="font-mono text-[10px] text-zinc-400">ORDER / VISIBILITY</span>
+                <span class="font-mono text-[10px] text-zinc-500 dark:text-zinc-400">ORDER / VISIBILITY</span>
               </div>
-              <div class="divide-y divide-zinc-100 overflow-hidden rounded-md border border-zinc-200">
+              <div class="divide-y divide-zinc-100 overflow-hidden rounded-md border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
                 <div
                   v-for="(secKey, idx) in editorStore.content.sections_order"
                   :key="secKey"
                   class="flex items-center justify-between px-2.5 py-1.5 text-xs transition"
                   :class="
                     editorStore.activeSection === secKey
-                      ? 'bg-zinc-900 text-white font-medium'
-                      : 'bg-white text-zinc-700 hover:bg-zinc-50'
+                      ? 'bg-zinc-900 text-white font-medium dark:bg-zinc-100 dark:text-zinc-950'
+                      : 'bg-white text-zinc-700 hover:bg-zinc-50 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800'
                   "
                 >
                   <button
@@ -409,10 +412,7 @@ const sectionLabels: Record<SectionKey, string> = {
                     class="flex flex-1 items-center gap-2 text-left"
                     @click="editorStore.activeSection = secKey"
                   >
-                    <span
-                      class="font-mono text-[10px]"
-                      :class="editorStore.activeSection === secKey ? 'text-zinc-400' : 'text-zinc-400'"
-                    >
+                    <span class="font-mono text-[10px] opacity-60">
                       {{ String(idx + 1).padStart(2, '0') }}
                     </span>
                     <span class="truncate">{{ sectionLabels[secKey] || secKey }}</span>
@@ -422,7 +422,7 @@ const sectionLabels: Record<SectionKey, string> = {
                     <button
                       type="button"
                       :disabled="idx === 0"
-                      class="rounded p-1 opacity-70 hover:opacity-100 disabled:opacity-20"
+                      class="rounded p-1 opacity-75 hover:opacity-100 disabled:opacity-20"
                       title="Move up"
                       @click="editorStore.moveSection(secKey, 'up')"
                     >
@@ -431,7 +431,7 @@ const sectionLabels: Record<SectionKey, string> = {
                     <button
                       type="button"
                       :disabled="idx === editorStore.content.sections_order.length - 1"
-                      class="rounded p-1 opacity-70 hover:opacity-100 disabled:opacity-20"
+                      class="rounded p-1 opacity-75 hover:opacity-100 disabled:opacity-20"
                       title="Move down"
                       @click="editorStore.moveSection(secKey, 'down')"
                     >
@@ -439,7 +439,7 @@ const sectionLabels: Record<SectionKey, string> = {
                     </button>
                     <button
                       type="button"
-                      class="rounded p-1 opacity-80 hover:opacity-100"
+                      class="rounded p-1 opacity-85 hover:opacity-100"
                       :title="editorStore.content.sections[secKey].visible ? 'Hide layer' : 'Show layer'"
                       @click="editorStore.toggleSectionVisibility(secKey)"
                     >
@@ -452,12 +452,12 @@ const sectionLabels: Record<SectionKey, string> = {
             </div>
 
             <!-- Active Section Property Form -->
-            <div class="border-t border-zinc-200 pt-4">
+            <div class="border-t border-zinc-200 pt-4 dark:border-zinc-800">
               <div class="mb-3 flex items-center justify-between">
-                <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Inspector
                 </span>
-                <span class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-800">
+                <span class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">
                   {{ sectionLabels[editorStore.activeSection] }}
                 </span>
               </div>
@@ -555,15 +555,15 @@ const sectionLabels: Record<SectionKey, string> = {
                   <div
                     v-for="(item, fIdx) in editorStore.content.sections.features.items"
                     :key="fIdx"
-                    class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
+                    class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2 dark:border-zinc-800 dark:bg-zinc-950"
                   >
                     <div class="flex items-center justify-between">
-                      <span class="font-mono text-[10px] font-semibold text-zinc-500">
+                      <span class="font-mono text-[10px] font-semibold text-zinc-500 dark:text-zinc-400">
                         BLOCK 0{{ fIdx + 1 }}
                       </span>
                       <button
                         type="button"
-                        class="text-zinc-400 hover:text-rose-600"
+                        class="text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400"
                         @click="removeFeatureItem(fIdx)"
                       >
                         <Trash2 class="h-3.5 w-3.5" />
@@ -604,7 +604,7 @@ const sectionLabels: Record<SectionKey, string> = {
                 <div
                   v-for="(bItem, bIdx) in editorStore.content.sections.benefits.items"
                   :key="bIdx"
-                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
+                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2 dark:border-zinc-800 dark:bg-zinc-950"
                 >
                   <BaseInput
                     v-model="bItem.metric_label"
@@ -654,7 +654,7 @@ const sectionLabels: Record<SectionKey, string> = {
                 <div
                   v-for="(tItem, tIdx) in editorStore.content.sections.testimonials.items"
                   :key="tIdx"
-                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
+                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2 dark:border-zinc-800 dark:bg-zinc-950"
                 >
                   <BaseTextarea
                     v-model="tItem.quote"
@@ -685,7 +685,7 @@ const sectionLabels: Record<SectionKey, string> = {
                 <div
                   v-for="(plan, pIdx) in editorStore.content.sections.pricing.plans"
                   :key="pIdx"
-                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
+                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2 dark:border-zinc-800 dark:bg-zinc-950"
                 >
                   <BaseInput
                     v-model="plan.name"
@@ -722,15 +722,15 @@ const sectionLabels: Record<SectionKey, string> = {
                 <div
                   v-for="(faq, qIdx) in editorStore.content.sections.faq.items"
                   :key="qIdx"
-                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
+                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2 dark:border-zinc-800 dark:bg-zinc-950"
                 >
                   <div class="flex items-center justify-between">
-                    <span class="font-mono text-[10px] font-semibold text-zinc-500">
+                    <span class="font-mono text-[10px] font-semibold text-zinc-500 dark:text-zinc-400">
                       Q0{{ qIdx + 1 }}
                     </span>
                     <button
                       type="button"
-                      class="text-zinc-400 hover:text-rose-600"
+                      class="text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400"
                       @click="removeFaqItem(qIdx)"
                     >
                       <Trash2 class="h-3.5 w-3.5" />
@@ -802,36 +802,36 @@ const sectionLabels: Record<SectionKey, string> = {
 
           <!-- TAB 2: DESIGN TOKENS (THEME) -->
           <div v-else-if="activeTab === 'theme'" class="space-y-4">
-            <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+            <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               Color Tokens
             </span>
-            <div class="divide-y divide-zinc-100 rounded-md border border-zinc-200">
+            <div class="divide-y divide-zinc-100 rounded-md border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
               <div
                 v-for="(hex, colorKey) in editorStore.theme.colors"
                 :key="colorKey"
                 class="flex items-center justify-between px-3 py-2"
               >
                 <div>
-                  <p class="text-xs font-medium capitalize text-zinc-800">{{ colorKey }}</p>
-                  <p class="font-mono text-[10px] text-zinc-400">{{ hex }}</p>
+                  <p class="text-xs font-medium capitalize text-zinc-800 dark:text-zinc-200">{{ colorKey }}</p>
+                  <p class="font-mono text-[10px] text-zinc-500 dark:text-zinc-400">{{ hex }}</p>
                 </div>
                 <input
                   type="color"
                   :value="hex"
                   :aria-label="`Choose ${colorKey} color`"
-                  class="h-7 w-10 cursor-pointer rounded border border-zinc-200 bg-white p-0.5"
+                  class="h-7 w-10 cursor-pointer rounded border border-zinc-200 bg-white p-0.5 dark:border-zinc-700 dark:bg-zinc-800"
                   @input="editorStore.updateColor(colorKey, ($event.target as HTMLInputElement).value)"
                 />
               </div>
             </div>
 
-            <div class="border-t border-zinc-200 pt-4 space-y-2">
-              <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+            <div class="border-t border-zinc-200 pt-4 space-y-2 dark:border-zinc-800">
+              <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Typography Stack
               </span>
               <select
                 :value="editorStore.theme.typography.body_font"
-                class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-xs text-zinc-900"
+                class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-xs text-zinc-900 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
                 @change="
                   editorStore.updateTypography(
                     'body_font',
@@ -848,14 +848,14 @@ const sectionLabels: Record<SectionKey, string> = {
 
           <!-- TAB 3: MEDIA ASSETS -->
           <div v-else-if="activeTab === 'media'" class="space-y-4">
-            <div class="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-4 text-center">
-              <Upload class="mx-auto h-5 w-5 text-zinc-500" />
-              <p class="mt-1.5 text-xs font-semibold text-zinc-900">Upload Image Asset</p>
-              <p class="mt-0.5 font-mono text-[10px] text-zinc-400">
+            <div class="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-4 text-center dark:border-zinc-700 dark:bg-zinc-950">
+              <Upload class="mx-auto h-5 w-5 text-zinc-500 dark:text-zinc-400" />
+              <p class="mt-1.5 text-xs font-semibold text-zinc-900 dark:text-zinc-100">Upload Image Asset</p>
+              <p class="mt-0.5 font-mono text-[10px] text-zinc-500 dark:text-zinc-400">
                 JPG, PNG, WEBP • MAX 2MB
               </p>
               <label
-                class="mt-3 inline-flex h-7 cursor-pointer items-center rounded-md bg-zinc-900 px-3 text-xs font-medium text-white hover:bg-zinc-800"
+                class="mt-3 inline-flex h-7 cursor-pointer items-center rounded-md bg-zinc-900 px-3 text-xs font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white"
               >
                 <span>{{ uploadingMedia ? 'Uploading...' : 'Select File' }}</span>
                 <input
@@ -866,13 +866,13 @@ const sectionLabels: Record<SectionKey, string> = {
                   @change="handleImageUpload"
                 />
               </label>
-              <p v-if="mediaUploadError" role="alert" class="mt-2 text-xs text-rose-600">
+              <p v-if="mediaUploadError" role="alert" class="mt-2 text-xs text-rose-600 dark:text-rose-400">
                 {{ mediaUploadError }}
               </p>
             </div>
 
             <div>
-              <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+              <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 Workspace Library ({{ mediaAssets.length }})
               </span>
               <div v-if="mediaAssets.length === 0" class="py-6 text-center font-mono text-xs text-zinc-400">
@@ -882,7 +882,7 @@ const sectionLabels: Record<SectionKey, string> = {
                 <div
                   v-for="asset in mediaAssets"
                   :key="asset.id"
-                  class="overflow-hidden rounded border border-zinc-200 bg-zinc-50"
+                  class="overflow-hidden rounded border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950"
                 >
                   <img
                     :src="asset.url"
@@ -891,7 +891,7 @@ const sectionLabels: Record<SectionKey, string> = {
                   />
                   <button
                     type="button"
-                    class="w-full bg-zinc-900 py-1 font-mono text-[10px] font-medium text-white hover:bg-zinc-800"
+                    class="w-full bg-zinc-900 py-1 font-mono text-[10px] font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950"
                     @click="selectHeroImage(asset.url)"
                   >
                     Bind to Hero
@@ -925,7 +925,7 @@ const sectionLabels: Record<SectionKey, string> = {
       <!-- Right Studio Canvas with Dot-Matrix & Ruler Bar -->
       <main class="bg-studio-canvas flex-1 overflow-y-auto p-4 sm:p-6">
         <div
-          class="mx-auto overflow-hidden rounded-xl border border-zinc-300/90 bg-white shadow-elevated transition-all duration-200"
+          class="mx-auto overflow-hidden rounded-xl border border-zinc-300/90 bg-white shadow-elevated transition-all duration-200 dark:border-zinc-700"
           :class="{
             'w-full': editorStore.viewport === 'desktop',
             'max-w-[768px]': editorStore.viewport === 'tablet',
@@ -933,11 +933,11 @@ const sectionLabels: Record<SectionKey, string> = {
           }"
         >
           <!-- Simulated Browser Frame Header Inside Canvas -->
-          <div class="flex h-8 items-center justify-between border-b border-zinc-200 bg-zinc-100/90 px-3 font-mono text-[11px] text-zinc-500">
+          <div class="flex h-8 items-center justify-between border-b border-zinc-200 bg-zinc-100/90 px-3 font-mono text-[11px] text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
             <div class="flex items-center gap-1.5">
-              <span class="h-2 w-2 rounded-full bg-zinc-300" />
-              <span class="h-2 w-2 rounded-full bg-zinc-300" />
-              <span class="h-2 w-2 rounded-full bg-zinc-300" />
+              <span class="h-2 w-2 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+              <span class="h-2 w-2 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+              <span class="h-2 w-2 rounded-full bg-zinc-300 dark:bg-zinc-700" />
             </div>
             <span>/p/{{ projectStore.currentProject?.slug }}</span>
             <span>{{ viewportWidthLabel }}</span>
@@ -962,8 +962,8 @@ const sectionLabels: Record<SectionKey, string> = {
       @close="showPublishModal = false"
     >
       <div v-if="projectStore.currentProject" class="space-y-4">
-        <div class="flex items-center justify-between rounded-md border border-zinc-200 bg-zinc-50 p-3">
-          <span class="font-mono text-xs text-zinc-500">Current State</span>
+        <div class="flex items-center justify-between rounded-md border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-800 dark:bg-zinc-950">
+          <span class="font-mono text-xs text-zinc-600 dark:text-zinc-400">Current State</span>
           <BaseBadge :variant="projectStore.currentProject.status">
             {{ projectStore.currentProject.status }}
           </BaseBadge>
@@ -979,20 +979,20 @@ const sectionLabels: Record<SectionKey, string> = {
 
         <div
           v-if="projectStore.currentProject.status === 'published'"
-          class="flex items-center justify-between rounded-md border border-emerald-200 bg-emerald-50/70 px-3.5 py-2.5 text-xs text-emerald-900"
+          class="flex items-center justify-between rounded-md border border-emerald-200 bg-emerald-50/70 px-3.5 py-2.5 text-xs text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
         >
           <span class="font-mono">/p/{{ projectStore.currentProject.slug }}</span>
           <RouterLink
             :to="`/p/${projectStore.currentProject.slug}`"
             target="_blank"
-            class="inline-flex items-center gap-1 font-semibold text-emerald-800 hover:underline"
+            class="inline-flex items-center gap-1 font-semibold text-emerald-800 hover:underline dark:text-emerald-300"
           >
             <span>Open Live Endpoint</span>
             <ArrowUpRight class="h-3.5 w-3.5" />
           </RouterLink>
         </div>
 
-        <div class="mt-6 flex items-center justify-between border-t border-zinc-100 pt-4">
+        <div class="mt-6 flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
           <BaseButton
             v-if="projectStore.currentProject.status === 'published'"
             variant="danger"

@@ -23,19 +23,19 @@ const props = withDefaults(
 
 const classes = computed(() => {
   const base =
-    'inline-flex items-center justify-center gap-1.5 font-medium tracking-tight rounded-md transition-all duration-150 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-1 disabled:opacity-45 disabled:cursor-not-allowed disabled:active:scale-100 select-none';
+    'inline-flex items-center justify-center gap-1.5 font-medium tracking-tight rounded-md transition-all duration-150 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 dark:focus-visible:ring-zinc-100 focus-visible:ring-offset-1 disabled:opacity-45 disabled:cursor-not-allowed disabled:active:scale-100 select-none';
 
   const variants: Record<string, string> = {
     primary:
-      'bg-zinc-900 text-white hover:bg-zinc-800 shadow-tactile border border-zinc-950',
+      'bg-zinc-900 text-white hover:bg-zinc-800 border border-zinc-950 shadow-tactile dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white dark:border-white',
     secondary:
-      'bg-zinc-100 text-zinc-900 hover:bg-zinc-200/80 border border-zinc-200/90',
+      'bg-rose-600 text-white hover:bg-rose-500 border border-rose-700 shadow-tactile dark:bg-rose-600 dark:text-white dark:hover:bg-rose-500 dark:border-rose-500',
     outline:
-      'border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-50 hover:border-zinc-300 shadow-subtle',
+      'border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-50 hover:border-zinc-300 shadow-subtle dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 dark:hover:bg-zinc-800 dark:hover:border-zinc-700',
     ghost:
-      'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100',
+      'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:text-white dark:hover:bg-zinc-800',
     danger:
-      'bg-rose-600 text-white hover:bg-rose-700 shadow-tactile border border-rose-700',
+      'bg-rose-600 text-white hover:bg-rose-700 shadow-tactile border border-rose-700 dark:bg-rose-600 dark:text-white dark:hover:bg-rose-500',
   };
 
   const sizes: Record<string, string> = {

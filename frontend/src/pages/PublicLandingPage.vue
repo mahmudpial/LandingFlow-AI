@@ -5,7 +5,7 @@ import { apiClient, extractErrorMessage } from '@/services/api';
 import type { ApiResponse, LandingPageContent, LandingPageTheme } from '@/types';
 import LandingPageRenderer from '@/components/landing/LandingPageRenderer.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
-import { AlertCircle, Sparkles } from 'lucide-vue-next';
+import { AlertCircle } from 'lucide-vue-next';
 
 const route = useRoute();
 const loading = ref(true);
@@ -53,13 +53,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-brand-bg">
+  <div class="min-h-screen bg-[#FAFAFA] text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100">
     <!-- Loading State -->
     <div v-if="loading" class="flex min-h-screen items-center justify-center">
-      <div class="flex items-center gap-2 text-sm font-medium text-brand-muted">
-        <Sparkles class="h-5 w-5 animate-pulse text-brand-primary" />
-        <span>Loading published page...</span>
-      </div>
+      <p class="font-mono text-xs uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
+        Loading published endpoint...
+      </p>
     </div>
 
     <!-- 404 / Unpublished Private Guard State -->
@@ -67,15 +66,15 @@ onMounted(async () => {
       v-else-if="notFoundError || !snapshot"
       class="flex min-h-screen flex-col items-center justify-center px-4 text-center"
     >
-      <div class="flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-brand-error">
+      <div class="flex h-12 w-12 items-center justify-center rounded-full bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400">
         <AlertCircle class="h-6 w-6" />
       </div>
-      <h1 class="mt-4 text-2xl font-bold text-brand-text">Page Not Available (404)</h1>
-      <p class="mt-2 max-w-md text-sm text-brand-muted">
+      <h1 class="mt-4 text-2xl font-bold text-zinc-900 dark:text-white">Page Not Available (404)</h1>
+      <p class="mt-2 max-w-md text-sm text-zinc-500 dark:text-zinc-400">
         {{ notFoundError }}
       </p>
       <RouterLink to="/" class="mt-6">
-        <BaseButton variant="primary">Go to LandingFlow AI</BaseButton>
+        <BaseButton variant="primary">Go to LandingFlow Studio</BaseButton>
       </RouterLink>
     </div>
 

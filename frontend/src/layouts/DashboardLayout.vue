@@ -4,7 +4,9 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useProjectStore } from '@/stores/projects';
 import { useToastStore } from '@/stores/toast';
+import { useThemeStore } from '@/stores/theme';
 import BaseButton from '@/components/ui/BaseButton.vue';
+import ThemeToggle from '@/components/ui/ThemeToggle.vue';
 import {
   Search,
   Plus,
@@ -19,6 +21,7 @@ const router = useRouter();
 const authStore = useAuthStore();
 const projectStore = useProjectStore();
 const toastStore = useToastStore();
+const themeStore = useThemeStore();
 
 const commandPaletteOpen = ref(false);
 const commandQuery = ref('');
@@ -46,6 +49,7 @@ const commandItems = computed(() => {
   const q = commandQuery.value.trim().toLowerCase();
   const baseActions = [
     { label: 'Draft new page with Copy Architect', category: 'Action', to: '/generator' },
+    { label: 'Toggle Dark / Light Theme', category: 'Appearance', to: '#toggle-theme' },
     { label: 'Go to Workspace Overview', category: 'Navigation', to: '/dashboard' },
     { label: 'View All Landing Page Projects', category: 'Navigation', to: '/projects' },
     { label: 'Browse Layout Systems & Templates', category: 'Navigation', to: '/templates' },
@@ -88,6 +92,10 @@ function handleGlobalKeydown(e: KeyboardEvent): void {
 
 function executeCommand(to: string): void {
   commandPaletteOpen.value = false;
+  if (to === '#toggle-theme') {
+    themeStore.toggleTheme();
+    return;
+  }
   router.push(to);
 }
 
@@ -102,21 +110,21 @@ async function handleLogout(): Promise<void> {
 </script>
 
 <template>
-  <div class="flex min-h-screen bg-[#FAFAFA] text-zinc-900">
+  <div class="flex min-h-screen bg-[#FAFAFA] text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100">
     <!-- Left Linear/Vercel-Density Sidebar (232px) -->
     <aside
-      class="hidden w-[232px] shrink-0 flex-col border-r border-zinc-200/90 bg-[#F4F4F5]/70 lg:flex"
+      class="hidden w-[232px] shrink-0 flex-col border-r border-zinc-200/90 bg-[#F4F4F5]/80 dark:border-zinc-800 dark:bg-zinc-900/90 lg:flex"
       aria-label="Primary Workspace Sidebar"
     >
       <!-- Workspace Switcher Header (48px) -->
-      <div class="flex h-12 items-center justify-between border-b border-zinc-200/80 px-3.5">
+      <div class="flex h-12 items-center justify-between border-b border-zinc-200/80 px-3.5 dark:border-zinc-800">
         <RouterLink to="/dashboard" class="flex items-center gap-2">
           <img src="/logo.svg" alt="LandingFlow" class="h-5 w-5 rounded" />
-          <span class="text-[13px] font-semibold tracking-tight text-zinc-900">
+          <span class="text-[13px] font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">
             {{ authStore.user?.company_name || 'LandingFlow' }}
           </span>
         </RouterLink>
-        <span class="rounded border border-zinc-200 bg-white px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-500">
+        <span class="rounded border border-zinc-200 bg-white px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
           PRO
         </span>
       </div>
@@ -125,11 +133,11 @@ async function handleLogout(): Promise<void> {
       <div class="px-2.5 pt-3">
         <button
           type="button"
-          class="flex h-8 w-full items-center justify-between rounded-md border border-zinc-200/90 bg-white px-2.5 text-xs text-zinc-500 shadow-subtle transition hover:border-zinc-300 hover:text-zinc-800"
+          class="flex h-8 w-full items-center justify-between rounded-md border border-zinc-200/90 bg-white px-2.5 text-xs text-zinc-500 shadow-subtle transition hover:border-zinc-300 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400 dark:hover:border-zinc-700 dark:hover:text-zinc-200"
           @click="commandPaletteOpen = true"
         >
           <span class="flex items-center gap-2">
-            <Search class="h-3.5 w-3.5 text-zinc-400" />
+            <Search class="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
             <span>Search or jump...</span>
           </span>
           <kbd class="kbd-shortcut">⌘K</kbd>
@@ -139,7 +147,7 @@ async function handleLogout(): Promise<void> {
       <!-- Grouped Navigation -->
       <div class="flex-1 space-y-5 px-2.5 py-4">
         <div v-for="group in navGroups" :key="group.label">
-          <p class="mb-1.5 px-2 font-mono text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+          <p class="mb-1.5 px-2 font-mono text-[10px] font-medium uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
             {{ group.label }}
           </p>
           <div class="space-y-0.5">
@@ -150,8 +158,8 @@ async function handleLogout(): Promise<void> {
               class="group flex h-8 items-center justify-between rounded-md px-2 text-[13px] transition-colors"
               :class="
                 route.path.startsWith(item.to)
-                  ? 'bg-zinc-900/6 font-medium text-zinc-950'
-                  : 'text-zinc-600 hover:bg-zinc-200/50 hover:text-zinc-900'
+                  ? 'bg-zinc-900 text-white font-medium dark:bg-zinc-100 dark:text-zinc-950'
+                  : 'text-zinc-700 hover:bg-zinc-200/70 hover:text-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-white'
               "
             >
               <div class="flex items-center gap-2">
@@ -159,13 +167,16 @@ async function handleLogout(): Promise<void> {
                   class="h-1.5 w-1.5 rounded-full transition-colors"
                   :class="
                     route.path.startsWith(item.to)
-                      ? 'bg-zinc-900'
-                      : 'bg-transparent group-hover:bg-zinc-300'
+                      ? 'bg-rose-500'
+                      : 'bg-transparent group-hover:bg-zinc-400 dark:group-hover:bg-zinc-500'
                   "
                 />
                 <span>{{ item.name }}</span>
               </div>
-              <span class="font-mono text-[10px] text-zinc-400 opacity-0 transition group-hover:opacity-100">
+              <span
+                class="font-mono text-[10px] opacity-0 transition group-hover:opacity-100"
+                :class="route.path.startsWith(item.to) ? 'text-zinc-300 dark:text-zinc-600' : 'text-zinc-400 dark:text-zinc-500'"
+              >
                 {{ item.shortcut }}
               </span>
             </RouterLink>
@@ -174,26 +185,26 @@ async function handleLogout(): Promise<void> {
       </div>
 
       <!-- Compact Footer User Strip -->
-      <div class="border-t border-zinc-200/80 p-2.5">
-        <div class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-zinc-200/50">
+      <div class="border-t border-zinc-200/80 p-2.5 dark:border-zinc-800">
+        <div class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/70">
           <div class="flex min-w-0 items-center gap-2">
             <div
-              class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-zinc-900 font-mono text-[10px] font-semibold text-white"
+              class="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-zinc-900 font-mono text-[10px] font-semibold text-white dark:bg-zinc-100 dark:text-zinc-950"
             >
               {{ userInitials }}
             </div>
             <div class="min-w-0">
-              <p class="truncate text-xs font-medium text-zinc-900">
+              <p class="truncate text-xs font-medium text-zinc-900 dark:text-zinc-100">
                 {{ authStore.user?.name }}
               </p>
-              <p class="truncate font-mono text-[10px] text-zinc-500">
+              <p class="truncate font-mono text-[10px] text-zinc-500 dark:text-zinc-400">
                 {{ authStore.user?.email }}
               </p>
             </div>
           </div>
           <button
             type="button"
-            class="rounded p-1 text-zinc-400 transition hover:bg-zinc-200 hover:text-zinc-800"
+            class="rounded p-1 text-zinc-500 transition hover:bg-zinc-200 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-white"
             title="Sign out"
             aria-label="Sign out"
             @click="handleLogout"
@@ -207,14 +218,14 @@ async function handleLogout(): Promise<void> {
     <!-- Main Workspace Column -->
     <div class="flex min-w-0 flex-1 flex-col">
       <!-- Top Breadcrumb & Context Bar (48px) -->
-      <header class="sticky top-0 z-20 flex h-12 items-center justify-between border-b border-zinc-200/80 bg-white/85 px-4 backdrop-blur-md sm:px-6">
+      <header class="sticky top-0 z-20 flex h-12 items-center justify-between border-b border-zinc-200/80 bg-white/90 px-4 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90 sm:px-6">
         <div class="flex items-center gap-2 text-xs">
-          <RouterLink to="/dashboard" class="flex items-center gap-1.5 font-medium text-zinc-500 hover:text-zinc-900">
+          <RouterLink to="/dashboard" class="flex items-center gap-1.5 font-medium text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
             <img src="/logo.svg" alt="LandingFlow" class="h-4 w-4 rounded lg:hidden" />
             <span>{{ authStore.user?.company_name || 'Workspace' }}</span>
           </RouterLink>
-          <ChevronRight class="h-3.5 w-3.5 text-zinc-300" />
-          <h1 class="font-semibold text-zinc-900">
+          <ChevronRight class="h-3.5 w-3.5 text-zinc-300 dark:text-zinc-600" />
+          <h1 class="font-semibold text-zinc-900 dark:text-zinc-100">
             {{ route.meta.title || 'Overview' }}
           </h1>
         </div>
@@ -222,12 +233,16 @@ async function handleLogout(): Promise<void> {
         <div class="flex items-center gap-2">
           <button
             type="button"
-            class="inline-flex h-7 items-center gap-1.5 rounded-md border border-zinc-200 bg-zinc-50 px-2 text-xs text-zinc-500 hover:text-zinc-900 lg:hidden"
+            class="inline-flex h-8 items-center gap-1.5 rounded-md border border-zinc-200 bg-zinc-50 px-2 text-xs text-zinc-600 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:text-white lg:hidden"
             @click="commandPaletteOpen = true"
           >
             <Command class="h-3 w-3" />
             <span>⌘K</span>
           </button>
+
+          <!-- Global Dark / Light Theme Toggle -->
+          <ThemeToggle :show-label="true" />
+
           <RouterLink to="/generator">
             <BaseButton size="sm" variant="primary">
               <Plus class="h-3.5 w-3.5" />
@@ -239,7 +254,7 @@ async function handleLogout(): Promise<void> {
 
       <!-- Mobile Sub-navigation -->
       <nav
-        class="flex overflow-x-auto border-b border-zinc-200 bg-zinc-50 px-4 py-1.5 lg:hidden"
+        class="flex overflow-x-auto border-b border-zinc-200 bg-zinc-50 px-4 py-1.5 dark:border-zinc-800 dark:bg-zinc-900 lg:hidden"
         aria-label="Mobile Navigation"
       >
         <RouterLink
@@ -249,8 +264,8 @@ async function handleLogout(): Promise<void> {
           class="mr-1.5 shrink-0 rounded px-2.5 py-1 text-xs font-medium"
           :class="
             route.path.startsWith(item.to)
-              ? 'bg-zinc-900 text-white'
-              : 'text-zinc-600'
+              ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950'
+              : 'text-zinc-600 dark:text-zinc-300'
           "
         >
           {{ item.name }}
@@ -273,18 +288,18 @@ async function handleLogout(): Promise<void> {
         aria-label="Command Palette"
       >
         <div
-          class="fixed inset-0 bg-zinc-950/40 backdrop-blur-[1px] animate-fade-in"
+          class="fixed inset-0 bg-zinc-950/60 backdrop-blur-[2px] animate-fade-in"
           @click="commandPaletteOpen = false"
         />
-        <div class="relative z-10 w-full max-w-lg overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-elevated animate-scale-in">
-          <div class="flex items-center border-b border-zinc-100 px-3.5">
+        <div class="relative z-10 w-full max-w-lg overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-elevated animate-scale-in dark:border-zinc-800 dark:bg-zinc-900">
+          <div class="flex items-center border-b border-zinc-100 px-3.5 dark:border-zinc-800">
             <Search class="h-4 w-4 text-zinc-400" />
             <input
               v-model="commandQuery"
               type="text"
               autofocus
               placeholder="Type a command or search projects..."
-              class="h-11 w-full bg-transparent px-3 text-[13px] text-zinc-900 placeholder-zinc-400 focus:outline-none"
+              class="h-11 w-full bg-transparent px-3 text-[13px] text-zinc-900 placeholder-zinc-400 focus:outline-none dark:text-zinc-100 dark:placeholder-zinc-500"
             />
             <kbd class="kbd-shortcut">ESC</kbd>
           </div>
@@ -300,7 +315,7 @@ async function handleLogout(): Promise<void> {
               v-for="cmd in commandItems"
               :key="cmd.to + cmd.label"
               type="button"
-              class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-[13px] text-zinc-700 transition hover:bg-zinc-100 hover:text-zinc-950"
+              class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-[13px] text-zinc-700 transition hover:bg-zinc-100 hover:text-zinc-950 dark:text-zinc-200 dark:hover:bg-zinc-800 dark:hover:text-white"
               @click="executeCommand(cmd.to)"
             >
               <span class="font-medium">{{ cmd.label }}</span>

@@ -60,18 +60,18 @@ async function handleUseTemplate(template: Template): Promise<void> {
     <!-- Header & Target Bar -->
     <div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div>
-        <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Layout Systems</h2>
-        <p class="mt-0.5 text-xs text-zinc-500">
+        <h2 class="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Layout Systems</h2>
+        <p class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
           Switch layout systems non-destructively on any project or initialize a new build.
         </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-2 rounded-lg border border-zinc-200 bg-white p-1.5 shadow-subtle">
-        <span class="px-2 font-mono text-[10px] font-medium uppercase text-zinc-400">Target:</span>
+      <div class="flex flex-wrap items-center gap-2 rounded-lg border border-zinc-200 bg-white p-1.5 shadow-subtle dark:border-zinc-800 dark:bg-zinc-900">
+        <span class="px-2 font-mono text-[10px] font-medium uppercase text-zinc-500 dark:text-zinc-400">Target:</span>
         <select
           v-model="applyingToProjectId"
           aria-label="Target project for template"
-          class="h-7 rounded border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-800 focus:border-zinc-900 focus:outline-none"
+          class="h-7 rounded border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-800 focus:border-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
         >
           <option value="new">+ Initialize New Project</option>
           <option
@@ -87,7 +87,7 @@ async function handleUseTemplate(template: Template): Promise<void> {
           v-model="newProjectName"
           type="text"
           placeholder="Optional project name..."
-          class="h-7 rounded border border-zinc-200 px-2.5 text-xs focus:border-zinc-900 focus:outline-none"
+          class="h-7 rounded border border-zinc-200 bg-white px-2.5 text-xs text-zinc-900 focus:border-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
         />
       </div>
     </div>
@@ -97,11 +97,11 @@ async function handleUseTemplate(template: Template): Promise<void> {
       <div
         v-for="(template, idx) in projectStore.templates"
         :key="template.id"
-        class="flex flex-col justify-between overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle transition hover:border-zinc-300"
+        class="flex flex-col justify-between overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
       >
         <div>
           <!-- Wireframe SVG Preview Header -->
-          <div class="relative h-44 overflow-hidden border-b border-zinc-200 bg-zinc-950">
+          <div class="relative h-44 overflow-hidden border-b border-zinc-200 bg-zinc-950 dark:border-zinc-800">
             <img
               v-if="template.preview_image_url"
               :src="template.preview_image_url"
@@ -126,31 +126,31 @@ async function handleUseTemplate(template: Template): Promise<void> {
 
           <div class="p-5">
             <div class="flex items-baseline justify-between">
-              <h3 class="text-sm font-semibold text-zinc-900">
+              <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
                 {{ template.name }}
               </h3>
-              <span class="font-mono text-[10px] text-zinc-400">
+              <span class="font-mono text-[10px] text-zinc-500 dark:text-zinc-400">
                 {{ template.typography.scale }}
               </span>
             </div>
 
-            <p class="mt-1.5 text-xs leading-relaxed text-zinc-500">
+            <p class="mt-1.5 text-xs leading-relaxed text-zinc-600 dark:text-zinc-300">
               {{ template.description }}
             </p>
 
-            <div class="mt-4 border-t border-zinc-100 pt-3">
-              <p class="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+            <div class="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+              <p class="font-mono text-[10px] uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                 10 Schema Blocks Included
               </p>
               <div class="mt-1.5 flex flex-wrap gap-1">
                 <span
                   v-for="sec in template.supported_sections.slice(0, 6)"
                   :key="sec"
-                  class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] text-zinc-600"
+                  class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
                 >
                   {{ sec.replace('_', ' ') }}
                 </span>
-                <span class="rounded bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                <span class="rounded bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] text-zinc-500 dark:bg-zinc-800/60 dark:text-zinc-400">
                   +4 more
                 </span>
               </div>
@@ -158,7 +158,7 @@ async function handleUseTemplate(template: Template): Promise<void> {
           </div>
         </div>
 
-        <div class="flex items-center justify-between border-t border-zinc-100 bg-zinc-50/60 px-5 py-3">
+        <div class="flex items-center justify-between border-t border-zinc-100 bg-zinc-50/60 px-5 py-3 dark:border-zinc-800 dark:bg-zinc-950/50">
           <BaseButton
             size="sm"
             variant="outline"
@@ -188,7 +188,7 @@ async function handleUseTemplate(template: Template): Promise<void> {
       max-width="2xl"
       @close="previewTemplate = null"
     >
-      <div v-if="previewTemplate" class="max-h-[72vh] overflow-y-auto rounded-lg border border-zinc-200">
+      <div v-if="previewTemplate" class="max-h-[72vh] overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-800">
         <LandingPageRenderer
           :content="previewTemplate.default_schema"
           :theme="{

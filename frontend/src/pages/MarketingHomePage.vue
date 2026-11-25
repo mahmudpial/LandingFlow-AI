@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
+import ThemeToggle from '@/components/ui/ThemeToggle.vue';
 
 const activePreviewTab = ref<'saas' | 'launch' | 'agency'>('saas');
 
@@ -12,8 +13,7 @@ const previewThemes = {
     headline: 'Cut cloud waste by 38% without slowing engineering velocity.',
     sub: 'Automated unit-cost attribution, anomaly guardrails, and Slack-native approvals for scaling platform teams.',
     cta: 'Start 14-Day Free Trial',
-    accent: '#111318',
-    tagColor: '#D94E28',
+    tagColor: '#E11D48',
   },
   launch: {
     label: '02 / Flagship Product Launch',
@@ -22,8 +22,7 @@ const previewThemes = {
     headline: 'A faster command surface for product designers & engineers.',
     sub: 'Keyboard-first workflows, instant design token sync, and zero-latency previewing right from your desktop.',
     cta: 'Download Release 2.4',
-    accent: '#D94E28',
-    tagColor: '#15803D',
+    tagColor: '#059669',
   },
   agency: {
     label: '03 / Advisory & Design Studio',
@@ -32,34 +31,34 @@ const previewThemes = {
     headline: 'We partner with Series A founders to ship category-defining products.',
     sub: 'Senior engineering, conversion architecture, and design systems delivered in focused 6-week sprints.',
     cta: 'Book Executive Briefing',
-    accent: '#14532D',
-    tagColor: '#111318',
+    tagColor: '#2563EB',
   },
 };
 </script>
 
 <template>
-  <div class="min-h-screen bg-brand-bg text-brand-text">
+  <div class="min-h-screen bg-[#FAFAFA] text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100">
     <!-- Top Editorial Navigation -->
-    <header class="sticky top-0 z-30 border-b border-brand-border bg-brand-bg/90 backdrop-blur-md">
-      <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center gap-3">
-          <img src="/logo.svg" alt="LandingFlow" class="h-8 w-8 rounded-lg shadow-2xs" />
+    <header class="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/90 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900/90">
+      <div class="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-2.5">
+          <img src="/logo.svg" alt="LandingFlow" class="h-7 w-7 rounded-md shadow-sm" />
           <div class="flex items-baseline gap-2">
-            <span class="text-base font-extrabold tracking-tight text-brand-text">LandingFlow</span>
-            <span class="hidden rounded border border-brand-border bg-white px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-widest text-brand-muted sm:inline-block">
+            <span class="text-[15px] font-bold tracking-tight text-zinc-900 dark:text-white">LandingFlow</span>
+            <span class="hidden rounded border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] font-medium uppercase tracking-widest text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 sm:inline-block">
               Studio v1.0
             </span>
           </div>
         </div>
 
-        <nav class="hidden items-center gap-8 text-[13px] font-medium text-brand-muted md:flex">
-          <a href="#architecture" class="transition hover:text-brand-text">Architecture</a>
-          <a href="#interactive-preview" class="transition hover:text-brand-text">Layout Systems</a>
-          <a href="#workflow" class="transition hover:text-brand-text">Workflow</a>
+        <nav class="hidden items-center gap-7 text-[13px] font-medium text-zinc-600 dark:text-zinc-300 md:flex">
+          <a href="#architecture" class="transition hover:text-zinc-950 dark:hover:text-white">Architecture</a>
+          <a href="#interactive-preview" class="transition hover:text-zinc-950 dark:hover:text-white">Layout Systems</a>
+          <a href="#workflow" class="transition hover:text-zinc-950 dark:hover:text-white">Workflow</a>
         </nav>
 
-        <div class="flex items-center gap-2.5">
+        <div class="flex items-center gap-2">
+          <ThemeToggle :show-label="true" />
           <RouterLink to="/login">
             <BaseButton variant="ghost" size="sm">Sign In</BaseButton>
           </RouterLink>
@@ -71,28 +70,28 @@ const previewThemes = {
     </header>
 
     <!-- Hero Section with Subtle Architectural Grid -->
-    <section class="bg-architectural-grid relative border-b border-brand-border px-4 pb-20 pt-16 sm:px-6 lg:pt-24">
+    <section class="bg-architectural-grid relative border-b border-zinc-200 px-4 pb-20 pt-16 dark:border-zinc-800 sm:px-6 lg:pt-24">
       <div class="mx-auto max-w-5xl text-center animate-fade-up">
         <!-- Editorial Issue Pill -->
-        <div class="inline-flex items-center gap-2.5 rounded-full border border-brand-border bg-white px-3.5 py-1.5 shadow-2xs">
-          <span class="h-2 w-2 rounded-full bg-brand-secondary" />
-          <span class="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-brand-text">
+        <div class="inline-flex items-center gap-2.5 rounded-full border border-zinc-200 bg-white px-3.5 py-1.5 shadow-subtle dark:border-zinc-800 dark:bg-zinc-900">
+          <span class="h-2 w-2 rounded-full bg-rose-600" />
+          <span class="font-mono text-[11px] font-semibold uppercase tracking-[0.12em] text-zinc-800 dark:text-zinc-200">
             Conversion Page Architecture for Modern Software Teams
           </span>
         </div>
 
-        <h1 class="mx-auto mt-8 max-w-4xl text-4xl font-extrabold leading-[1.08] tracking-tight text-brand-text sm:text-6xl lg:text-[64px]">
+        <h1 class="mx-auto mt-8 max-w-4xl text-4xl font-extrabold leading-[1.08] tracking-tight text-zinc-950 dark:text-white sm:text-6xl lg:text-[62px]">
           Craft high-converting landing pages with
-          <span class="font-serif italic font-normal text-brand-secondary">editorial clarity.</span>
+          <span class="font-serif italic font-normal text-rose-600 dark:text-rose-400">editorial clarity.</span>
         </h1>
 
-        <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-brand-muted sm:text-lg">
+        <p class="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-zinc-600 dark:text-zinc-300 sm:text-lg">
           Turn a structured product brief into a 10-section conversion page. Customize typography,
           color tokens, and responsive viewports in a tactile live studio—then publish to a clean
           public slug in one click.
         </p>
 
-        <div class="mt-9 flex flex-wrap items-center justify-center gap-3.5">
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
           <RouterLink to="/register">
             <BaseButton size="lg" variant="primary">
               <span>Start Building in Studio</span>
@@ -107,7 +106,7 @@ const previewThemes = {
         </div>
 
         <!-- Technical Spec Bar -->
-        <div class="mx-auto mt-10 flex max-w-2xl flex-wrap items-center justify-center gap-x-8 gap-y-2 border-t border-brand-border pt-6 font-mono text-[11px] text-brand-muted">
+        <div class="mx-auto mt-10 flex max-w-2xl flex-wrap items-center justify-center gap-x-8 gap-y-2 border-t border-zinc-200 pt-6 font-mono text-[11px] text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
           <span>01 / 10-SECTION VALIDATED SCHEMA</span>
           <span>02 / NON-DESTRUCTIVE LAYOUT SWITCHING</span>
           <span>03 / INSTANT PUBLIC SLUG (/p/slug)</span>
@@ -117,7 +116,7 @@ const previewThemes = {
       <!-- Interactive Studio Window Mockup -->
       <div
         id="interactive-preview"
-        class="mx-auto mt-14 max-w-6xl animate-fade-up stagger-2"
+        class="mx-auto mt-14 max-w-6xl animate-fade-up"
       >
         <!-- Preset Switcher Tabs -->
         <div class="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -126,35 +125,35 @@ const previewThemes = {
               v-for="(item, key) in previewThemes"
               :key="key"
               type="button"
-              class="rounded-lg border px-3.5 py-1.5 font-mono text-xs font-medium transition-all"
+              class="rounded-md border px-3 py-1.5 font-mono text-xs font-medium transition-all"
               :class="
                 activePreviewTab === key
-                  ? 'border-brand-primary bg-brand-primary text-white shadow-2xs'
-                  : 'border-brand-border bg-white text-brand-muted hover:text-brand-text'
+                  ? 'border-zinc-900 bg-zinc-900 text-white shadow-sm dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-950'
+                  : 'border-zinc-200 bg-white text-zinc-600 hover:text-zinc-900 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:text-white'
               "
               @click="activePreviewTab = key"
             >
               {{ item.label }}
             </button>
           </div>
-          <span class="font-mono text-[11px] text-brand-muted">
+          <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
             LIVE INTERACTIVE SCHEMA PREVIEW
           </span>
         </div>
 
         <!-- Browser Frame -->
-        <div class="overflow-hidden rounded-2xl border border-brand-border bg-white shadow-elevated">
+        <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-elevated dark:border-zinc-800 dark:bg-zinc-900">
           <!-- Window Chrome Bar -->
-          <div class="flex items-center justify-between border-b border-brand-border bg-[#F3F1EC] px-4 py-3">
+          <div class="flex items-center justify-between border-b border-zinc-200 bg-zinc-100/80 px-4 py-2.5 dark:border-zinc-800 dark:bg-zinc-950">
             <div class="flex items-center gap-2">
-              <span class="h-2.5 w-2.5 rounded-full bg-[#D6D3CD]" />
-              <span class="h-2.5 w-2.5 rounded-full bg-[#D6D3CD]" />
-              <span class="h-2.5 w-2.5 rounded-full bg-[#D6D3CD]" />
+              <span class="h-2.5 w-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+              <span class="h-2.5 w-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
+              <span class="h-2.5 w-2.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
             </div>
-            <div class="rounded-md border border-brand-border bg-white px-4 py-1 font-mono text-[11px] text-brand-muted">
+            <div class="rounded border border-zinc-200 bg-white px-4 py-1 font-mono text-[11px] text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300">
               https://{{ previewThemes[activePreviewTab].slug }}
             </div>
-            <div class="font-mono text-[10px] font-semibold uppercase tracking-widest text-brand-success">
+            <div class="font-mono text-[10px] font-semibold uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
               ● PUBLISHED
             </div>
           </div>
@@ -162,48 +161,34 @@ const previewThemes = {
           <!-- Simulated Studio Split View -->
           <div class="grid lg:grid-cols-12">
             <!-- Left Inspector Preview (4 cols) -->
-            <div class="hidden border-r border-brand-border bg-[#FAF9F6] p-6 lg:col-span-4 lg:block">
-              <div class="flex items-center justify-between border-b border-brand-border pb-3">
-                <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-brand-muted">
+            <div class="hidden border-r border-zinc-200 bg-zinc-50/70 p-6 dark:border-zinc-800 dark:bg-zinc-950/60 lg:col-span-4 lg:block">
+              <div class="flex items-center justify-between border-b border-zinc-200 pb-3 dark:border-zinc-800">
+                <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
                   SECTION ARCHITECTURE
                 </span>
-                <span class="font-mono text-[10px] text-brand-secondary">10 BLOCKS</span>
+                <span class="font-mono text-[10px] text-rose-600 dark:text-rose-400">10 BLOCKS</span>
               </div>
 
               <div class="mt-4 space-y-2 font-mono text-xs">
-                <div class="flex items-center justify-between rounded-md border border-brand-primary bg-white px-3 py-2 font-semibold text-brand-text shadow-2xs">
+                <div class="flex items-center justify-between rounded-md border border-zinc-900 bg-white px-3 py-2 font-semibold text-zinc-900 shadow-subtle dark:border-zinc-200 dark:bg-zinc-900 dark:text-white">
                   <span>01. Hero Statement</span>
-                  <span class="text-[10px] text-brand-secondary">ACTIVE</span>
+                  <span class="text-[10px] text-rose-600 dark:text-rose-400">ACTIVE</span>
                 </div>
-                <div class="flex items-center justify-between rounded-md border border-brand-border bg-white/70 px-3 py-2 text-brand-muted">
+                <div class="flex items-center justify-between rounded-md border border-zinc-200 bg-white/80 px-3 py-2 text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-300">
                   <span>02. Problem vs. Solution</span>
-                  <span class="text-[10px]">VISIBLE</span>
+                  <span class="text-[10px] text-zinc-400">VISIBLE</span>
                 </div>
-                <div class="flex items-center justify-between rounded-md border border-brand-border bg-white/70 px-3 py-2 text-brand-muted">
+                <div class="flex items-center justify-between rounded-md border border-zinc-200 bg-white/80 px-3 py-2 text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-300">
                   <span>03. Core Capabilities Grid</span>
-                  <span class="text-[10px]">VISIBLE</span>
+                  <span class="text-[10px] text-zinc-400">VISIBLE</span>
                 </div>
-                <div class="flex items-center justify-between rounded-md border border-brand-border bg-white/70 px-3 py-2 text-brand-muted">
+                <div class="flex items-center justify-between rounded-md border border-zinc-200 bg-white/80 px-3 py-2 text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-300">
                   <span>04. Outcomes & Metrics</span>
-                  <span class="text-[10px]">VISIBLE</span>
+                  <span class="text-[10px] text-zinc-400">VISIBLE</span>
                 </div>
-                <div class="flex items-center justify-between rounded-md border border-brand-border bg-white/70 px-3 py-2 text-brand-muted">
+                <div class="flex items-center justify-between rounded-md border border-zinc-200 bg-white/80 px-3 py-2 text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900/60 dark:text-zinc-300">
                   <span>05. Pricing Architecture</span>
-                  <span class="text-[10px]">VISIBLE</span>
-                </div>
-              </div>
-
-              <div class="mt-6 rounded-lg border border-brand-border bg-white p-3.5">
-                <p class="font-mono text-[10px] font-bold uppercase tracking-wider text-brand-muted">
-                  TYPOGRAPHY & PALETTE
-                </p>
-                <div class="mt-2.5 flex items-center justify-between">
-                  <span class="text-xs font-medium text-brand-text">Plus Jakarta + Instrument</span>
-                  <div class="flex gap-1.5">
-                    <span class="h-3.5 w-3.5 rounded-full bg-[#111318]" />
-                    <span class="h-3.5 w-3.5 rounded-full bg-[#D94E28]" />
-                    <span class="h-3.5 w-3.5 rounded-full bg-[#15803D]" />
-                  </div>
+                  <span class="text-[10px] text-zinc-400">VISIBLE</span>
                 </div>
               </div>
             </div>
@@ -217,44 +202,40 @@ const previewThemes = {
                 >
                   {{ previewThemes[activePreviewTab].badge }}
                 </span>
-                <h2 class="mt-5 text-2xl font-extrabold leading-tight tracking-tight text-brand-text sm:text-4xl">
+                <h2 class="mt-5 text-2xl font-extrabold leading-tight tracking-tight text-zinc-950 dark:text-white sm:text-4xl">
                   {{ previewThemes[activePreviewTab].headline }}
                 </h2>
-                <p class="mt-4 text-sm leading-relaxed text-brand-muted sm:text-base">
+                <p class="mt-4 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300 sm:text-base">
                   {{ previewThemes[activePreviewTab].sub }}
                 </p>
                 <div class="mt-7 flex flex-wrap items-center gap-3">
                   <RouterLink to="/register">
-                    <button
-                      type="button"
-                      class="rounded-lg px-5 py-2.5 text-xs font-semibold text-white shadow-tactile transition hover:opacity-95"
-                      :style="{ backgroundColor: previewThemes[activePreviewTab].accent }"
-                    >
+                    <BaseButton variant="primary" size="lg">
                       {{ previewThemes[activePreviewTab].cta }} →
-                    </button>
+                    </BaseButton>
                   </RouterLink>
-                  <span class="font-mono text-[11px] text-brand-muted">
+                  <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">
                     Schema-verified • Responsive
                   </span>
                 </div>
               </div>
 
               <!-- Mini Wireframe Cards Inside Preview -->
-              <div class="mt-10 grid gap-3 border-t border-brand-border pt-6 sm:grid-cols-3">
-                <div class="rounded-lg border border-brand-border bg-[#FAF9F6] p-3.5">
-                  <span class="font-mono text-[10px] font-semibold text-brand-secondary">01</span>
-                  <p class="mt-1 text-xs font-bold text-brand-text">Problem & Solution</p>
-                  <p class="mt-0.5 text-[11px] text-brand-muted">Side-by-side contrast matrix</p>
+              <div class="mt-10 grid gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800 sm:grid-cols-3">
+                <div class="rounded-lg border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-950">
+                  <span class="font-mono text-[10px] font-semibold text-rose-600 dark:text-rose-400">01</span>
+                  <p class="mt-1 text-xs font-bold text-zinc-900 dark:text-zinc-100">Problem & Solution</p>
+                  <p class="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">Side-by-side contrast matrix</p>
                 </div>
-                <div class="rounded-lg border border-brand-border bg-[#FAF9F6] p-3.5">
-                  <span class="font-mono text-[10px] font-semibold text-brand-secondary">02</span>
-                  <p class="mt-1 text-xs font-bold text-brand-text">Transparent Proof</p>
-                  <p class="mt-0.5 text-[11px] text-brand-muted">Honest illustrative guardrails</p>
+                <div class="rounded-lg border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-950">
+                  <span class="font-mono text-[10px] font-semibold text-rose-600 dark:text-rose-400">02</span>
+                  <p class="mt-1 text-xs font-bold text-zinc-900 dark:text-zinc-100">Transparent Proof</p>
+                  <p class="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">Honest illustrative guardrails</p>
                 </div>
-                <div class="rounded-lg border border-brand-border bg-[#FAF9F6] p-3.5">
-                  <span class="font-mono text-[10px] font-semibold text-brand-secondary">03</span>
-                  <p class="mt-1 text-xs font-bold text-brand-text">Conversion Tiers</p>
-                  <p class="mt-0.5 text-[11px] text-brand-muted">Structured pricing & FAQ</p>
+                <div class="rounded-lg border border-zinc-200 bg-zinc-50 p-3.5 dark:border-zinc-800 dark:bg-zinc-950">
+                  <span class="font-mono text-[10px] font-semibold text-rose-600 dark:text-rose-400">03</span>
+                  <p class="mt-1 text-xs font-bold text-zinc-900 dark:text-zinc-100">Conversion Tiers</p>
+                  <p class="mt-0.5 text-[11px] text-zinc-500 dark:text-zinc-400">Structured pricing & FAQ</p>
                 </div>
               </div>
             </div>
@@ -266,53 +247,53 @@ const previewThemes = {
     <!-- Bento Architecture Grid -->
     <section id="architecture" class="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <div class="max-w-2xl">
-        <span class="font-mono text-xs font-semibold uppercase tracking-[0.15em] text-brand-secondary">
+        <span class="font-mono text-xs font-semibold uppercase tracking-[0.15em] text-rose-600 dark:text-rose-400">
           System Architecture
         </span>
-        <h2 class="mt-2 text-3xl font-extrabold tracking-tight text-brand-text sm:text-4xl">
+        <h2 class="mt-2 text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-white sm:text-4xl">
           Engineered like a serious software product, not a toy template.
         </h2>
       </div>
 
       <div class="mt-12 grid gap-6 md:grid-cols-3">
-        <div class="card-hover-lift rounded-xl border border-brand-border bg-white p-7 shadow-card">
-          <div class="flex items-center justify-between border-b border-brand-border pb-4">
-            <span class="font-mono text-xs font-bold text-brand-secondary">MODULE 01</span>
-            <span class="font-mono text-[11px] text-brand-muted">SCHEMA ENGINE</span>
+        <div class="rounded-xl border border-zinc-200 bg-white p-7 shadow-subtle transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700">
+          <div class="flex items-center justify-between border-b border-zinc-200 pb-4 dark:border-zinc-800">
+            <span class="font-mono text-xs font-bold text-rose-600 dark:text-rose-400">MODULE 01</span>
+            <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">SCHEMA ENGINE</span>
           </div>
-          <h3 class="mt-5 text-lg font-bold text-brand-text">
+          <h3 class="mt-5 text-lg font-bold text-zinc-900 dark:text-white">
             Structured Copy Architect
           </h3>
-          <p class="mt-2.5 text-sm leading-relaxed text-brand-muted">
+          <p class="mt-2.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
             Synthesizes your product brief, audience, and conversion goal into 10 distinct landing
             page sections with explicit illustrative disclaimers—never fabricating fake claims.
           </p>
         </div>
 
-        <div class="card-hover-lift rounded-xl border border-brand-border bg-white p-7 shadow-card">
-          <div class="flex items-center justify-between border-b border-brand-border pb-4">
-            <span class="font-mono text-xs font-bold text-brand-secondary">MODULE 02</span>
-            <span class="font-mono text-[11px] text-brand-muted">LIVE STUDIO</span>
+        <div class="rounded-xl border border-zinc-200 bg-white p-7 shadow-subtle transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700">
+          <div class="flex items-center justify-between border-b border-zinc-200 pb-4 dark:border-zinc-800">
+            <span class="font-mono text-xs font-bold text-rose-600 dark:text-rose-400">MODULE 02</span>
+            <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">LIVE STUDIO</span>
           </div>
-          <h3 class="mt-5 text-lg font-bold text-brand-text">
+          <h3 class="mt-5 text-lg font-bold text-zinc-900 dark:text-white">
             Tactile Responsive Editor
           </h3>
-          <p class="mt-2.5 text-sm leading-relaxed text-brand-muted">
+          <p class="mt-2.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
             Reorder sections, toggle visibility, fine-tune color tokens and typography pairings,
             upload validated media assets, and preview across Desktop, Tablet, and Mobile with
             30-step Undo/Redo.
           </p>
         </div>
 
-        <div class="card-hover-lift rounded-xl border border-brand-border bg-white p-7 shadow-card">
-          <div class="flex items-center justify-between border-b border-brand-border pb-4">
-            <span class="font-mono text-xs font-bold text-brand-secondary">MODULE 03</span>
-            <span class="font-mono text-[11px] text-brand-muted">EDGE DELIVERY</span>
+        <div class="rounded-xl border border-zinc-200 bg-white p-7 shadow-subtle transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700">
+          <div class="flex items-center justify-between border-b border-zinc-200 pb-4 dark:border-zinc-800">
+            <span class="font-mono text-xs font-bold text-rose-600 dark:text-rose-400">MODULE 03</span>
+            <span class="font-mono text-[11px] text-zinc-500 dark:text-zinc-400">EDGE DELIVERY</span>
           </div>
-          <h3 class="mt-5 text-lg font-bold text-brand-text">
+          <h3 class="mt-5 text-lg font-bold text-zinc-900 dark:text-white">
             Immutable Snapshot Publishing
           </h3>
-          <p class="mt-2.5 text-sm leading-relaxed text-brand-muted">
+          <p class="mt-2.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
             Publish an immutable JSON snapshot to `/p/your-slug`. Keep iterating on drafts in the
             editor without breaking your live public conversion page until you republish.
           </p>
@@ -321,16 +302,16 @@ const previewThemes = {
     </section>
 
     <!-- Editorial Bottom Banner -->
-    <section id="workflow" class="border-t border-brand-border bg-[#111318] px-4 py-20 text-[#FAF9F5] sm:px-6">
+    <section id="workflow" class="border-t border-zinc-200 bg-zinc-950 px-4 py-20 text-zinc-100 dark:border-zinc-800 sm:px-6">
       <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-8 text-center sm:flex-row sm:text-left">
         <div class="max-w-xl">
-          <span class="font-mono text-xs uppercase tracking-[0.16em] text-brand-secondary">
+          <span class="font-mono text-xs uppercase tracking-[0.16em] text-rose-500">
             Ready for Launch
           </span>
           <h2 class="mt-2 text-3xl font-bold tracking-tight text-white">
             Build your next product launch page today.
           </h2>
-          <p class="mt-2 text-sm text-[#A1A09A]">
+          <p class="mt-2 text-sm text-zinc-400">
             Full access to the 3-step Copy Architect, 3 layout systems, and live responsive studio.
           </p>
         </div>

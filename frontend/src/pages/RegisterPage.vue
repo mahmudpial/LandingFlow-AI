@@ -7,6 +7,7 @@ import { registerSchema } from '@/utils/validation';
 import { extractErrorMessage, extractFieldErrors } from '@/services/api';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
+import ThemeToggle from '@/components/ui/ThemeToggle.vue';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -49,71 +50,75 @@ async function handleSubmit(): Promise<void> {
 </script>
 
 <template>
-  <div class="grid min-h-screen bg-brand-bg lg:grid-cols-12">
+  <div class="grid min-h-screen bg-[#FAFAFA] text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100 lg:grid-cols-12">
     <!-- Left Editorial Column -->
-    <div class="hidden flex-col justify-between border-r border-brand-border bg-[#111318] p-12 text-[#FAF9F5] lg:col-span-5 lg:flex">
+    <div class="hidden flex-col justify-between border-r border-zinc-800 bg-zinc-950 p-12 text-zinc-100 lg:col-span-5 lg:flex">
       <RouterLink to="/" class="flex items-center gap-2.5">
-        <img src="/logo.svg" alt="LandingFlow" class="h-8 w-8 rounded-md" />
-        <span class="text-base font-bold tracking-tight">LandingFlow Studio</span>
+        <img src="/logo.svg" alt="LandingFlow" class="h-7 w-7 rounded-md" />
+        <span class="text-[15px] font-bold tracking-tight text-white">LandingFlow Studio</span>
       </RouterLink>
 
       <div class="my-auto max-w-md">
-        <p class="font-mono text-xs uppercase tracking-[0.18em] text-brand-secondary">
+        <p class="font-mono text-xs uppercase tracking-[0.18em] text-rose-500">
           Built for Builders
         </p>
         <h2 class="mt-4 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
           From product brief to live conversion page in minutes.
         </h2>
-        <ul class="mt-6 space-y-3 text-sm text-[#A1A09A]">
+        <ul class="mt-6 space-y-3 text-sm text-zinc-400">
           <li class="flex items-center gap-2.5">
-            <span class="h-1.5 w-1.5 rounded-full bg-brand-secondary" />
+            <span class="h-1.5 w-1.5 rounded-full bg-rose-500" />
             <span>10-section schema-validated page architecture</span>
           </li>
           <li class="flex items-center gap-2.5">
-            <span class="h-1.5 w-1.5 rounded-full bg-brand-secondary" />
+            <span class="h-1.5 w-1.5 rounded-full bg-rose-500" />
             <span>3 handcrafted editorial & SaaS layout systems</span>
           </li>
           <li class="flex items-center gap-2.5">
-            <span class="h-1.5 w-1.5 rounded-full bg-brand-secondary" />
+            <span class="h-1.5 w-1.5 rounded-full bg-rose-500" />
             <span>Responsive live editor with 30-step Undo/Redo</span>
           </li>
         </ul>
       </div>
 
-      <div class="flex items-center justify-between border-t border-white/10 pt-6 font-mono text-xs text-[#8E8D87]">
+      <div class="flex items-center justify-between border-t border-white/10 pt-6 font-mono text-xs text-zinc-500">
         <span>ZERO-COST LOCAL STUDIO</span>
         <span>AWS BEDROCK READY</span>
       </div>
     </div>
 
     <!-- Right Form Column -->
-    <div class="flex flex-col justify-center px-4 py-10 sm:px-6 lg:col-span-7 lg:px-16">
+    <div class="relative flex flex-col justify-center px-4 py-10 sm:px-6 lg:col-span-7 lg:px-16">
+      <div class="absolute right-6 top-6">
+        <ThemeToggle :show-label="true" />
+      </div>
+
       <div class="mx-auto w-full max-w-md animate-fade-up">
         <RouterLink to="/" class="mb-6 inline-flex items-center gap-2 lg:hidden">
           <img src="/logo.svg" alt="LandingFlow" class="h-7 w-7 rounded-md" />
-          <span class="text-base font-bold text-brand-text">LandingFlow Studio</span>
+          <span class="text-base font-bold text-zinc-900 dark:text-white">LandingFlow Studio</span>
         </RouterLink>
 
         <div>
-          <span class="font-mono text-[11px] font-semibold uppercase tracking-widest text-brand-secondary">
+          <span class="font-mono text-[11px] font-semibold uppercase tracking-widest text-rose-600 dark:text-rose-400">
             New Workspace
           </span>
-          <h1 class="mt-1.5 text-2xl font-bold tracking-tight text-brand-text">
+          <h1 class="mt-1.5 text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
             Create your studio account
           </h1>
-          <p class="mt-1.5 text-sm text-brand-muted">
+          <p class="mt-1.5 text-sm text-zinc-600 dark:text-zinc-400">
             Already registered?
-            <RouterLink to="/login" class="font-semibold text-brand-text underline decoration-brand-secondary underline-offset-4 hover:text-brand-secondary">
+            <RouterLink to="/login" class="font-semibold text-zinc-900 underline decoration-rose-500 underline-offset-4 hover:text-rose-600 dark:text-white dark:hover:text-rose-400">
               Sign in here
             </RouterLink>
           </p>
         </div>
 
-        <div class="mt-6 rounded-xl border border-brand-border bg-white p-6 shadow-card sm:p-8">
+        <div class="mt-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-subtle dark:border-zinc-800 dark:bg-zinc-900 sm:p-8">
           <div
             v-if="formError"
             role="alert"
-            class="mb-5 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-medium text-brand-error"
+            class="mb-5 rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-medium text-rose-700 dark:border-rose-800 dark:bg-rose-950/50 dark:text-rose-300"
           >
             {{ formError }}
           </div>

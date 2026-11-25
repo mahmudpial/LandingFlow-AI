@@ -115,8 +115,8 @@ async function confirmDeleteProject(): Promise<void> {
     <!-- Header Bar -->
     <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
       <div>
-        <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Projects</h2>
-        <p class="mt-0.5 text-xs text-zinc-500">
+        <h2 class="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Projects</h2>
+        <p class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
           Manage, duplicate, and publish your conversion landing pages.
         </p>
       </div>
@@ -134,16 +134,16 @@ async function confirmDeleteProject(): Promise<void> {
     </div>
 
     <!-- Compact Linear-Style Filter Toolbar -->
-    <div class="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-white p-2 shadow-subtle">
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-zinc-200 bg-white p-2 shadow-subtle dark:border-zinc-800 dark:bg-zinc-900">
       <div class="flex flex-1 flex-wrap items-center gap-2">
         <div class="relative min-w-[220px] flex-1 sm:max-w-xs">
-          <Search class="pointer-events-none absolute left-2.5 top-2 h-3.5 w-3.5 text-zinc-400" />
+          <Search class="pointer-events-none absolute left-2.5 top-2 h-3.5 w-3.5 text-zinc-400 dark:text-zinc-500" />
           <input
             v-model="filters.search"
             type="search"
             placeholder="Filter by name or slug..."
             aria-label="Filter projects"
-            class="h-7 w-full rounded border border-zinc-200 bg-zinc-50/50 pl-8 pr-3 text-xs text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:bg-white focus:outline-none"
+            class="h-7 w-full rounded border border-zinc-200 bg-zinc-50/50 pl-8 pr-3 text-xs text-zinc-900 placeholder-zinc-400 focus:border-zinc-900 focus:bg-white focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100 dark:placeholder-zinc-500 dark:focus:border-zinc-400"
             @input="loadProjects"
           />
         </div>
@@ -151,7 +151,7 @@ async function confirmDeleteProject(): Promise<void> {
         <select
           v-model="filters.status"
           aria-label="Filter by status"
-          class="h-7 rounded border border-zinc-200 bg-white px-2.5 text-xs text-zinc-700 focus:border-zinc-900 focus:outline-none"
+          class="h-7 rounded border border-zinc-200 bg-white px-2.5 text-xs text-zinc-700 focus:border-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200"
           @change="loadProjects"
         >
           <option value="">Status: All</option>
@@ -163,7 +163,7 @@ async function confirmDeleteProject(): Promise<void> {
         <select
           v-model="filters.sort"
           aria-label="Sort projects"
-          class="h-7 rounded border border-zinc-200 bg-white px-2.5 text-xs text-zinc-700 focus:border-zinc-900 focus:outline-none"
+          class="h-7 rounded border border-zinc-200 bg-white px-2.5 text-xs text-zinc-700 focus:border-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200"
           @change="loadProjects"
         >
           <option value="newest">Sort: Newest</option>
@@ -174,11 +174,11 @@ async function confirmDeleteProject(): Promise<void> {
       </div>
 
       <!-- Table / Grid View Toggle -->
-      <div class="flex items-center rounded border border-zinc-200 bg-zinc-50 p-0.5">
+      <div class="flex items-center rounded border border-zinc-200 bg-zinc-50 p-0.5 dark:border-zinc-700 dark:bg-zinc-950">
         <button
           type="button"
           class="rounded p-1 transition"
-          :class="viewMode === 'table' ? 'bg-white text-zinc-900 shadow-2xs' : 'text-zinc-400 hover:text-zinc-700'"
+          :class="viewMode === 'table' ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300'"
           title="Table View"
           @click="viewMode = 'table'"
         >
@@ -187,7 +187,7 @@ async function confirmDeleteProject(): Promise<void> {
         <button
           type="button"
           class="rounded p-1 transition"
-          :class="viewMode === 'grid' ? 'bg-white text-zinc-900 shadow-2xs' : 'text-zinc-400 hover:text-zinc-700'"
+          :class="viewMode === 'grid' ? 'bg-white text-zinc-900 shadow-sm dark:bg-zinc-800 dark:text-white' : 'text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300'"
           title="Grid View"
           @click="viewMode = 'grid'"
         >
@@ -201,18 +201,18 @@ async function confirmDeleteProject(): Promise<void> {
       <div
         v-for="n in 4"
         :key="n"
-        class="h-12 animate-pulse rounded-lg border border-zinc-200 bg-white"
+        class="h-12 animate-pulse rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900"
       />
     </div>
 
     <!-- Empty State -->
     <div
       v-else-if="projectStore.projects.length === 0"
-      class="rounded-lg border border-dashed border-zinc-300 bg-white py-14 text-center"
+      class="rounded-lg border border-dashed border-zinc-300 bg-white py-14 text-center dark:border-zinc-800 dark:bg-zinc-900"
     >
-      <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400">NO MATCHING BUILDS</p>
-      <h3 class="mt-1.5 text-sm font-semibold text-zinc-900">No projects match your filter</h3>
-      <p class="mx-auto mt-1 max-w-sm text-xs text-zinc-500">
+      <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500">NO MATCHING BUILDS</p>
+      <h3 class="mt-1.5 text-sm font-semibold text-zinc-900 dark:text-zinc-100">No projects match your filter</h3>
+      <p class="mx-auto mt-1 max-w-sm text-xs text-zinc-500 dark:text-zinc-400">
         Create a new project from a starter layout or generate one with Copy Architect.
       </p>
       <div class="mt-4 flex justify-center gap-2">
@@ -225,15 +225,15 @@ async function confirmDeleteProject(): Promise<void> {
       </div>
     </div>
 
-    <!-- TABLE VIEW (Default — High-Density Linear/Vercel Style) -->
+    <!-- TABLE VIEW -->
     <div
       v-else-if="viewMode === 'table'"
-      class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle"
+      class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle dark:border-zinc-800 dark:bg-zinc-900"
     >
       <div class="overflow-x-auto">
         <table class="w-full text-left text-[13px]">
           <thead>
-            <tr class="border-b border-zinc-200 bg-zinc-50/70 font-mono text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+            <tr class="border-b border-zinc-200 bg-zinc-50/70 font-mono text-[10px] font-medium uppercase tracking-wider text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950/60 dark:text-zinc-400">
               <th class="px-4 py-2.5">Project Name</th>
               <th class="px-4 py-2.5">Public Endpoint</th>
               <th class="px-4 py-2.5">Layout System</th>
@@ -242,41 +242,41 @@ async function confirmDeleteProject(): Promise<void> {
               <th class="px-4 py-2.5 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-zinc-100">
+          <tbody class="divide-y divide-zinc-100 dark:divide-zinc-800">
             <tr
               v-for="project in projectStore.projects"
               :key="project.id"
-              class="group transition-colors hover:bg-zinc-50/90"
+              class="group transition-colors hover:bg-zinc-50/90 dark:hover:bg-zinc-800/50"
             >
               <td class="px-4 py-3">
                 <div class="flex items-center gap-2.5">
                   <span
-                    class="h-2.5 w-2.5 shrink-0 rounded-xs border border-black/15"
+                    class="h-2.5 w-2.5 shrink-0 rounded-xs border border-black/15 dark:border-white/20"
                     :style="{ backgroundColor: project.theme?.colors?.primary || '#09090B' }"
                   />
                   <div>
                     <RouterLink
                       :to="`/projects/${project.id}/edit`"
-                      class="font-semibold text-zinc-900 hover:underline"
+                      class="font-semibold text-zinc-900 hover:underline dark:text-zinc-100"
                     >
                       {{ project.name }}
                     </RouterLink>
-                    <p class="max-w-xs truncate text-xs text-zinc-400">
+                    <p class="max-w-xs truncate text-xs text-zinc-500 dark:text-zinc-400">
                       {{ project.description || project.content?.sections?.hero?.headline }}
                     </p>
                   </div>
                 </div>
               </td>
-              <td class="px-4 py-3 font-mono text-xs text-zinc-500">
+              <td class="px-4 py-3 font-mono text-xs text-zinc-600 dark:text-zinc-300">
                 /p/{{ project.slug }}
               </td>
-              <td class="px-4 py-3 text-xs text-zinc-600">
+              <td class="px-4 py-3 text-xs text-zinc-600 dark:text-zinc-300">
                 {{ project.template?.name || 'Custom Schema' }}
               </td>
               <td class="px-4 py-3">
                 <BaseBadge :variant="project.status">{{ project.status }}</BaseBadge>
               </td>
-              <td class="px-4 py-3 font-mono text-[11px] text-zinc-400 tabular-nums">
+              <td class="px-4 py-3 font-mono text-[11px] text-zinc-500 dark:text-zinc-400 tabular-nums">
                 {{ new Date(project.updated_at).toLocaleDateString() }}
               </td>
               <td class="px-4 py-3 text-right">
@@ -285,7 +285,7 @@ async function confirmDeleteProject(): Promise<void> {
                     v-if="project.status === 'published'"
                     :to="`/p/${project.slug}`"
                     target="_blank"
-                    class="inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-emerald-700 hover:bg-emerald-50"
+                    class="inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-emerald-700 hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-950/60"
                     title="Open live page"
                   >
                     <span>Live</span>
@@ -293,7 +293,7 @@ async function confirmDeleteProject(): Promise<void> {
                   </RouterLink>
                   <button
                     type="button"
-                    class="rounded p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900"
+                    class="rounded p-1.5 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
                     title="Duplicate project"
                     aria-label="Duplicate project"
                     @click="handleDuplicate(project)"
@@ -302,7 +302,7 @@ async function confirmDeleteProject(): Promise<void> {
                   </button>
                   <button
                     type="button"
-                    class="rounded p-1.5 text-zinc-400 hover:bg-rose-50 hover:text-rose-600"
+                    class="rounded p-1.5 text-zinc-500 hover:bg-rose-50 hover:text-rose-600 dark:text-zinc-400 dark:hover:bg-rose-950/60 dark:hover:text-rose-400"
                     title="Delete project"
                     aria-label="Delete project"
                     @click="projectToDelete = project"
@@ -329,35 +329,35 @@ async function confirmDeleteProject(): Promise<void> {
       <div
         v-for="project in projectStore.projects"
         :key="project.id"
-        class="flex flex-col justify-between rounded-lg border border-zinc-200 bg-white p-5 shadow-subtle transition hover:border-zinc-300"
+        class="flex flex-col justify-between rounded-lg border border-zinc-200 bg-white p-5 shadow-subtle transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
       >
         <div>
           <div class="mb-3 flex items-center justify-between">
             <div class="flex items-center gap-1">
               <span
-                class="h-3 w-3 rounded-xs border border-black/10"
+                class="h-3 w-3 rounded-xs border border-black/10 dark:border-white/20"
                 :style="{ backgroundColor: project.theme?.colors?.primary || '#09090B' }"
               />
               <span
-                class="h-3 w-3 rounded-xs border border-black/10"
+                class="h-3 w-3 rounded-xs border border-black/10 dark:border-white/20"
                 :style="{ backgroundColor: project.theme?.colors?.secondary || '#E11D48' }"
               />
             </div>
             <BaseBadge :variant="project.status">{{ project.status }}</BaseBadge>
           </div>
 
-          <h3 class="text-sm font-semibold text-zinc-900">{{ project.name }}</h3>
-          <p class="mt-1 line-clamp-2 text-xs text-zinc-500">
+          <h3 class="text-sm font-semibold text-zinc-900 dark:text-zinc-100">{{ project.name }}</h3>
+          <p class="mt-1 line-clamp-2 text-xs text-zinc-500 dark:text-zinc-400">
             {{ project.description || project.content?.sections?.hero?.headline }}
           </p>
-          <p class="mt-3 font-mono text-[11px] text-zinc-400">/p/{{ project.slug }}</p>
+          <p class="mt-3 font-mono text-[11px] text-zinc-500 dark:text-zinc-400">/p/{{ project.slug }}</p>
         </div>
 
-        <div class="mt-4 flex items-center justify-between border-t border-zinc-100 pt-3">
+        <div class="mt-4 flex items-center justify-between border-t border-zinc-100 pt-3 dark:border-zinc-800">
           <div class="flex items-center gap-1">
             <button
               type="button"
-              class="rounded p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-900"
+              class="rounded p-1.5 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
               title="Duplicate"
               @click="handleDuplicate(project)"
             >
@@ -365,7 +365,7 @@ async function confirmDeleteProject(): Promise<void> {
             </button>
             <button
               type="button"
-              class="rounded p-1.5 text-zinc-400 hover:bg-rose-50 hover:text-rose-600"
+              class="rounded p-1.5 text-zinc-500 hover:bg-rose-50 hover:text-rose-600 dark:text-zinc-400 dark:hover:bg-rose-950/60 dark:hover:text-rose-400"
               title="Delete"
               @click="projectToDelete = project"
             >
@@ -393,7 +393,7 @@ async function confirmDeleteProject(): Promise<void> {
       <div
         v-if="createError"
         role="alert"
-        class="mb-4 rounded-md border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700"
+        class="mb-4 rounded-md border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300"
       >
         {{ createError }}
       </div>
@@ -417,14 +417,14 @@ async function confirmDeleteProject(): Promise<void> {
         <div>
           <label
             for="new-project-template"
-            class="mb-1.5 block text-xs font-medium text-zinc-700"
+            class="mb-1.5 block text-xs font-medium text-zinc-700 dark:text-zinc-300"
           >
             Layout System
           </label>
           <select
             id="new-project-template"
             v-model="createForm.template_id"
-            class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none"
+            class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
           >
             <option
               v-for="tpl in projectStore.templates"

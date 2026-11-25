@@ -32,11 +32,15 @@ defineEmits<{
     <div class="flex items-start gap-3.5">
       <div
         class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
-        :class="variant === 'danger' ? 'bg-red-50 text-brand-error' : 'bg-indigo-50 text-brand-primary'"
+        :class="
+          variant === 'danger'
+            ? 'bg-rose-50 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400'
+            : 'bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100'
+        "
       >
         <AlertTriangle class="h-5 w-5" />
       </div>
-      <p class="text-sm leading-relaxed text-slate-600">
+      <p class="text-sm leading-relaxed text-zinc-600 dark:text-zinc-300">
         {{ message }}
       </p>
     </div>

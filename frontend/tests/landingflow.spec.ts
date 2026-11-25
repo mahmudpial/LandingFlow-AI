@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { setActivePinia, createPinia } from 'pinia';
 import { mount } from '@vue/test-utils';
 import { useEditorStore } from '@/stores/editor';
+import { useThemeStore } from '@/stores/theme';
 import {
   sanitizeHref,
   loginSchema,
@@ -269,5 +270,20 @@ describe('LandingFlow AI Frontend Suite', () => {
     // Redo color change
     store.redo();
     expect(store.theme?.colors.primary).toBe('#10B981');
+  });
+
+  it('toggles between dark and light mode and updates document.documentElement class', () => {
+    const themeStore = useThemeStore();
+    themeStore.setTheme('light');
+    expect(themeStore.isDark).toBe(false);
+    expect(document.documentElement.classList.contains('dark')).toBe(false);
+
+    themeStore.toggleTheme();
+    expect(themeStore.isDark).toBe(true);
+    expect(document.documentElement.classList.contains('dark')).toBe(true);
+
+    themeStore.toggleTheme();
+    expect(themeStore.isDark).toBe(false);
+    expect(document.documentElement.classList.contains('dark')).toBe(false);
   });
 });

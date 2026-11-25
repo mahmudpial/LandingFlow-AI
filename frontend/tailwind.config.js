@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
@@ -31,7 +32,7 @@ export default {
       },
       boxShadow: {
         'card': '0 1px 2px 0 rgba(9, 9, 11, 0.03), 0 0 0 1px rgba(9, 9, 11, 0.04)',
-        'elevated': '0 20px 40px -15px rgba(9, 9, 11, 0.1), 0 0 0 1px rgba(9, 9, 11, 0.06)',
+        'elevated': '0 20px 40px -15px rgba(9, 9, 11, 0.14), 0 0 0 1px rgba(9, 9, 11, 0.08)',
         'tactile': '0 1px 2px 0 rgba(9, 9, 11, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.16)',
         'subtle': '0 1px 1px 0 rgba(9, 9, 11, 0.03)',
       },

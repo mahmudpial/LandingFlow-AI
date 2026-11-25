@@ -76,18 +76,18 @@ async function handleVerifyEmail(): Promise<void> {
   <DashboardLayout>
     <div class="mx-auto max-w-3xl space-y-6">
       <div>
-        <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Account & Security</h2>
-        <p class="mt-0.5 text-xs text-zinc-500">
+        <h2 class="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Account & Security</h2>
+        <p class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
           Manage your studio profile, organization details, and session credentials.
         </p>
       </div>
 
       <!-- Profile Section -->
-      <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle">
-        <div class="flex items-center justify-between border-b border-zinc-200 px-5 py-3.5">
+      <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle dark:border-zinc-800 dark:bg-zinc-900">
+        <div class="flex items-center justify-between border-b border-zinc-200 px-5 py-3.5 dark:border-zinc-800">
           <div>
-            <h3 class="text-[13px] font-semibold text-zinc-900">Operator Profile</h3>
-            <p class="text-xs text-zinc-500">Identity displayed across workspace audit logs.</p>
+            <h3 class="text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">Operator Profile</h3>
+            <p class="text-xs text-zinc-500 dark:text-zinc-400">Identity displayed across workspace audit logs.</p>
           </div>
           <div class="flex items-center gap-2">
             <BaseBadge :variant="authStore.user?.email_verified ? 'published' : 'draft'">
@@ -109,7 +109,7 @@ async function handleVerifyEmail(): Promise<void> {
           <div
             v-if="profileError"
             role="alert"
-            class="rounded-md border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700"
+            class="rounded-md border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300"
           >
             {{ profileError }}
           </div>
@@ -141,7 +141,7 @@ async function handleVerifyEmail(): Promise<void> {
               label="Role"
             />
           </div>
-          <div class="flex justify-end border-t border-zinc-100 pt-3">
+          <div class="flex justify-end border-t border-zinc-100 pt-3 dark:border-zinc-800">
             <BaseButton type="submit" variant="primary" :loading="savingProfile">
               Save Profile
             </BaseButton>
@@ -150,10 +150,10 @@ async function handleVerifyEmail(): Promise<void> {
       </div>
 
       <!-- Password Rotation -->
-      <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle">
-        <div class="border-b border-zinc-200 px-5 py-3.5">
-          <h3 class="text-[13px] font-semibold text-zinc-900">Credential Rotation</h3>
-          <p class="text-xs text-zinc-500">
+      <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle dark:border-zinc-800 dark:bg-zinc-900">
+        <div class="border-b border-zinc-200 px-5 py-3.5 dark:border-zinc-800">
+          <h3 class="text-[13px] font-semibold text-zinc-900 dark:text-zinc-100">Credential Rotation</h3>
+          <p class="text-xs text-zinc-500 dark:text-zinc-400">
             Session protected via HTTP-only Sanctum cookies and CSRF tokens.
           </p>
         </div>
@@ -162,7 +162,7 @@ async function handleVerifyEmail(): Promise<void> {
           <div
             v-if="passwordError"
             role="alert"
-            class="rounded-md border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700"
+            class="rounded-md border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300"
           >
             {{ passwordError }}
           </div>
@@ -190,7 +190,7 @@ async function handleVerifyEmail(): Promise<void> {
               required
             />
           </div>
-          <div class="flex justify-end border-t border-zinc-100 pt-3">
+          <div class="flex justify-end border-t border-zinc-100 pt-3 dark:border-zinc-800">
             <BaseButton type="submit" variant="outline" :loading="savingPassword">
               Rotate Password
             </BaseButton>

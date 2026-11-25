@@ -4,7 +4,7 @@ import { apiClient, ensureCsrfCookie, extractErrorMessage } from '@/services/api
 import { useToastStore } from '@/stores/toast';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
-import { Sparkles } from 'lucide-vue-next';
+import ThemeToggle from '@/components/ui/ThemeToggle.vue';
 
 const toastStore = useToastStore();
 
@@ -55,33 +55,33 @@ async function handleResetPassword(): Promise<void> {
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col justify-center bg-brand-bg px-4 py-12 sm:px-6 lg:px-8">
+  <div class="relative flex min-h-screen flex-col justify-center bg-[#FAFAFA] px-4 py-12 text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100 sm:px-6 lg:px-8">
+    <div class="absolute right-6 top-6">
+      <ThemeToggle :show-label="true" />
+    </div>
+
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <RouterLink to="/" class="flex items-center justify-center gap-2.5">
-        <div
-          class="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-sm"
-        >
-          <Sparkles class="h-5 w-5" />
-        </div>
-        <span class="text-xl font-extrabold tracking-tight text-brand-text">LandingFlow AI</span>
+        <img src="/logo.svg" alt="LandingFlow" class="h-8 w-8 rounded-md" />
+        <span class="text-lg font-bold tracking-tight text-zinc-900 dark:text-white">LandingFlow Studio</span>
       </RouterLink>
-      <h1 class="mt-6 text-center text-2xl font-bold text-brand-text">
+      <h1 class="mt-6 text-center text-2xl font-bold text-zinc-900 dark:text-white">
         {{ step === 'request' ? 'Reset your password' : 'Enter new password' }}
       </h1>
     </div>
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div class="rounded-2xl border border-brand-border bg-white px-6 py-8 shadow-card sm:px-10">
+      <div class="rounded-xl border border-zinc-200 bg-white px-6 py-8 shadow-subtle dark:border-zinc-800 dark:bg-zinc-900 sm:px-10">
         <div
           v-if="statusMessage"
-          class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-xs font-medium text-emerald-800"
+          class="mb-4 rounded-lg border border-emerald-200 bg-emerald-50 p-3 text-xs font-medium text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300"
         >
           {{ statusMessage }}
         </div>
         <div
           v-if="errorMessage"
           role="alert"
-          class="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-xs font-medium text-brand-error"
+          class="mb-4 rounded-lg border border-rose-200 bg-rose-50 p-3 text-xs font-medium text-rose-700 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300"
         >
           {{ errorMessage }}
         </div>
@@ -128,8 +128,8 @@ async function handleResetPassword(): Promise<void> {
         </form>
 
         <div class="mt-6 text-center text-xs">
-          <RouterLink to="/login" class="font-semibold text-brand-primary hover:underline">
-            Back to Sign In
+          <RouterLink to="/login" class="font-semibold text-zinc-900 hover:underline dark:text-zinc-200">
+            ← Back to Sign In
           </RouterLink>
         </div>
       </div>

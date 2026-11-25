@@ -117,17 +117,17 @@ async function handleGenerate(): Promise<void> {
       <div class="mb-5 flex items-center justify-between">
         <div>
           <div class="flex items-center gap-2">
-            <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Copy Architect</h2>
+            <h2 class="text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-100">Copy Architect</h2>
             <BaseBadge variant="neutral">10-Section Schema Compiler</BaseBadge>
           </div>
-          <p class="mt-0.5 text-xs text-zinc-500">
+          <p class="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
             Define your product positioning, audience, and conversion goal to compile a complete page.
           </p>
         </div>
       </div>
 
       <!-- Segmented Step Header -->
-      <div class="mb-5 grid grid-cols-3 divide-x divide-zinc-200 overflow-hidden rounded-lg border border-zinc-200 bg-white">
+      <div class="mb-5 grid grid-cols-3 divide-x divide-zinc-200 overflow-hidden rounded-lg border border-zinc-200 bg-white dark:divide-zinc-800 dark:border-zinc-800 dark:bg-zinc-900">
         <button
           v-for="stepNum in [1, 2, 3]"
           :key="stepNum"
@@ -135,10 +135,10 @@ async function handleGenerate(): Promise<void> {
           class="px-4 py-2.5 text-left transition"
           :class="
             currentStep === stepNum
-              ? 'bg-zinc-900 text-white'
+              ? 'bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-950'
               : currentStep > stepNum
-                ? 'bg-zinc-50 text-zinc-900'
-                : 'bg-white text-zinc-400'
+                ? 'bg-zinc-50 text-zinc-900 dark:bg-zinc-800/70 dark:text-zinc-200'
+                : 'bg-white text-zinc-400 dark:bg-zinc-900 dark:text-zinc-500'
           "
           @click="stepNum < currentStep ? (currentStep = stepNum) : null"
         >
@@ -158,11 +158,11 @@ async function handleGenerate(): Promise<void> {
       </div>
 
       <!-- Main Specification Card -->
-      <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-subtle">
+      <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-subtle dark:border-zinc-800 dark:bg-zinc-900">
         <div
           v-if="errorMessage"
           role="alert"
-          class="mb-5 rounded-md border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-xs font-medium text-rose-700"
+          class="mb-5 rounded-md border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-xs font-medium text-rose-700 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-300"
         >
           {{ errorMessage }}
         </div>
@@ -172,14 +172,14 @@ async function handleGenerate(): Promise<void> {
           <div>
             <label
               for="target-project"
-              class="mb-1.5 block text-xs font-medium text-zinc-700"
+              class="mb-1.5 block text-xs font-medium text-zinc-700 dark:text-zinc-300"
             >
               Target Project
             </label>
             <select
               id="target-project"
               v-model="targetProjectId"
-              class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none"
+              class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
             >
               <option value="new">+ Create New Project Automatically</option>
               <option
@@ -259,14 +259,14 @@ async function handleGenerate(): Promise<void> {
             <div>
               <label
                 for="wiz-tone"
-                class="mb-1.5 block text-xs font-medium text-zinc-700"
+                class="mb-1.5 block text-xs font-medium text-zinc-700 dark:text-zinc-300"
               >
                 Editorial Voice
               </label>
               <select
                 id="wiz-tone"
                 v-model="wizard.brand_tone"
-                class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none"
+                class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
               >
                 <option value="Modern, clear, and authoritative">Modern, clear & authoritative</option>
                 <option value="Bold, technical, and launch-focused">Bold, technical & launch-focused</option>
@@ -287,14 +287,14 @@ async function handleGenerate(): Promise<void> {
           <div v-if="targetProjectId === 'new'">
             <label
               for="wiz-template"
-              class="mb-1.5 block text-xs font-medium text-zinc-700"
+              class="mb-1.5 block text-xs font-medium text-zinc-700 dark:text-zinc-300"
             >
               Initial Layout System
             </label>
             <select
               id="wiz-template"
               v-model="selectedTemplateId"
-              class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none"
+              class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-100"
             >
               <option
                 v-for="tpl in projectStore.templates"
@@ -306,8 +306,8 @@ async function handleGenerate(): Promise<void> {
             </select>
           </div>
 
-          <div class="rounded-md border border-zinc-200 bg-zinc-50 p-3.5 text-xs text-zinc-600">
-            <p class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-900">
+          <div class="rounded-md border border-zinc-200 bg-zinc-50 p-3.5 text-xs text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300">
+            <p class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-900 dark:text-zinc-100">
               Truthfulness & Schema Guardrail
             </p>
             <p class="mt-1 leading-relaxed">
@@ -319,7 +319,7 @@ async function handleGenerate(): Promise<void> {
         </div>
 
         <!-- Footer Controls -->
-        <div class="mt-6 flex items-center justify-between border-t border-zinc-100 pt-4">
+        <div class="mt-6 flex items-center justify-between border-t border-zinc-100 pt-4 dark:border-zinc-800">
           <BaseButton
             v-if="currentStep > 1"
             variant="outline"
