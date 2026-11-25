@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full antialiased">
+<html lang="en" class="light h-full antialiased" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,12 +14,15 @@
     <script>
       (function () {
         try {
-          var saved = localStorage.getItem('landingflow_theme_mode');
-          var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if (saved === 'dark' || ((!saved || saved === 'system') && prefersDark)) {
+          var saved = localStorage.getItem('landingflow_theme_mode_v2');
+          if (saved === 'dark') {
             document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+            document.documentElement.setAttribute('data-theme', 'dark');
           } else {
             document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+            document.documentElement.setAttribute('data-theme', 'light');
           }
         } catch (e) {}
       })();

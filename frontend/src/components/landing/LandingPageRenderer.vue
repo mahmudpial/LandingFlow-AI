@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import type { LandingPageContent, LandingPageTheme, SectionKey } from '@/types';
 import { sanitizeHref } from '@/utils/validation';
+import { useThemeStore } from '@/stores/theme';
 
 const props = withDefaults(
   defineProps<{
@@ -21,14 +22,24 @@ const emit = defineEmits<{
   (e: 'select-section', key: SectionKey): void;
 }>();
 
-const palette = computed(() => ({
-  primary: props.theme?.colors?.primary || '#111318',
-  secondary: props.theme?.colors?.secondary || '#D94E28',
-  accent: props.theme?.colors?.accent || '#15803D',
-  background: props.theme?.colors?.background || '#F7F6F2',
-  surface: props.theme?.colors?.surface || '#FFFFFF',
-  text: props.theme?.colors?.text || '#111318',
-}));
+const themeStore = useThemeStore();
+
+const palette = computed(() => {
+  const isDark = themeStore.isDark;
+  const rawBg = props.theme?.colors?.background || '#F7F6F2';
+  const rawSurface = props.theme?.colors?.surface || '#FFFFFF';
+  const rawText = props.theme?.colors?.text || '#111318';
+  const rawPrimary = props.theme?.colors?.primary || '#111318';
+
+  return {
+    primary: isDark && (rawPrimary === '#111318' || rawPrimary === '#09090B') ? '#E11D48' : rawPrimary,
+    secondary: props.theme?.colors?.secondary || '#D94E28',
+    accent: props.theme?.colors?.accent || '#15803D',
+    background: isDark && (rawBg === '#F7F6F2' || rawBg === '#FAF9F5' || rawBg === '#FFFFFF' || rawBg === '#F8FAFC') ? '#09090B' : rawBg,
+    surface: isDark && (rawSurface === '#FFFFFF' || rawSurface === '#F8FAFC') ? '#18181B' : rawSurface,
+    text: isDark && (rawText === '#111318' || rawText === '#0F172A' || rawText === '#09090B') ? '#F4F4F5' : rawText,
+  };
+});
 
 const orderedVisibleSections = computed(() => {
   const order = props.content?.sections_order || [
@@ -215,12 +226,12 @@ function formatIndex(idx: number): string {
 
             <div class="mt-12 grid gap-6 md:grid-cols-2">
               <!-- Problem Column -->
-              <div class="rounded-xl border border-black/10 bg-white/60 p-7">
-                <div class="flex items-center justify-between border-b border-black/10 pb-3">
-                  <h3 class="text-sm font-bold uppercase tracking-wider text-rose-800">
+              <div class="rounded-xl border border-black/10 bg-white/60 p-7 dark:border-white/10 dark:bg-zinc-900/80">
+                <div class="flex items-center justify-between border-b border-black/10 pb-3 dark:border-white/10">
+                  <h3 class="text-sm font-bold uppercase tracking-wider text-rose-800 dark:text-rose-400">
                     {{ content.sections.problem_solution.problem_title }}
                   </h3>
-                  <span class="font-mono text-[11px] text-rose-700">LEGACY</span>
+                  <span class="font-mono text-[11px] text-rose-700 dark:text-rose-400">LEGACY</span>
                 </div>
                 <ul class="mt-5 space-y-3.5">
                   <li
@@ -228,7 +239,7 @@ function formatIndex(idx: number): string {
                     :key="idx"
                     class="flex items-start gap-3 text-sm opacity-85"
                   >
-                    <span class="mt-1 font-mono text-xs font-bold text-rose-600">×</span>
+                    <span class="mt-1 font-mono text-xs font-bold text-rose-600 dark:text-rose-400">×</span>
                     <span>{{ item }}</span>
                   </li>
                 </ul>
@@ -236,10 +247,10 @@ function formatIndex(idx: number): string {
 
               <!-- Solution Column -->
               <div
-                class="rounded-xl border bg-white p-7 shadow-sm"
+                class="rounded-xl border bg-white p-7 shadow-sm dark:bg-zinc-900"
                 :style="{ borderColor: palette.primary }"
               >
-                <div class="flex items-center justify-between border-b border-black/10 pb-3">
+                <div class="flex items-center justify-between border-b border-black/10 pb-3 dark:border-white/10">
                   <h3 class="text-sm font-bold uppercase tracking-wider" :style="{ color: palette.primary }">
                     {{ content.sections.problem_solution.solution_title }}
                   </h3>
@@ -284,19 +295,19 @@ function formatIndex(idx: number): string {
               <div
                 v-for="(feat, idx) in content.sections.features.items"
                 :key="idx"
-                class="flex flex-col justify-between rounded-xl border border-black/10 bg-white p-6 transition hover:border-black/30"
+                class="flex flex-col justify-between rounded-xl border border-black/10 bg-white p-6 transition hover:border-black/30 dark:border-white/10 dark:bg-zinc-900 dark:hover:border-white/30"
               >
                 <div>
-                  <div class="flex items-center justify-between border-b border-black/10 pb-3">
+                  <div class="flex items-center justify-between border-b border-black/10 pb-3 dark:border-white/10">
                     <span class="font-mono text-xs font-bold" :style="{ color: palette.secondary }">
                       {{ formatIndex(idx) }}
                     </span>
                     <span class="h-1.5 w-1.5 rounded-full" :style="{ backgroundColor: palette.primary }" />
                   </div>
-                  <h3 class="mt-5 text-base font-bold text-neutral-900">
+                  <h3 class="mt-5 text-base font-bold text-neutral-900 dark:text-zinc-100">
                     {{ feat.title }}
                   </h3>
-                  <p class="mt-2 text-sm leading-relaxed text-neutral-600">
+                  <p class="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-zinc-300">
                     {{ feat.description }}
                   </p>
                 </div>
@@ -328,7 +339,7 @@ function formatIndex(idx: number): string {
               <div
                 v-for="(benefit, idx) in content.sections.benefits.items"
                 :key="idx"
-                class="rounded-xl border border-black/10 bg-white p-7"
+                class="rounded-xl border border-black/10 bg-white p-7 dark:border-white/10 dark:bg-zinc-900"
               >
                 <span
                   class="inline-block rounded border px-2.5 py-0.5 font-mono text-[11px] font-semibold uppercase"
@@ -339,10 +350,10 @@ function formatIndex(idx: number): string {
                 >
                   {{ benefit.metric_label }}
                 </span>
-                <h3 class="mt-4 text-lg font-bold text-neutral-900">
+                <h3 class="mt-4 text-lg font-bold text-neutral-900 dark:text-zinc-100">
                   {{ benefit.title }}
                 </h3>
-                <p class="mt-2 text-sm leading-relaxed text-neutral-600">
+                <p class="mt-2 text-sm leading-relaxed text-neutral-600 dark:text-zinc-300">
                   {{ benefit.description }}
                 </p>
               </div>
@@ -377,14 +388,14 @@ function formatIndex(idx: number): string {
               <div
                 v-for="(item, idx) in content.sections.testimonials.items"
                 :key="idx"
-                class="flex flex-col justify-between rounded-xl border border-black/10 bg-white p-6"
+                class="flex flex-col justify-between rounded-xl border border-black/10 bg-white p-6 dark:border-white/10 dark:bg-zinc-900"
               >
-                <p class="font-serif text-lg italic leading-relaxed text-neutral-800">
+                <p class="font-serif text-lg italic leading-relaxed text-neutral-800 dark:text-zinc-200">
                   "{{ item.quote }}"
                 </p>
-                <div class="mt-6 border-t border-black/10 pt-4">
-                  <p class="text-xs font-bold text-neutral-900">{{ item.author_name }}</p>
-                  <p class="font-mono text-[11px] text-neutral-500">
+                <div class="mt-6 border-t border-black/10 pt-4 dark:border-white/10">
+                  <p class="text-xs font-bold text-neutral-900 dark:text-zinc-100">{{ item.author_name }}</p>
+                  <p class="font-mono text-[11px] text-neutral-500 dark:text-zinc-400">
                     {{ item.author_role }} • {{ item.company }}
                   </p>
                 </div>
@@ -419,13 +430,13 @@ function formatIndex(idx: number): string {
               <div
                 v-for="(plan, idx) in content.sections.pricing.plans"
                 :key="idx"
-                class="relative flex flex-col justify-between rounded-xl border bg-white p-7"
-                :class="plan.is_popular ? 'ring-2' : 'border-black/15'"
+                class="relative flex flex-col justify-between rounded-xl border bg-white p-7 dark:bg-zinc-900"
+                :class="plan.is_popular ? 'ring-2' : 'border-black/15 dark:border-white/15'"
                 :style="plan.is_popular ? { borderColor: palette.primary } : {}"
               >
                 <div>
                   <div class="flex items-center justify-between">
-                    <h3 class="text-base font-bold text-neutral-900">{{ plan.name }}</h3>
+                    <h3 class="text-base font-bold text-neutral-900 dark:text-zinc-100">{{ plan.name }}</h3>
                     <span
                       v-if="plan.is_popular"
                       class="rounded px-2 py-0.5 font-mono text-[10px] font-bold uppercase text-white"
@@ -434,17 +445,17 @@ function formatIndex(idx: number): string {
                       Recommended
                     </span>
                   </div>
-                  <p class="mt-2 text-xs text-neutral-500">{{ plan.description }}</p>
-                  <div class="mt-5 flex items-baseline gap-1 border-b border-black/10 pb-5">
-                    <span class="font-mono text-3xl font-extrabold text-neutral-900">{{ plan.price }}</span>
-                    <span class="font-mono text-xs text-neutral-500">{{ plan.period }}</span>
+                  <p class="mt-2 text-xs text-neutral-500 dark:text-zinc-400">{{ plan.description }}</p>
+                  <div class="mt-5 flex items-baseline gap-1 border-b border-black/10 pb-5 dark:border-white/10">
+                    <span class="font-mono text-3xl font-extrabold text-neutral-900 dark:text-zinc-100">{{ plan.price }}</span>
+                    <span class="font-mono text-xs text-neutral-500 dark:text-zinc-400">{{ plan.period }}</span>
                   </div>
 
                   <ul class="mt-5 space-y-2.5">
                     <li
                       v-for="(feat, fIdx) in plan.features"
                       :key="fIdx"
-                      class="flex items-start gap-2.5 text-xs text-neutral-700"
+                      class="flex items-start gap-2.5 text-xs text-neutral-700 dark:text-zinc-300"
                     >
                       <span class="font-mono font-bold" :style="{ color: palette.accent }">✓</span>
                       <span>{{ feat }}</span>
@@ -458,7 +469,7 @@ function formatIndex(idx: number): string {
                   :class="
                     plan.is_popular
                       ? 'text-white shadow-sm'
-                      : 'border border-neutral-300 text-neutral-900 hover:bg-neutral-50'
+                      : 'border border-neutral-300 text-neutral-900 hover:bg-neutral-50 dark:border-zinc-700 dark:text-zinc-100 dark:hover:bg-zinc-800'
                   "
                   :style="plan.is_popular ? { backgroundColor: palette.primary } : {}"
                 >
@@ -489,19 +500,19 @@ function formatIndex(idx: number): string {
               </p>
             </div>
 
-            <div class="mt-10 divide-y divide-black/10 border-t border-black/10">
+            <div class="mt-10 divide-y divide-black/10 border-t border-black/10 dark:divide-white/10 dark:border-white/10">
               <div
                 v-for="(faq, idx) in content.sections.faq.items"
                 :key="idx"
                 class="py-5"
               >
-                <h3 class="flex items-baseline gap-3 text-sm font-bold text-neutral-900">
+                <h3 class="flex items-baseline gap-3 text-sm font-bold text-neutral-900 dark:text-zinc-100">
                   <span class="font-mono text-xs" :style="{ color: palette.secondary }">
                     {{ formatIndex(idx) }}
                   </span>
                   <span>{{ faq.question }}</span>
                 </h3>
-                <p class="mt-2 pl-7 text-sm leading-relaxed text-neutral-600">
+                <p class="mt-2 pl-7 text-sm leading-relaxed text-neutral-600 dark:text-zinc-300">
                   {{ faq.answer }}
                 </p>
               </div>

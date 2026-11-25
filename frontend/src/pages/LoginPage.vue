@@ -50,27 +50,27 @@ async function handleSubmit(): Promise<void> {
 
 <template>
   <div class="grid min-h-screen bg-[#FAFAFA] text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100 lg:grid-cols-12">
-    <!-- Left Editorial Column -->
-    <div class="hidden flex-col justify-between border-r border-zinc-800 bg-zinc-950 p-12 text-zinc-100 lg:col-span-5 lg:flex">
+    <!-- Left Editorial Column (Adapts to Light & Dark Mode) -->
+    <div class="hidden flex-col justify-between border-r border-zinc-200 bg-zinc-100/80 p-12 text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 lg:col-span-5 lg:flex">
       <RouterLink to="/" class="flex items-center gap-2.5">
         <img src="/logo.svg" alt="LandingFlow" class="h-7 w-7 rounded-md" />
-        <span class="text-[15px] font-bold tracking-tight text-white">LandingFlow Studio</span>
+        <span class="text-[15px] font-bold tracking-tight text-zinc-900 dark:text-white">LandingFlow Studio</span>
       </RouterLink>
 
       <div class="my-auto max-w-md">
-        <p class="font-mono text-xs uppercase tracking-[0.18em] text-rose-500">
+        <p class="font-mono text-xs uppercase tracking-[0.18em] text-rose-600 dark:text-rose-500">
           Conversion Architecture
         </p>
-        <h2 class="mt-4 text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl">
+        <h2 class="mt-4 text-3xl font-bold leading-tight tracking-tight text-zinc-900 dark:text-white sm:text-4xl">
           Structured landing pages built with editorial precision.
         </h2>
-        <p class="mt-4 text-sm leading-relaxed text-zinc-400">
+        <p class="mt-4 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           Draft persuasive product messaging, test responsive layouts across viewports, and publish
           directly to clean public slugs.
         </p>
       </div>
 
-      <div class="flex items-center justify-between border-t border-white/10 pt-6 font-mono text-xs text-zinc-500">
+      <div class="flex items-center justify-between border-t border-zinc-200 pt-6 font-mono text-xs text-zinc-500 dark:border-white/10">
         <span>SANCTUM STATEFUL AUTH</span>
         <span>v1.0 STUDIO</span>
       </div>

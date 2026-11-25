@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 
 export type ThemeMode = 'light' | 'dark';
 
-const STORAGE_KEY = 'landingflow_theme_mode';
+const STORAGE_KEY = 'landingflow_theme_mode_v2';
 
 export const useThemeStore = defineStore('theme', () => {
   const mode = ref<ThemeMode>('light');
@@ -12,24 +12,32 @@ export const useThemeStore = defineStore('theme', () => {
 
   function applyDomTheme(target: ThemeMode): void {
     if (typeof document === 'undefined') return;
-    const root = document.documentElement;
+    const html = document.documentElement;
+    const body = document.body;
+
     if (target === 'dark') {
-      root.classList.add('dark');
+      html.classList.add('dark');
+      html.classList.remove('light');
+      html.setAttribute('data-theme', 'dark');
+      html.style.colorScheme = 'dark';
+      body?.classList.add('dark');
     } else {
-      root.classList.remove('dark');
+      html.classList.remove('dark');
+      html.classList.add('light');
+      html.setAttribute('data-theme', 'light');
+      html.style.colorScheme = 'light';
+      body?.classList.remove('dark');
     }
   }
 
   function initTheme(): void {
     if (typeof window === 'undefined') return;
     const saved = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
-    if (saved === 'dark' || saved === 'light') {
-      mode.value = saved;
+    // Default to Light Mode unless user explicitly chose 'dark'
+    if (saved === 'dark') {
+      mode.value = 'dark';
     } else {
-      const prefersDark =
-        typeof window.matchMedia === 'function' &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches;
-      mode.value = prefersDark ? 'dark' : 'light';
+      mode.value = 'light';
     }
     applyDomTheme(mode.value);
   }

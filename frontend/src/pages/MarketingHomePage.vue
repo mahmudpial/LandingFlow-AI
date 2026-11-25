@@ -301,23 +301,23 @@ const previewThemes = {
       </div>
     </section>
 
-    <!-- Editorial Bottom Banner -->
-    <section id="workflow" class="border-t border-zinc-200 bg-zinc-950 px-4 py-20 text-zinc-100 dark:border-zinc-800 sm:px-6">
+    <!-- Editorial Bottom Banner (Adapts to Light & Dark Mode) -->
+    <section id="workflow" class="border-t border-zinc-200 bg-zinc-100/80 px-4 py-20 text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100 sm:px-6">
       <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-8 text-center sm:flex-row sm:text-left">
         <div class="max-w-xl">
-          <span class="font-mono text-xs uppercase tracking-[0.16em] text-rose-500">
+          <span class="font-mono text-xs uppercase tracking-[0.16em] text-rose-600 dark:text-rose-500">
             Ready for Launch
           </span>
-          <h2 class="mt-2 text-3xl font-bold tracking-tight text-white">
+          <h2 class="mt-2 text-3xl font-bold tracking-tight text-zinc-950 dark:text-white">
             Build your next product launch page today.
           </h2>
-          <p class="mt-2 text-sm text-zinc-400">
+          <p class="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
             Full access to the 3-step Copy Architect, 3 layout systems, and live responsive studio.
           </p>
         </div>
         <div class="flex shrink-0 gap-3">
           <RouterLink to="/register">
-            <BaseButton size="lg" variant="secondary">
+            <BaseButton size="lg" variant="primary">
               Create Studio Account →
             </BaseButton>
           </RouterLink>
