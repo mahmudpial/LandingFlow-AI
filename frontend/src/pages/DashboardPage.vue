@@ -7,6 +7,7 @@ import { extractErrorMessage } from '@/services/api';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseBadge from '@/components/ui/BaseBadge.vue';
+import { Plus, ArrowUpRight, RefreshCw } from 'lucide-vue-next';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -18,7 +19,7 @@ async function loadDashboard(): Promise<void> {
   try {
     await projectStore.fetchDashboard();
   } catch (err) {
-    errorMessage.value = extractErrorMessage(err, 'Failed to load workspace telemetry.');
+    errorMessage.value = extractErrorMessage(err, 'Failed to load workspace overview.');
   }
 }
 
@@ -29,155 +30,154 @@ onMounted(() => {
 
 <template>
   <DashboardLayout>
-    <!-- Studio Welcome Header -->
-    <div
-      class="mb-8 flex flex-col justify-between gap-4 rounded-xl border border-brand-border bg-white p-6 shadow-card sm:flex-row sm:items-center"
-    >
+    <!-- Compact Page Header -->
+    <div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div>
-        <div class="flex flex-wrap items-center gap-2.5">
-          <span class="font-mono text-[11px] font-semibold uppercase tracking-widest text-brand-secondary">
-            Studio Overview
-          </span>
+        <div class="flex items-center gap-2">
+          <h2 class="text-lg font-semibold tracking-tight text-zinc-900">
+            Overview
+          </h2>
           <BaseBadge variant="neutral">
-            Engine: {{ projectStore.dashboardStats?.ai_provider || 'mock' }}
+            engine:{{ projectStore.dashboardStats?.ai_provider || 'mock' }}
           </BaseBadge>
         </div>
-        <h2 class="mt-1.5 text-xl font-extrabold tracking-tight text-brand-text sm:text-2xl">
-          Welcome back, {{ authStore.user?.name }}
-        </h2>
-        <p class="mt-1 text-sm text-brand-muted">
-          Monitor active landing page builds, public conversion traffic, and workspace activity.
+        <p class="mt-0.5 text-xs text-zinc-500">
+          Workspace telemetry and recent builds for {{ authStore.user?.name }}.
         </p>
       </div>
 
-      <div class="flex flex-wrap items-center gap-2.5">
+      <div class="flex items-center gap-2">
+        <BaseButton size="sm" variant="outline" @click="loadDashboard">
+          <RefreshCw class="h-3 w-3" />
+          <span>Refresh</span>
+        </BaseButton>
         <RouterLink to="/templates">
-          <BaseButton variant="outline">Browse Layout Systems</BaseButton>
+          <BaseButton size="sm" variant="outline">Layouts</BaseButton>
         </RouterLink>
         <RouterLink to="/generator">
-          <BaseButton variant="primary">
-            <span>+ Draft With Copy Architect</span>
+          <BaseButton size="sm" variant="primary">
+            <Plus class="h-3.5 w-3.5" />
+            <span>New Brief</span>
           </BaseButton>
         </RouterLink>
       </div>
     </div>
 
-    <!-- Error state -->
+    <!-- Error Banner -->
     <div
       v-if="errorMessage"
       role="alert"
-      class="mb-6 flex items-center justify-between rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-brand-error"
+      class="mb-6 flex items-center justify-between rounded-lg border border-rose-200 bg-rose-50 px-4 py-2.5 text-xs text-rose-700"
     >
       <span>{{ errorMessage }}</span>
       <BaseButton size="sm" variant="outline" @click="loadDashboard">Retry</BaseButton>
     </div>
 
-    <!-- Loading Skeleton -->
-    <div v-if="projectStore.loading && !projectStore.dashboardStats" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      <div
-        v-for="n in 4"
-        :key="n"
-        class="h-32 animate-pulse rounded-xl border border-brand-border bg-white p-5"
-      />
+    <!-- Unified 4-Column Hairline Telemetry Strip (Attio / Vercel Style) -->
+    <div
+      v-if="projectStore.loading && !projectStore.dashboardStats"
+      class="grid grid-cols-2 divide-x divide-y divide-zinc-200 overflow-hidden rounded-lg border border-zinc-200 bg-white sm:grid-cols-4 sm:divide-y-0"
+    >
+      <div v-for="n in 4" :key="n" class="h-24 animate-pulse p-4" />
     </div>
 
-    <!-- Live Metric Cards (Tabular Monospace Typography) -->
-    <div v-else-if="projectStore.dashboardStats" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-      <div class="card-hover-lift rounded-xl border border-brand-border bg-white p-5 shadow-card animate-fade-up">
-        <div class="flex items-center justify-between border-b border-brand-border pb-2.5">
-          <span class="font-mono text-[11px] font-semibold uppercase tracking-wider text-brand-muted">
-            Total Projects
-          </span>
-          <span class="font-mono text-[11px] text-brand-secondary">01</span>
+    <div
+      v-else-if="projectStore.dashboardStats"
+      class="grid grid-cols-2 divide-x divide-y divide-zinc-200 overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle sm:grid-cols-4 sm:divide-y-0"
+    >
+      <div class="p-4 sm:p-5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-zinc-500">Total Projects</span>
+          <span class="font-mono text-[10px] text-zinc-400">ALL</span>
         </div>
-        <p class="mt-4 font-mono text-3xl font-bold tracking-tight text-brand-text">
+        <p class="mt-2 font-mono text-2xl font-semibold tracking-tight text-zinc-900 tabular-nums">
           {{ projectStore.dashboardStats.total_projects }}
         </p>
-        <p class="mt-1.5 font-mono text-xs text-brand-muted">
-          {{ projectStore.dashboardStats.draft_projects }} active draft(s)
+        <p class="mt-1 font-mono text-[11px] text-zinc-500">
+          {{ projectStore.dashboardStats.draft_projects }} in draft state
         </p>
       </div>
 
-      <div class="card-hover-lift rounded-xl border border-brand-border bg-white p-5 shadow-card animate-fade-up stagger-1">
-        <div class="flex items-center justify-between border-b border-brand-border pb-2.5">
-          <span class="font-mono text-[11px] font-semibold uppercase tracking-wider text-brand-muted">
-            Published Live
-          </span>
-          <span class="font-mono text-[11px] text-brand-success">02</span>
+      <div class="p-4 sm:p-5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-zinc-500">Published Live</span>
+          <span class="h-1.5 w-1.5 rounded-full bg-emerald-500" />
         </div>
-        <p class="mt-4 font-mono text-3xl font-bold tracking-tight text-brand-text">
+        <p class="mt-2 font-mono text-2xl font-semibold tracking-tight text-zinc-900 tabular-nums">
           {{ projectStore.dashboardStats.published_pages }}
         </p>
-        <p class="mt-1.5 font-mono text-xs text-brand-muted">
-          {{ projectStore.dashboardStats.total_public_views }} public page views
+        <p class="mt-1 font-mono text-[11px] text-zinc-500">
+          Active public endpoints
         </p>
       </div>
 
-      <div class="card-hover-lift rounded-xl border border-brand-border bg-white p-5 shadow-card animate-fade-up stagger-2">
-        <div class="flex items-center justify-between border-b border-brand-border pb-2.5">
-          <span class="font-mono text-[11px] font-semibold uppercase tracking-wider text-brand-muted">
-            Copy Generations
-          </span>
-          <span class="font-mono text-[11px] text-brand-muted">03</span>
+      <div class="p-4 sm:p-5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-zinc-500">Public Views</span>
+          <span class="font-mono text-[10px] text-zinc-400">HITS</span>
         </div>
-        <p class="mt-4 font-mono text-3xl font-bold tracking-tight text-brand-text">
-          {{ projectStore.dashboardStats.ai_generations_used }}
+        <p class="mt-2 font-mono text-2xl font-semibold tracking-tight text-zinc-900 tabular-nums">
+          {{ projectStore.dashboardStats.total_public_views }}
         </p>
-        <p class="mt-1.5 font-mono text-xs text-brand-muted">
-          {{ projectStore.dashboardStats.ai_generations_last_hour }}/{{ projectStore.dashboardStats.ai_hourly_limit }} hourly quota
+        <p class="mt-1 font-mono text-[11px] text-zinc-500">
+          Cumulative `/p/slug` impressions
         </p>
       </div>
 
-      <div class="flex flex-col justify-between rounded-xl border border-brand-primary bg-[#111318] p-5 text-[#FAF9F5] shadow-card animate-fade-up stagger-3">
-        <div>
-          <span class="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-brand-secondary">
-            Quick Launch
-          </span>
-          <p class="mt-1.5 text-sm font-bold text-white">
-            Start a new conversion brief
-          </p>
-          <p class="mt-1 text-xs text-[#A1A09A]">
-            Generate all 10 sections from a 3-step product brief.
-          </p>
+      <div class="p-4 sm:p-5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-zinc-500">Copy Architect Quota</span>
+          <span class="font-mono text-[10px] text-zinc-400">1H WINDOW</span>
         </div>
-        <RouterLink to="/generator" class="mt-4">
-          <BaseButton size="sm" variant="secondary" full-width>
-            Open Copy Architect →
-          </BaseButton>
-        </RouterLink>
+        <p class="mt-2 font-mono text-2xl font-semibold tracking-tight text-zinc-900 tabular-nums">
+          {{ projectStore.dashboardStats.ai_generations_last_hour }}
+          <span class="text-sm font-normal text-zinc-400">
+            / {{ projectStore.dashboardStats.ai_hourly_limit }}
+          </span>
+        </p>
+        <p class="mt-1 font-mono text-[11px] text-zinc-500">
+          {{ projectStore.dashboardStats.ai_generations_used }} total lifetime runs
+        </p>
       </div>
     </div>
 
-    <!-- Main 2-Column Content: Recent Projects + Audit Log -->
-    <div class="mt-8 grid gap-8 lg:grid-cols-3">
-      <!-- Recent Projects (2 cols) -->
-      <div class="lg:col-span-2">
-        <div class="rounded-xl border border-brand-border bg-white p-6 shadow-card">
-          <div class="mb-5 flex items-center justify-between border-b border-brand-border pb-3.5">
-            <div>
-              <h3 class="text-base font-bold text-brand-text">Recent Projects</h3>
-              <p class="text-xs text-brand-muted">Latest landing pages modified in your workspace</p>
+    <!-- Split Workspace: Recent Projects Table (Left 8 cols) + Audit Stream (Right 4 cols) -->
+    <div class="mt-6 grid gap-6 lg:grid-cols-12">
+      <!-- Recent Projects Table Card -->
+      <div class="lg:col-span-8">
+        <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle">
+          <div class="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
+            <div class="flex items-center gap-2">
+              <h3 class="text-[13px] font-semibold text-zinc-900">Recent Builds</h3>
+              <span class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] text-zinc-600">
+                {{ projectStore.recentProjects.length }}
+              </span>
             </div>
-            <RouterLink to="/projects" class="font-mono text-xs font-semibold text-brand-text underline decoration-brand-secondary underline-offset-4 hover:text-brand-secondary">
-              All Projects →
+            <RouterLink
+              to="/projects"
+              class="text-xs font-medium text-zinc-500 hover:text-zinc-900"
+            >
+              View all →
             </RouterLink>
           </div>
 
           <!-- Empty State -->
           <div
             v-if="!projectStore.loading && projectStore.recentProjects.length === 0"
-            class="rounded-xl border border-dashed border-brand-border bg-[#FAF9F6] py-12 text-center"
+            class="px-6 py-12 text-center"
           >
-            <p class="font-mono text-xs uppercase tracking-widest text-brand-secondary">WORKSPACE EMPTY</p>
-            <h4 class="mt-2 text-base font-bold text-brand-text">No landing page projects yet</h4>
-            <p class="mx-auto mt-1 max-w-sm text-xs text-brand-muted">
-              Draft your first page using the structured Copy Architect or start from a layout preset.
+            <p class="font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+              NO PROJECTS FOUND
             </p>
-            <div class="mt-5 flex justify-center gap-3">
+            <h4 class="mt-1.5 text-sm font-semibold text-zinc-900">
+              Your workspace has no landing pages yet
+            </h4>
+            <p class="mx-auto mt-1 max-w-xs text-xs text-zinc-500">
+              Generate a 10-section page from a product brief or pick a starter layout system.
+            </p>
+            <div class="mt-4 flex justify-center gap-2">
               <RouterLink to="/generator">
-                <BaseButton size="sm" variant="primary">
-                  Open Copy Architect
-                </BaseButton>
+                <BaseButton size="sm" variant="primary">Create Page Brief</BaseButton>
               </RouterLink>
               <RouterLink to="/templates">
                 <BaseButton size="sm" variant="outline">Browse Layouts</BaseButton>
@@ -185,83 +185,95 @@ onMounted(() => {
             </div>
           </div>
 
-          <!-- Recent Projects List -->
-          <div v-else class="divide-y divide-brand-border">
-            <div
-              v-for="project in projectStore.recentProjects"
-              :key="project.id"
-              class="flex flex-col justify-between gap-4 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center"
-            >
-              <div class="min-w-0">
-                <div class="flex items-center gap-2.5">
-                  <RouterLink
-                    :to="`/projects/${project.id}/edit`"
-                    class="truncate text-sm font-bold text-brand-text hover:text-brand-secondary"
-                  >
-                    {{ project.name }}
-                  </RouterLink>
-                  <BaseBadge :variant="project.status">
-                    {{ project.status }}
-                  </BaseBadge>
-                </div>
-                <p class="mt-1 truncate font-mono text-xs text-brand-muted">
-                  /p/{{ project.slug }}
-                  <span v-if="project.template" class="ml-2 font-sans text-brand-muted">
-                    • {{ project.template.name }}
-                  </span>
-                </p>
-              </div>
-
-              <div class="flex shrink-0 items-center gap-2">
-                <RouterLink
-                  v-if="project.status === 'published'"
-                  :to="`/p/${project.slug}`"
-                  target="_blank"
+          <!-- High-Density Table -->
+          <div v-else class="overflow-x-auto">
+            <table class="w-full text-left text-[13px]">
+              <thead>
+                <tr class="border-b border-zinc-100 bg-zinc-50/60 font-mono text-[10px] font-medium uppercase tracking-wider text-zinc-400">
+                  <th class="px-4 py-2">Project</th>
+                  <th class="px-4 py-2">Endpoint</th>
+                  <th class="px-4 py-2">Status</th>
+                  <th class="px-4 py-2 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-zinc-100">
+                <tr
+                  v-for="project in projectStore.recentProjects"
+                  :key="project.id"
+                  class="group transition-colors hover:bg-zinc-50/80"
                 >
-                  <BaseButton size="sm" variant="ghost">
-                    Live URL ↗
-                  </BaseButton>
-                </RouterLink>
-                <BaseButton
-                  size="sm"
-                  variant="outline"
-                  @click="router.push(`/projects/${project.id}/edit`)"
-                >
-                  Open Studio →
-                </BaseButton>
-              </div>
-            </div>
+                  <td class="px-4 py-2.5">
+                    <RouterLink
+                      :to="`/projects/${project.id}/edit`"
+                      class="font-medium text-zinc-900 hover:underline"
+                    >
+                      {{ project.name }}
+                    </RouterLink>
+                    <p v-if="project.template" class="text-[11px] text-zinc-400">
+                      {{ project.template.name }}
+                    </p>
+                  </td>
+                  <td class="px-4 py-2.5 font-mono text-xs text-zinc-500">
+                    /p/{{ project.slug }}
+                  </td>
+                  <td class="px-4 py-2.5">
+                    <BaseBadge :variant="project.status">{{ project.status }}</BaseBadge>
+                  </td>
+                  <td class="px-4 py-2.5 text-right">
+                    <div class="inline-flex items-center gap-1.5">
+                      <RouterLink
+                        v-if="project.status === 'published'"
+                        :to="`/p/${project.slug}`"
+                        target="_blank"
+                        class="inline-flex h-7 items-center gap-1 rounded px-2 text-xs text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+                      >
+                        <span>Live</span>
+                        <ArrowUpRight class="h-3 w-3" />
+                      </RouterLink>
+                      <BaseButton
+                        size="sm"
+                        variant="outline"
+                        @click="router.push(`/projects/${project.id}/edit`)"
+                      >
+                        Studio
+                      </BaseButton>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
 
-      <!-- Recent Activity Audit Log -->
-      <div>
-        <div class="rounded-xl border border-brand-border bg-white p-6 shadow-card">
-          <div class="mb-5 flex items-center justify-between border-b border-brand-border pb-3.5">
-            <h3 class="text-base font-bold text-brand-text">Audit Log</h3>
-            <span class="font-mono text-[10px] uppercase tracking-widest text-brand-muted">LIVE</span>
+      <!-- Right Column: Audit Stream -->
+      <div class="lg:col-span-4">
+        <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle">
+          <div class="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
+            <h3 class="text-[13px] font-semibold text-zinc-900">Activity Stream</h3>
+            <span class="font-mono text-[10px] text-zinc-400">AUDIT</span>
           </div>
 
           <div
             v-if="projectStore.recentActivity.length === 0"
-            class="py-8 text-center font-mono text-xs text-brand-muted"
+            class="px-4 py-8 text-center font-mono text-xs text-zinc-400"
           >
-            No workspace events recorded.
+            No events recorded yet.
           </div>
 
-          <ul v-else class="space-y-3.5">
+          <ul v-else class="divide-y divide-zinc-100 px-4 py-1">
             <li
               v-for="item in projectStore.recentActivity"
               :key="item.id"
-              class="flex items-start gap-3 border-b border-brand-border pb-3 last:border-b-0 last:pb-0"
+              class="py-2.5"
             >
-              <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-secondary" />
-              <div class="min-w-0 flex-1">
-                <p class="text-xs font-medium text-brand-text">{{ item.description }}</p>
-                <p class="mt-0.5 font-mono text-[10px] text-brand-muted">
-                  {{ new Date(item.created_at).toLocaleString() }}
-                </p>
+              <div class="flex items-baseline justify-between gap-2">
+                <p class="text-xs font-medium text-zinc-800">{{ item.description }}</p>
+              </div>
+              <div class="mt-0.5 flex items-center gap-2 font-mono text-[10px] text-zinc-400">
+                <span>{{ item.action }}</span>
+                <span>•</span>
+                <span>{{ new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}</span>
               </div>
             </li>
           </ul>

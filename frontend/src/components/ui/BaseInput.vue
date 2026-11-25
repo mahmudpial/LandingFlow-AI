@@ -29,10 +29,10 @@ defineEmits<{
     <label
       v-if="label"
       :for="id"
-      class="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.06em] text-brand-muted"
+      class="mb-1.5 block text-xs font-medium text-zinc-700"
     >
       {{ label }}
-      <span v-if="required" class="text-brand-secondary" aria-hidden="true">*</span>
+      <span v-if="required" class="ml-0.5 text-rose-600" aria-hidden="true">*</span>
     </label>
     <input
       :id="id"
@@ -42,18 +42,18 @@ defineEmits<{
       :required="required"
       :disabled="disabled"
       :aria-invalid="Boolean(error)"
-      class="w-full rounded-lg border px-3.5 py-2 text-sm text-brand-text placeholder-[#9E9B95] transition-all duration-150 focus:outline-none focus:ring-2 disabled:bg-[#EFECE6] disabled:text-brand-muted"
+      class="h-8 w-full rounded-md border px-2.5 text-[13px] text-zinc-900 placeholder-zinc-400 shadow-subtle transition-colors duration-150 focus:outline-none focus:ring-2 disabled:bg-zinc-100 disabled:text-zinc-500"
       :class="
         error
-          ? 'border-brand-error bg-rose-50/30 focus:border-brand-error focus:ring-brand-error/15'
-          : 'border-brand-border bg-white hover:border-[#CFCBC2] focus:border-brand-primary focus:ring-brand-primary/10'
+          ? 'border-rose-500 bg-rose-50/20 focus:border-rose-600 focus:ring-rose-500/15'
+          : 'border-zinc-200 bg-white hover:border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900/10'
       "
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     />
-    <p v-if="error" role="alert" class="mt-1.5 text-xs font-medium text-brand-error">
+    <p v-if="error" role="alert" class="mt-1 text-xs font-medium text-rose-600">
       {{ error }}
     </p>
-    <p v-else-if="hint" class="mt-1 text-xs text-brand-muted">
+    <p v-else-if="hint" class="mt-1 text-[11px] text-zinc-500">
       {{ hint }}
     </p>
   </div>

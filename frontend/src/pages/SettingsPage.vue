@@ -7,7 +7,6 @@ import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseBadge from '@/components/ui/BaseBadge.vue';
-import { CheckCircle2, Shield } from 'lucide-vue-next';
 
 const authStore = useAuthStore();
 const toastStore = useToastStore();
@@ -36,7 +35,7 @@ async function handleSaveProfile(): Promise<void> {
   profileError.value = '';
   try {
     await authStore.updateProfile(profileForm);
-    toastStore.success('Profile updated', 'Your account settings have been saved.');
+    toastStore.success('Profile updated', 'Workspace identity saved.');
   } catch (err) {
     profileError.value = extractErrorMessage(err);
   } finally {
@@ -52,7 +51,7 @@ async function handleUpdatePassword(): Promise<void> {
     passwordForm.current_password = '';
     passwordForm.password = '';
     passwordForm.password_confirmation = '';
-    toastStore.success('Password updated', 'Your password has been changed.');
+    toastStore.success('Password rotated', 'Your credentials have been updated.');
   } catch (err) {
     passwordError.value = extractErrorMessage(err);
   } finally {
@@ -64,7 +63,7 @@ async function handleVerifyEmail(): Promise<void> {
   verifyingEmail.value = true;
   try {
     await authStore.verifyEmail();
-    toastStore.success('Email verified', 'Your email address is now marked verified.');
+    toastStore.success('Email verified', 'Account email marked verified.');
   } catch (err) {
     toastStore.error('Verification failed', extractErrorMessage(err));
   } finally {
@@ -75,19 +74,24 @@ async function handleVerifyEmail(): Promise<void> {
 
 <template>
   <DashboardLayout>
-    <div class="mx-auto max-w-3xl space-y-8">
-      <!-- Profile Details -->
-      <div class="rounded-2xl border border-brand-border bg-white p-6 shadow-card">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+    <div class="mx-auto max-w-3xl space-y-6">
+      <div>
+        <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Account & Security</h2>
+        <p class="mt-0.5 text-xs text-zinc-500">
+          Manage your studio profile, organization details, and session credentials.
+        </p>
+      </div>
+
+      <!-- Profile Section -->
+      <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle">
+        <div class="flex items-center justify-between border-b border-zinc-200 px-5 py-3.5">
           <div>
-            <h2 class="text-base font-bold text-brand-text">Account Profile</h2>
-            <p class="text-xs text-brand-muted">
-              Update your name, organization, and verified contact email.
-            </p>
+            <h3 class="text-[13px] font-semibold text-zinc-900">Operator Profile</h3>
+            <p class="text-xs text-zinc-500">Identity displayed across workspace audit logs.</p>
           </div>
           <div class="flex items-center gap-2">
             <BaseBadge :variant="authStore.user?.email_verified ? 'published' : 'draft'">
-              {{ authStore.user?.email_verified ? 'Verified Email' : 'Unverified Email' }}
+              {{ authStore.user?.email_verified ? 'Verified' : 'Unverified' }}
             </BaseBadge>
             <BaseButton
               v-if="!authStore.user?.email_verified"
@@ -96,21 +100,20 @@ async function handleVerifyEmail(): Promise<void> {
               :loading="verifyingEmail"
               @click="handleVerifyEmail"
             >
-              <CheckCircle2 class="h-3.5 w-3.5" />
-              <span>Verify Now</span>
+              Verify Email
             </BaseButton>
           </div>
         </div>
 
-        <div
-          v-if="profileError"
-          role="alert"
-          class="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-brand-error"
-        >
-          {{ profileError }}
-        </div>
+        <form class="p-5 space-y-4" @submit.prevent="handleSaveProfile">
+          <div
+            v-if="profileError"
+            role="alert"
+            class="rounded-md border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700"
+          >
+            {{ profileError }}
+          </div>
 
-        <form class="mt-5 space-y-4" @submit.prevent="handleSaveProfile">
           <div class="grid gap-4 sm:grid-cols-2">
             <BaseInput
               id="set-name"
@@ -121,7 +124,7 @@ async function handleVerifyEmail(): Promise<void> {
             <BaseInput
               id="set-email"
               v-model="profileForm.email"
-              label="Email Address"
+              label="Work Email"
               type="email"
               required
             />
@@ -130,43 +133,40 @@ async function handleVerifyEmail(): Promise<void> {
             <BaseInput
               id="set-company"
               v-model="profileForm.company_name"
-              label="Company / Studio"
+              label="Workspace / Company Name"
             />
             <BaseInput
               id="set-role"
               v-model="profileForm.job_title"
-              label="Job Title"
+              label="Role"
             />
           </div>
-          <div class="flex justify-end">
+          <div class="flex justify-end border-t border-zinc-100 pt-3">
             <BaseButton type="submit" variant="primary" :loading="savingProfile">
-              Save Profile Changes
+              Save Profile
             </BaseButton>
           </div>
         </form>
       </div>
 
-      <!-- Password & Security -->
-      <div class="rounded-2xl border border-brand-border bg-white p-6 shadow-card">
-        <div class="flex items-center gap-2.5 border-b border-slate-100 pb-4">
-          <Shield class="h-5 w-5 text-brand-primary" />
-          <div>
-            <h2 class="text-base font-bold text-brand-text">Password & Session Security</h2>
-            <p class="text-xs text-brand-muted">
-              Authenticated via Laravel Sanctum HTTP-only session cookies with CSRF protection.
-            </p>
+      <!-- Password Rotation -->
+      <div class="overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle">
+        <div class="border-b border-zinc-200 px-5 py-3.5">
+          <h3 class="text-[13px] font-semibold text-zinc-900">Credential Rotation</h3>
+          <p class="text-xs text-zinc-500">
+            Session protected via HTTP-only Sanctum cookies and CSRF tokens.
+          </p>
+        </div>
+
+        <form class="p-5 space-y-4" @submit.prevent="handleUpdatePassword">
+          <div
+            v-if="passwordError"
+            role="alert"
+            class="rounded-md border border-rose-200 bg-rose-50 p-3 text-xs text-rose-700"
+          >
+            {{ passwordError }}
           </div>
-        </div>
 
-        <div
-          v-if="passwordError"
-          role="alert"
-          class="mt-4 rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-brand-error"
-        >
-          {{ passwordError }}
-        </div>
-
-        <form class="mt-5 space-y-4" @submit.prevent="handleUpdatePassword">
           <BaseInput
             id="set-cur-pass"
             v-model="passwordForm.current_password"
@@ -190,9 +190,9 @@ async function handleVerifyEmail(): Promise<void> {
               required
             />
           </div>
-          <div class="flex justify-end">
+          <div class="flex justify-end border-t border-zinc-100 pt-3">
             <BaseButton type="submit" variant="outline" :loading="savingPassword">
-              Update Password
+              Rotate Password
             </BaseButton>
           </div>
         </form>

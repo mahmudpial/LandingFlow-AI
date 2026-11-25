@@ -10,7 +10,6 @@ import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseTextarea from '@/components/ui/BaseTextarea.vue';
 import BaseBadge from '@/components/ui/BaseBadge.vue';
-import { Sparkles, ArrowRight, ArrowLeft, CheckCircle2, Info } from 'lucide-vue-next';
 
 const router = useRouter();
 const projectStore = useProjectStore();
@@ -19,14 +18,14 @@ const toastStore = useToastStore();
 const currentStep = ref(1);
 const targetProjectId = ref<number | 'new'>('new');
 const selectedTemplateId = ref<number | undefined>(undefined);
-const keywordInput = ref('SaaS automation, AI workflow, conversion optimization');
+const keywordInput = ref('SaaS automation, workflow, conversion architecture');
 const errorMessage = ref('');
 
 const wizard = reactive({
   product_name: '',
   product_description: '',
-  industry: 'B2B SaaS & Software',
-  target_audience: 'Startup Founders, Product Managers, and Growth Teams',
+  industry: 'B2B SaaS & Developer Tools',
+  target_audience: 'Founders, Product Engineers, and Growth Teams',
   website_goal: 'Start Free 14-Day Trial',
   brand_tone: 'Modern, clear, and authoritative',
   language: 'English',
@@ -52,11 +51,11 @@ function nextStep(): void {
   errorMessage.value = '';
   if (currentStep.value === 1) {
     if (wizard.product_name.trim().length < 2) {
-      errorMessage.value = 'Please enter a product or business name (at least 2 characters).';
+      errorMessage.value = 'Enter a product or business name (minimum 2 characters).';
       return;
     }
     if (wizard.product_description.trim().length < 10) {
-      errorMessage.value = 'Please provide a product description of at least 10 characters.';
+      errorMessage.value = 'Provide a product brief of at least 10 characters.';
       return;
     }
   }
@@ -82,7 +81,7 @@ async function handleGenerate(): Promise<void> {
 
   const validation = aiGeneratorWizardSchema.safeParse(payload);
   if (!validation.success) {
-    errorMessage.value = validation.error.issues[0]?.message || 'Please complete all required wizard fields.';
+    errorMessage.value = validation.error.issues[0]?.message || 'Complete all required fields.';
     return;
   }
 
@@ -101,91 +100,94 @@ async function handleGenerate(): Promise<void> {
 
     const result = await projectStore.generateLandingPage(projectId, validation.data);
     toastStore.success(
-      'AI Landing Page Generated!',
-      `Generated via ${result.generation.provider} (${result.generation.duration_ms}ms).`
+      'Conversion schema compiled',
+      `Built via ${result.generation.provider} (${result.generation.duration_ms}ms).`
     );
     router.push(`/projects/${projectId}/edit`);
   } catch (err) {
-    errorMessage.value = extractErrorMessage(err, 'AI generation failed. Please try again.');
+    errorMessage.value = extractErrorMessage(err, 'Copy generation failed. Please try again.');
   }
 }
 </script>
 
 <template>
   <DashboardLayout>
-    <div class="mx-auto max-w-3xl">
-      <!-- Wizard Header -->
-      <div class="mb-6 flex items-center justify-between">
+    <div class="mx-auto max-w-2xl">
+      <!-- Header -->
+      <div class="mb-5 flex items-center justify-between">
         <div>
           <div class="flex items-center gap-2">
-            <h2 class="text-xl font-bold text-brand-text">AI Landing Page Generator</h2>
-            <BaseBadge variant="ai">Structured Schema Engine</BaseBadge>
+            <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Copy Architect</h2>
+            <BaseBadge variant="neutral">10-Section Schema Compiler</BaseBadge>
           </div>
-          <p class="mt-1 text-sm text-brand-muted">
-            Answer 3 quick steps and our AI engine will craft a complete 10-section landing page.
+          <p class="mt-0.5 text-xs text-zinc-500">
+            Define your product positioning, audience, and conversion goal to compile a complete page.
           </p>
         </div>
       </div>
 
-      <!-- Step Progress Bar -->
-      <div class="mb-8 grid grid-cols-3 gap-3">
-        <div
+      <!-- Segmented Step Header -->
+      <div class="mb-5 grid grid-cols-3 divide-x divide-zinc-200 overflow-hidden rounded-lg border border-zinc-200 bg-white">
+        <button
           v-for="stepNum in [1, 2, 3]"
           :key="stepNum"
-          class="rounded-xl border p-3 transition"
+          type="button"
+          class="px-4 py-2.5 text-left transition"
           :class="
-            currentStep >= stepNum
-              ? 'border-brand-primary bg-indigo-50/60 text-brand-primary'
-              : 'border-brand-border bg-white text-slate-400'
+            currentStep === stepNum
+              ? 'bg-zinc-900 text-white'
+              : currentStep > stepNum
+                ? 'bg-zinc-50 text-zinc-900'
+                : 'bg-white text-zinc-400'
           "
+          @click="stepNum < currentStep ? (currentStep = stepNum) : null"
         >
-          <div class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider">
-            <CheckCircle2 v-if="currentStep > stepNum" class="h-4 w-4 text-brand-success" />
-            <span>Step {{ stepNum }}</span>
+          <div class="font-mono text-[10px] uppercase tracking-wider opacity-75">
+            0{{ stepNum }} / {{ currentStep > stepNum ? 'DONE' : 'STEP' }}
           </div>
-          <p class="mt-1 text-xs font-medium text-slate-700">
+          <p class="mt-0.5 text-xs font-semibold">
             {{
               stepNum === 1
-                ? 'Product & Industry'
+                ? 'Product Brief'
                 : stepNum === 2
-                  ? 'Audience & Conversion Goal'
-                  : 'Tone, Template & Generate'
+                  ? 'Audience & Goal'
+                  : 'Voice & Layout'
             }}
           </p>
-        </div>
+        </button>
       </div>
 
-      <!-- Form Card -->
-      <div class="rounded-2xl border border-brand-border bg-white p-6 shadow-card sm:p-8">
+      <!-- Main Specification Card -->
+      <div class="rounded-lg border border-zinc-200 bg-white p-6 shadow-subtle">
         <div
           v-if="errorMessage"
           role="alert"
-          class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4 text-xs font-medium text-brand-error"
+          class="mb-5 rounded-md border border-rose-200 bg-rose-50 px-3.5 py-2.5 text-xs font-medium text-rose-700"
         >
           {{ errorMessage }}
         </div>
 
-        <!-- STEP 1: Product Identity -->
-        <div v-if="currentStep === 1" class="space-y-5">
+        <!-- STEP 1 -->
+        <div v-if="currentStep === 1" class="space-y-4">
           <div>
             <label
               for="target-project"
-              class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+              class="mb-1.5 block text-xs font-medium text-zinc-700"
             >
-              Destination Project
+              Target Project
             </label>
             <select
               id="target-project"
               v-model="targetProjectId"
-              class="w-full rounded-lg border border-brand-border bg-white px-3.5 py-2 text-sm text-brand-text"
+              class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none"
             >
-              <option value="new">+ Create a New Project Automatically</option>
+              <option value="new">+ Create New Project Automatically</option>
               <option
                 v-for="proj in projectStore.projects"
                 :key="proj.id"
                 :value="proj.id"
               >
-                Overwrite Existing Project: {{ proj.name }}
+                Overwrite Existing Build: {{ proj.name }}
               </option>
             </select>
           </div>
@@ -193,52 +195,52 @@ async function handleGenerate(): Promise<void> {
           <BaseInput
             id="wiz-product-name"
             v-model="wizard.product_name"
-            label="Product or Business Name"
-            placeholder="e.g., PulseMetrics AI"
+            label="Product or Company Name"
+            placeholder="e.g., PulseMetrics FinOps"
             required
           />
 
           <BaseTextarea
             id="wiz-product-desc"
             v-model="wizard.product_description"
-            label="Product / Service Description"
-            placeholder="Describe what your product does, the core problem it solves, and what makes it unique..."
+            label="Product Positioning Brief"
+            placeholder="Describe what your product does, the operational bottleneck it eliminates, and its core differentiator..."
             :rows="4"
             required
-            hint="Minimum 10 characters, up to 600 characters."
+            hint="10 to 600 characters."
           />
 
           <BaseInput
             id="wiz-industry"
             v-model="wizard.industry"
-            label="Industry / Category"
-            placeholder="e.g., B2B SaaS, FinTech, Digital Agency, Creator Tools"
+            label="Market Category"
+            placeholder="e.g., B2B SaaS, Cloud Infrastructure, Product Advisory"
             required
           />
         </div>
 
-        <!-- STEP 2: Audience & Conversion Goal -->
-        <div v-else-if="currentStep === 2" class="space-y-5">
+        <!-- STEP 2 -->
+        <div v-else-if="currentStep === 2" class="space-y-4">
           <BaseInput
             id="wiz-audience"
             v-model="wizard.target_audience"
-            label="Target Audience"
-            placeholder="e.g., SaaS Founders, RevOps leaders, and Engineering Managers"
+            label="Primary Buyer / Audience"
+            placeholder="e.g., CTOs, Platform Engineers, and VPs of Engineering"
             required
           />
 
           <BaseInput
             id="wiz-goal"
             v-model="wizard.website_goal"
-            label="Primary Website Goal"
-            placeholder="e.g., Start a 14-day free trial or book a live demo"
+            label="Conversion Objective"
+            placeholder="e.g., Start 14-day trial or schedule technical architecture review"
             required
           />
 
           <BaseInput
             id="wiz-cta"
             v-model="wizard.primary_cta"
-            label="Primary Call-To-Action Button Text"
+            label="Primary Call-To-Action Label"
             placeholder="e.g., Start Free Trial"
             required
           />
@@ -246,37 +248,37 @@ async function handleGenerate(): Promise<void> {
           <BaseInput
             id="wiz-keywords"
             v-model="keywordInput"
-            label="Optional SEO Keywords (Comma-Separated)"
-            placeholder="e.g., revenue forecasting, churn alerts, SaaS analytics"
+            label="SEO Keywords (Comma-Separated)"
+            placeholder="e.g., cloud cost attribution, finops automation, kubernetes cost"
           />
         </div>
 
-        <!-- STEP 3: Brand Tone, Language, Template & Truthfulness Notice -->
-        <div v-else class="space-y-5">
+        <!-- STEP 3 -->
+        <div v-else class="space-y-4">
           <div class="grid gap-4 sm:grid-cols-2">
             <div>
               <label
                 for="wiz-tone"
-                class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+                class="mb-1.5 block text-xs font-medium text-zinc-700"
               >
-                Brand Tone
+                Editorial Voice
               </label>
               <select
                 id="wiz-tone"
                 v-model="wizard.brand_tone"
-                class="w-full rounded-lg border border-brand-border bg-white px-3.5 py-2 text-sm text-brand-text"
+                class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none"
               >
-                <option value="Modern, clear, and authoritative">Modern, clear, and authoritative</option>
-                <option value="Bold, energetic, and launch-focused">Bold, energetic, and launch-focused</option>
-                <option value="Consultative, trustworthy, and executive">Consultative, trustworthy, and executive</option>
-                <option value="Friendly, minimal, and approachable">Friendly, minimal, and approachable</option>
+                <option value="Modern, clear, and authoritative">Modern, clear & authoritative</option>
+                <option value="Bold, technical, and launch-focused">Bold, technical & launch-focused</option>
+                <option value="Consultative, executive, and precise">Consultative & executive</option>
+                <option value="Minimal, direct, and product-led">Minimal & product-led</option>
               </select>
             </div>
 
             <BaseInput
               id="wiz-language"
               v-model="wizard.language"
-              label="Preferred Language"
+              label="Output Language"
               placeholder="English"
               required
             />
@@ -285,14 +287,14 @@ async function handleGenerate(): Promise<void> {
           <div v-if="targetProjectId === 'new'">
             <label
               for="wiz-template"
-              class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-700"
+              class="mb-1.5 block text-xs font-medium text-zinc-700"
             >
-              Design Template
+              Initial Layout System
             </label>
             <select
               id="wiz-template"
               v-model="selectedTemplateId"
-              class="w-full rounded-lg border border-brand-border bg-white px-3.5 py-2 text-sm text-brand-text"
+              class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-[13px] text-zinc-900 focus:border-zinc-900 focus:outline-none"
             >
               <option
                 v-for="tpl in projectStore.templates"
@@ -304,32 +306,27 @@ async function handleGenerate(): Promise<void> {
             </select>
           </div>
 
-          <div class="rounded-xl border border-amber-200 bg-amber-50 p-4 text-xs text-amber-900">
-            <div class="flex items-start gap-2.5">
-              <Info class="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
-              <div>
-                <p class="font-bold">AI Content Integrity & Illustrative Placeholders</p>
-                <p class="mt-1 leading-relaxed">
-                  LandingFlow AI never fabricates real customer endorsements or company metrics as
-                  factual claims. Generated testimonials, partner logos, and pricing tiers are marked
-                  as <strong>Illustrative Suggestions</strong> so you can replace them with verified
-                  details in the editor before publishing.
-                </p>
-              </div>
-            </div>
+          <div class="rounded-md border border-zinc-200 bg-zinc-50 p-3.5 text-xs text-zinc-600">
+            <p class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-900">
+              Truthfulness & Schema Guardrail
+            </p>
+            <p class="mt-1 leading-relaxed">
+              Generated social proof, customer quotes, and pricing tiers are flagged with
+              <code>is_illustrative: true</code> so placeholder examples are never mistaken for
+              verified customer endorsements until you edit them in the studio.
+            </p>
           </div>
         </div>
 
-        <!-- Wizard Footer Actions -->
-        <div class="mt-8 flex items-center justify-between border-t border-slate-100 pt-5">
+        <!-- Footer Controls -->
+        <div class="mt-6 flex items-center justify-between border-t border-zinc-100 pt-4">
           <BaseButton
             v-if="currentStep > 1"
             variant="outline"
             :disabled="projectStore.generating"
             @click="prevStep"
           >
-            <ArrowLeft class="h-4 w-4" />
-            <span>Previous</span>
+            ← Back
           </BaseButton>
           <div v-else />
 
@@ -338,8 +335,7 @@ async function handleGenerate(): Promise<void> {
             variant="primary"
             @click="nextStep"
           >
-            <span>Continue</span>
-            <ArrowRight class="h-4 w-4" />
+            Continue →
           </BaseButton>
 
           <BaseButton
@@ -349,8 +345,7 @@ async function handleGenerate(): Promise<void> {
             :loading="projectStore.generating"
             @click="handleGenerate"
           >
-            <Sparkles class="h-4 w-4" />
-            <span>Generate Complete Landing Page</span>
+            Compile 10-Section Landing Page →
           </BaseButton>
         </div>
       </div>

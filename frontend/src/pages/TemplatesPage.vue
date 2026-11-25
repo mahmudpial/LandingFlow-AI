@@ -7,10 +7,8 @@ import { extractErrorMessage } from '@/services/api';
 import type { Template } from '@/types';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
-import BaseBadge from '@/components/ui/BaseBadge.vue';
 import BaseModal from '@/components/ui/BaseModal.vue';
 import LandingPageRenderer from '@/components/landing/LandingPageRenderer.vue';
-import { Eye, Plus, CheckCircle2, Layers } from 'lucide-vue-next';
 
 const router = useRouter();
 const projectStore = useProjectStore();
@@ -29,13 +27,13 @@ async function handleUseTemplate(template: Template): Promise<void> {
   submitting.value = true;
   try {
     if (applyingToProjectId.value === 'new') {
-      const name = newProjectName.value.trim() || `${template.name} Project`;
+      const name = newProjectName.value.trim() || `${template.name} Build`;
       const created = await projectStore.createProject({
         name,
-        description: `Created from ${template.name} template`,
+        description: `Initialized from ${template.name}`,
         template_id: template.id,
       });
-      toastStore.success('Project created from template', `Opened "${created.name}".`);
+      toastStore.success('Project initialized', `Opened "${created.name}".`);
       router.push(`/projects/${created.id}/edit`);
     } else {
       const updated = await projectStore.applyTemplate(
@@ -44,13 +42,13 @@ async function handleUseTemplate(template: Template): Promise<void> {
         false
       );
       toastStore.success(
-        'Template applied!',
-        `Updated "${updated.name}" to ${template.name} while preserving your copy.`
+        'Layout system updated',
+        `Applied ${template.name} to "${updated.name}" while preserving your copy.`
       );
       router.push(`/projects/${updated.id}/edit`);
     }
   } catch (err) {
-    toastStore.error('Failed to apply template', extractErrorMessage(err));
+    toastStore.error('Failed to apply layout', extractErrorMessage(err));
   } finally {
     submitting.value = false;
   }
@@ -59,118 +57,114 @@ async function handleUseTemplate(template: Template): Promise<void> {
 
 <template>
   <DashboardLayout>
+    <!-- Header & Target Bar -->
     <div class="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div>
-        <h2 class="text-xl font-bold text-brand-text">Reusable Template Library</h2>
-        <p class="mt-1 text-sm text-brand-muted">
-          Switch templates anytime without losing your project copy, or launch a new project from a preset.
+        <h2 class="text-lg font-semibold tracking-tight text-zinc-900">Layout Systems</h2>
+        <p class="mt-0.5 text-xs text-zinc-500">
+          Switch layout systems non-destructively on any project or initialize a new build.
         </p>
       </div>
 
-      <!-- Target Selector -->
-      <div class="flex flex-wrap items-center gap-2 rounded-xl border border-brand-border bg-white p-2.5 shadow-2xs">
-        <span class="text-xs font-semibold text-slate-600">Apply to:</span>
+      <div class="flex flex-wrap items-center gap-2 rounded-lg border border-zinc-200 bg-white p-1.5 shadow-subtle">
+        <span class="px-2 font-mono text-[10px] font-medium uppercase text-zinc-400">Target:</span>
         <select
           v-model="applyingToProjectId"
           aria-label="Target project for template"
-          class="rounded-lg border border-brand-border bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-brand-text"
+          class="h-7 rounded border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-800 focus:border-zinc-900 focus:outline-none"
         >
-          <option value="new">+ New Project</option>
+          <option value="new">+ Initialize New Project</option>
           <option
             v-for="proj in projectStore.projects"
             :key="proj.id"
             :value="proj.id"
           >
-            Existing: {{ proj.name }} (Preserves copy)
+            Apply to: {{ proj.name }} (Keeps copy)
           </option>
         </select>
         <input
           v-if="applyingToProjectId === 'new'"
           v-model="newProjectName"
           type="text"
-          placeholder="Optional new project title..."
-          class="rounded-lg border border-brand-border px-2.5 py-1.5 text-xs"
+          placeholder="Optional project name..."
+          class="h-7 rounded border border-zinc-200 px-2.5 text-xs focus:border-zinc-900 focus:outline-none"
         />
       </div>
     </div>
 
-    <!-- Template Cards -->
-    <div class="grid gap-6 lg:grid-cols-3">
+    <!-- Layout System Cards -->
+    <div class="grid gap-5 lg:grid-cols-3">
       <div
-        v-for="template in projectStore.templates"
+        v-for="(template, idx) in projectStore.templates"
         :key="template.id"
-        class="flex flex-col justify-between rounded-2xl border border-brand-border bg-white overflow-hidden shadow-card transition hover:shadow-elevated"
+        class="flex flex-col justify-between overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-subtle transition hover:border-zinc-300"
       >
         <div>
-          <!-- SVG Template Preview Banner -->
-          <div class="relative h-44 overflow-hidden bg-slate-900">
+          <!-- Wireframe SVG Preview Header -->
+          <div class="relative h-44 overflow-hidden border-b border-zinc-200 bg-zinc-950">
             <img
               v-if="template.preview_image_url"
               :src="template.preview_image_url"
-              :alt="`${template.name} preview`"
-              class="h-full w-full object-cover opacity-90 transition duration-300 hover:scale-105"
+              :alt="`${template.name} wireframe`"
+              class="h-full w-full object-cover opacity-95"
             />
-            <div
-              class="
-                absolute inset-0 flex flex-col justify-between
-                bg-gradient-to-t from-slate-950/90 via-slate-900/35 to-transparent p-5 text-white
-              "
-            >
-              <div class="flex items-center justify-between">
-                <span class="rounded-full bg-white/20 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider backdrop-blur-xs">
-                  {{ template.category }}
-                </span>
-                <div class="flex items-center gap-1.5 rounded-full bg-black/40 px-2.5 py-1 backdrop-blur-xs">
-                  <span
-                    v-for="(hex, key) in template.color_palette"
-                    :key="key"
-                    class="h-3 w-3 rounded-full border border-white/60"
-                    :style="{ backgroundColor: hex }"
-                    :title="`${key}: ${hex}`"
-                  />
-                </div>
-              </div>
-              <div>
-                <h3 class="font-display text-lg font-bold tracking-tight">
-                  {{ template.name }}
-                </h3>
-                <p class="mt-0.5 text-xs text-white/80">
-                  Typography: {{ template.typography.heading_font }} • Scale: {{ template.typography.scale }}
-                </p>
-              </div>
+            <div class="absolute left-3 top-3 flex items-center gap-1.5">
+              <span class="rounded bg-zinc-900/90 px-2 py-0.5 font-mono text-[10px] font-medium uppercase text-white">
+                0{{ idx + 1 }} / {{ template.category }}
+              </span>
+            </div>
+            <div class="absolute bottom-3 right-3 flex items-center gap-1 rounded-full bg-zinc-900/80 px-2 py-1 backdrop-blur-xs">
+              <span
+                v-for="(hex, key) in template.color_palette"
+                :key="key"
+                class="h-2.5 w-2.5 rounded-full border border-white/40"
+                :style="{ backgroundColor: hex }"
+                :title="`${key}: ${hex}`"
+              />
             </div>
           </div>
 
-          <div class="p-6">
-            <p class="text-sm leading-relaxed text-brand-muted">
+          <div class="p-5">
+            <div class="flex items-baseline justify-between">
+              <h3 class="text-sm font-semibold text-zinc-900">
+                {{ template.name }}
+              </h3>
+              <span class="font-mono text-[10px] text-zinc-400">
+                {{ template.typography.scale }}
+              </span>
+            </div>
+
+            <p class="mt-1.5 text-xs leading-relaxed text-zinc-500">
               {{ template.description }}
             </p>
 
-            <div class="mt-4">
-              <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                Supported Sections ({{ template.supported_sections.length }})
+            <div class="mt-4 border-t border-zinc-100 pt-3">
+              <p class="font-mono text-[10px] uppercase tracking-wider text-zinc-400">
+                10 Schema Blocks Included
               </p>
-              <div class="mt-2 flex flex-wrap gap-1.5">
-                <BaseBadge
-                  v-for="sec in template.supported_sections"
+              <div class="mt-1.5 flex flex-wrap gap-1">
+                <span
+                  v-for="sec in template.supported_sections.slice(0, 6)"
                   :key="sec"
-                  variant="neutral"
+                  class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] text-zinc-600"
                 >
                   {{ sec.replace('_', ' ') }}
-                </BaseBadge>
+                </span>
+                <span class="rounded bg-zinc-50 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                  +4 more
+                </span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="flex items-center justify-between border-t border-slate-100 bg-slate-50/50 px-6 py-4">
+        <div class="flex items-center justify-between border-t border-zinc-100 bg-zinc-50/60 px-5 py-3">
           <BaseButton
             size="sm"
             variant="outline"
             @click="previewTemplate = template"
           >
-            <Eye class="h-3.5 w-3.5" />
-            <span>Live Preview</span>
+            Inspect Layout
           </BaseButton>
 
           <BaseButton
@@ -179,24 +173,22 @@ async function handleUseTemplate(template: Template): Promise<void> {
             :loading="submitting"
             @click="handleUseTemplate(template)"
           >
-            <CheckCircle2 v-if="applyingToProjectId !== 'new'" class="h-3.5 w-3.5" />
-            <Plus v-else class="h-3.5 w-3.5" />
             <span>
-              {{ applyingToProjectId === 'new' ? 'Use Template' : 'Apply to Project' }}
+              {{ applyingToProjectId === 'new' ? 'Initialize Build →' : 'Apply Layout →' }}
             </span>
           </BaseButton>
         </div>
       </div>
     </div>
 
-    <!-- Full Template Preview Modal -->
+    <!-- Full Layout Preview Modal -->
     <BaseModal
       :open="previewTemplate !== null"
-      :title="`Template Preview: ${previewTemplate?.name || ''}`"
+      :title="`Layout Inspection: ${previewTemplate?.name || ''}`"
       max-width="2xl"
       @close="previewTemplate = null"
     >
-      <div v-if="previewTemplate" class="max-h-[75vh] overflow-y-auto rounded-xl border border-brand-border">
+      <div v-if="previewTemplate" class="max-h-[72vh] overflow-y-auto rounded-lg border border-zinc-200">
         <LandingPageRenderer
           :content="previewTemplate.default_schema"
           :theme="{
@@ -214,8 +206,7 @@ async function handleUseTemplate(template: Template): Promise<void> {
           variant="primary"
           @click="handleUseTemplate(previewTemplate)"
         >
-          <Layers class="h-4 w-4" />
-          <span>Use This Template</span>
+          Use This Layout →
         </BaseButton>
       </div>
     </BaseModal>

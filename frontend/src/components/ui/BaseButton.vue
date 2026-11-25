@@ -23,25 +23,25 @@ const props = withDefaults(
 
 const classes = computed(() => {
   const base =
-    'inline-flex items-center justify-center gap-2 font-semibold tracking-tight rounded-lg transition-all duration-200 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100';
+    'inline-flex items-center justify-center gap-1.5 font-medium tracking-tight rounded-md transition-all duration-150 active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-900 focus-visible:ring-offset-1 disabled:opacity-45 disabled:cursor-not-allowed disabled:active:scale-100 select-none';
 
   const variants: Record<string, string> = {
     primary:
-      'bg-brand-primary text-[#FAF9F5] hover:bg-brand-primary-hover shadow-tactile border border-brand-primary',
+      'bg-zinc-900 text-white hover:bg-zinc-800 shadow-tactile border border-zinc-950',
     secondary:
-      'bg-brand-secondary text-white hover:bg-[#C2411F] shadow-tactile border border-[#C2411F]',
+      'bg-zinc-100 text-zinc-900 hover:bg-zinc-200/80 border border-zinc-200/90',
     outline:
-      'border border-brand-border bg-white text-brand-text hover:bg-[#F3F1EC] hover:border-[#CFCBC2] shadow-2xs',
+      'border border-zinc-200 bg-white text-zinc-800 hover:bg-zinc-50 hover:border-zinc-300 shadow-subtle',
     ghost:
-      'text-brand-muted hover:text-brand-text hover:bg-[#EFECE6]',
+      'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100',
     danger:
-      'bg-brand-error text-white hover:bg-rose-800 shadow-tactile border border-rose-800',
+      'bg-rose-600 text-white hover:bg-rose-700 shadow-tactile border border-rose-700',
   };
 
   const sizes: Record<string, string> = {
-    sm: 'px-3 py-1.5 text-xs',
-    md: 'px-4 py-2 text-[13px]',
-    lg: 'px-5 py-2.5 text-sm',
+    sm: 'h-7 px-2.5 text-xs',
+    md: 'h-8 px-3 text-[13px]',
+    lg: 'h-9 px-4 text-[13px]',
   };
 
   return [

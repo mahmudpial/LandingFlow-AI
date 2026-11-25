@@ -12,22 +12,22 @@ const props = withDefaults(
 
 const badgeClasses = computed(() => {
   const styles: Record<string, string> = {
-    published: 'bg-[#ECFDF3] text-[#166534] border border-[#BBF7D0]',
-    draft: 'bg-[#FEF3C7]/60 text-[#92400E] border border-[#FDE68A]',
-    archived: 'bg-[#EFECE6] text-[#575653] border border-[#E4E2DC]',
-    ai: 'bg-[#FFF3EE] text-[#C2411F] border border-[#FCD9CE]',
-    neutral: 'bg-[#F3F1EC] text-[#3F3E3C] border border-[#E4E2DC]',
+    published: 'bg-emerald-50/80 text-emerald-700 border-emerald-200/80',
+    draft: 'bg-amber-50/80 text-amber-800 border-amber-200/80',
+    archived: 'bg-zinc-100 text-zinc-600 border-zinc-200',
+    ai: 'bg-zinc-900 text-white border-zinc-900',
+    neutral: 'bg-zinc-100/80 text-zinc-700 border-zinc-200/80',
   };
-  return `inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 font-mono text-[11px] font-medium tracking-tight ${styles[props.variant]}`;
+  return `inline-flex items-center gap-1.5 rounded px-1.5 py-0.5 border font-mono text-[11px] font-medium leading-none ${styles[props.variant]}`;
 });
 
 const dotColor = computed(() => {
   const map: Record<string, string> = {
-    published: 'bg-[#15803D]',
-    draft: 'bg-[#D97706]',
-    archived: 'bg-[#78716C]',
-    ai: 'bg-[#D94E28]',
-    neutral: 'bg-[#78716C]',
+    published: 'bg-emerald-600',
+    draft: 'bg-amber-500',
+    archived: 'bg-zinc-400',
+    ai: 'bg-rose-500',
+    neutral: 'bg-zinc-400',
   };
   return map[props.variant];
 });

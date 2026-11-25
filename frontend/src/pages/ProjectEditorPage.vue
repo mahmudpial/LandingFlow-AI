@@ -19,19 +19,13 @@ import {
   Smartphone,
   Undo2,
   Redo2,
-  Save,
-  Globe,
   Eye,
   EyeOff,
   ArrowUp,
   ArrowDown,
-  Palette,
-  Layers,
-  Search,
-  Image as ImageIcon,
   Plus,
   Trash2,
-  ExternalLink,
+  ArrowUpRight,
   Upload,
 } from 'lucide-vue-next';
 
@@ -51,6 +45,12 @@ const uploadingMedia = ref(false);
 const mediaUploadError = ref('');
 
 const projectId = computed(() => Number(route.params.id));
+
+const viewportWidthLabel = computed(() => {
+  if (editorStore.viewport === 'mobile') return '375px • Mobile';
+  if (editorStore.viewport === 'tablet') return '768px • Tablet';
+  return '1280px • Desktop';
+});
 
 onMounted(async () => {
   await Promise.all([
@@ -85,7 +85,7 @@ async function handleSave(): Promise<void> {
     const updated = await editorStore.saveChanges();
     if (updated) {
       projectStore.currentProject = updated;
-      toastStore.success('Changes saved', 'Your landing page has been updated.');
+      toastStore.success('Saved', 'Schema and theme tokens updated.');
     }
   } catch (err) {
     toastStore.error('Save failed', extractErrorMessage(err));
@@ -101,9 +101,9 @@ async function handleTemplateSwitch(event: Event): Promise<void> {
     await handleSave();
     const updated = await projectStore.applyTemplate(projectStore.currentProject.id, tplId, false);
     editorStore.loadFromProject(updated);
-    toastStore.success('Template applied', 'Color palette and layout updated without losing your copy.');
+    toastStore.success('Layout updated', 'Palette and typography switched without losing copy.');
   } catch (err) {
-    toastStore.error('Template switch failed', extractErrorMessage(err));
+    toastStore.error('Layout switch failed', extractErrorMessage(err));
   }
 }
 
@@ -119,8 +119,8 @@ async function handlePublishAction(publish: boolean): Promise<void> {
     );
     publishSlug.value = updated.slug;
     toastStore.success(
-      publish ? 'Landing Page Published!' : 'Page Unpublished',
-      publish ? `Live at /p/${updated.slug}` : 'Page reverted to private draft.'
+      publish ? 'Published Live' : 'Reverted to Draft',
+      publish ? `Endpoint active at /p/${updated.slug}` : 'Public endpoint disabled.'
     );
     showPublishModal.value = false;
   } catch (err) {
@@ -155,9 +155,9 @@ async function handleImageUpload(event: Event): Promise<void> {
       editorStore.content.sections.hero.image_url = uploaded.url;
       editorStore.recordSnapshot();
     }
-    toastStore.success('Image uploaded', 'Applied to Hero section and saved in Media Library.');
+    toastStore.success('Asset uploaded', 'Applied to Hero section.');
   } catch (err) {
-    mediaUploadError.value = extractErrorMessage(err, 'Upload failed. Only JPG, PNG, WEBP up to 2MB are allowed.');
+    mediaUploadError.value = extractErrorMessage(err, 'Only JPG, PNG, WEBP up to 2MB are allowed.');
   } finally {
     uploadingMedia.value = false;
     input.value = '';
@@ -168,14 +168,14 @@ function selectHeroImage(url: string): void {
   if (!editorStore.content) return;
   editorStore.content.sections.hero.image_url = url;
   editorStore.recordSnapshot();
-  toastStore.success('Hero image updated', 'Remember to click Save to persist changes.');
+  toastStore.success('Hero asset linked', 'Save changes to persist.');
 }
 
 function addFeatureItem(): void {
   if (!editorStore.content) return;
   editorStore.content.sections.features.items.push({
-    icon: 'Sparkles',
-    title: 'New Feature Capability',
+    icon: String(editorStore.content.sections.features.items.length + 1).padStart(2, '0'),
+    title: 'New Capability',
     description: 'Describe how this capability helps your users.',
   });
   editorStore.recordSnapshot();
@@ -190,8 +190,8 @@ function removeFeatureItem(index: number): void {
 function addFaqItem(): void {
   if (!editorStore.content) return;
   editorStore.content.sections.faq.items.push({
-    question: 'New frequently asked question?',
-    answer: 'Clear, helpful answer for prospective customers.',
+    question: 'New specification question?',
+    answer: 'Clear, direct answer for prospective buyers.',
   });
   editorStore.recordSnapshot();
 }
@@ -203,50 +203,49 @@ function removeFaqItem(index: number): void {
 }
 
 const sectionLabels: Record<SectionKey, string> = {
-  hero: 'Hero Banner',
-  problem_solution: 'Problem & Solution',
-  features: 'Features Grid',
-  benefits: 'Key Benefits',
-  social_proof: 'Social Proof (Illustrative)',
-  testimonials: 'Testimonials (Illustrative)',
-  pricing: 'Pricing Tiers (Illustrative)',
-  faq: 'FAQ Accordion',
-  cta: 'Call to Action',
+  hero: 'Hero Statement',
+  problem_solution: 'Contrast Matrix',
+  features: 'Capabilities Grid',
+  benefits: 'Operational Impact',
+  social_proof: 'Partner Proof',
+  testimonials: 'Customer Quotes',
+  pricing: 'Pricing Tiers',
+  faq: 'Specifications / FAQ',
+  cta: 'Conversion Banner',
   footer: 'Footer',
 };
 </script>
 
 <template>
-  <div class="flex h-screen flex-col overflow-hidden bg-slate-100">
-    <!-- Top Editor Toolbar -->
-    <header class="flex h-16 shrink-0 items-center justify-between border-b border-brand-border bg-white px-4 shadow-2xs">
-      <!-- Left: Back & Project Info -->
-      <div class="flex items-center gap-3">
+  <div class="flex h-screen flex-col overflow-hidden bg-[#F4F4F5] text-zinc-900 select-none">
+    <!-- Top Framer/Webflow-Grade Studio Header (48px) -->
+    <header class="flex h-12 shrink-0 items-center justify-between border-b border-zinc-200 bg-white px-3">
+      <!-- Left: Back, Project Title, Layout Switcher -->
+      <div class="flex items-center gap-2.5">
         <RouterLink
           to="/projects"
-          class="flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100"
+          class="inline-flex h-7 items-center gap-1.5 rounded border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-600 transition hover:bg-zinc-100 hover:text-zinc-900"
         >
-          <ArrowLeft class="h-4 w-4" />
+          <ArrowLeft class="h-3.5 w-3.5" />
           <span>Projects</span>
         </RouterLink>
 
-        <div class="h-5 w-px bg-slate-200" />
+        <div class="h-4 w-px bg-zinc-200" />
 
         <div v-if="projectStore.currentProject" class="flex items-center gap-2">
-          <h1 class="max-w-[180px] truncate text-sm font-bold text-brand-text sm:max-w-xs">
+          <span class="max-w-[160px] truncate text-xs font-semibold text-zinc-900 sm:max-w-[220px]">
             {{ projectStore.currentProject.name }}
-          </h1>
+          </span>
           <BaseBadge :variant="projectStore.currentProject.status">
             {{ projectStore.currentProject.status }}
           </BaseBadge>
         </div>
 
-        <!-- Template Quick Switcher -->
         <select
           v-if="projectStore.currentProject"
           :value="projectStore.currentProject.template_id"
-          aria-label="Switch template"
-          class="hidden rounded-lg border border-brand-border bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700 md:block"
+          aria-label="Switch layout system"
+          class="hidden h-7 rounded border border-zinc-200 bg-zinc-50 px-2 text-xs font-medium text-zinc-700 focus:border-zinc-900 focus:outline-none md:block"
           @change="handleTemplateSwitch"
         >
           <option
@@ -254,88 +253,100 @@ const sectionLabels: Record<SectionKey, string> = {
             :key="tpl.id"
             :value="tpl.id"
           >
-            Template: {{ tpl.name }}
+            Layout: {{ tpl.name }}
           </option>
         </select>
       </div>
 
-      <!-- Center: Viewport Switcher & Undo/Redo -->
+      <!-- Center: Breakpoint Pill Bar & Undo/Redo -->
       <div class="hidden items-center gap-2 sm:flex">
-        <div class="flex items-center rounded-lg border border-brand-border bg-slate-50 p-1">
+        <div class="flex items-center rounded-md border border-zinc-200 bg-zinc-100/80 p-0.5">
           <button
             type="button"
-            class="rounded-md px-2.5 py-1 text-xs font-medium transition"
+            class="flex h-6 items-center gap-1 rounded px-2 text-[11px] font-medium transition"
             :class="
               editorStore.viewport === 'desktop'
-                ? 'bg-white text-brand-primary shadow-2xs'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'bg-white text-zinc-950 shadow-2xs'
+                : 'text-zinc-500 hover:text-zinc-800'
             "
-            title="Desktop Preview"
+            title="Desktop Breakpoint"
             @click="editorStore.viewport = 'desktop'"
           >
-            <Monitor class="h-4 w-4" />
+            <Monitor class="h-3.5 w-3.5" />
+            <span class="hidden lg:inline">1280</span>
           </button>
           <button
             type="button"
-            class="rounded-md px-2.5 py-1 text-xs font-medium transition"
+            class="flex h-6 items-center gap-1 rounded px-2 text-[11px] font-medium transition"
             :class="
               editorStore.viewport === 'tablet'
-                ? 'bg-white text-brand-primary shadow-2xs'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'bg-white text-zinc-950 shadow-2xs'
+                : 'text-zinc-500 hover:text-zinc-800'
             "
-            title="Tablet Preview (768px)"
+            title="Tablet Breakpoint (768px)"
             @click="editorStore.viewport = 'tablet'"
           >
-            <Tablet class="h-4 w-4" />
+            <Tablet class="h-3.5 w-3.5" />
+            <span class="hidden lg:inline">768</span>
           </button>
           <button
             type="button"
-            class="rounded-md px-2.5 py-1 text-xs font-medium transition"
+            class="flex h-6 items-center gap-1 rounded px-2 text-[11px] font-medium transition"
             :class="
               editorStore.viewport === 'mobile'
-                ? 'bg-white text-brand-primary shadow-2xs'
-                : 'text-slate-500 hover:text-slate-800'
+                ? 'bg-white text-zinc-950 shadow-2xs'
+                : 'text-zinc-500 hover:text-zinc-800'
             "
-            title="Mobile Preview (375px)"
+            title="Mobile Breakpoint (375px)"
             @click="editorStore.viewport = 'mobile'"
           >
-            <Smartphone class="h-4 w-4" />
+            <Smartphone class="h-3.5 w-3.5" />
+            <span class="hidden lg:inline">375</span>
           </button>
         </div>
 
-        <div class="flex items-center rounded-lg border border-brand-border bg-white p-1">
+        <div class="flex items-center rounded-md border border-zinc-200 bg-white p-0.5">
           <button
             type="button"
             :disabled="!editorStore.canUndo"
-            class="rounded p-1.5 text-slate-600 hover:bg-slate-100 disabled:opacity-35"
+            class="rounded p-1 text-zinc-600 hover:bg-zinc-100 disabled:opacity-30"
             title="Undo"
             aria-label="Undo"
             @click="editorStore.undo"
           >
-            <Undo2 class="h-4 w-4" />
+            <Undo2 class="h-3.5 w-3.5" />
           </button>
           <button
             type="button"
             :disabled="!editorStore.canRedo"
-            class="rounded p-1.5 text-slate-600 hover:bg-slate-100 disabled:opacity-35"
+            class="rounded p-1 text-zinc-600 hover:bg-zinc-100 disabled:opacity-30"
             title="Redo"
             aria-label="Redo"
             @click="editorStore.redo"
           >
-            <Redo2 class="h-4 w-4" />
+            <Redo2 class="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
 
-      <!-- Right: Save & Publish Actions -->
-      <div class="flex items-center gap-2">
+      <!-- Right: Save & Publish -->
+      <div class="flex items-center gap-1.5">
+        <RouterLink
+          v-if="projectStore.currentProject?.status === 'published'"
+          :to="`/p/${projectStore.currentProject.slug}`"
+          target="_blank"
+          class="hidden h-7 items-center gap-1 rounded border border-zinc-200 px-2 font-mono text-[11px] text-zinc-600 hover:bg-zinc-50 md:inline-flex"
+        >
+          <span>/p/{{ projectStore.currentProject.slug }}</span>
+          <ArrowUpRight class="h-3 w-3" />
+        </RouterLink>
+
         <BaseButton
           size="sm"
           variant="outline"
           :loading="editorStore.saving"
           @click="handleSave"
         >
-          <Save class="h-3.5 w-3.5" />
           <span>{{ editorStore.isDirty ? 'Save*' : 'Saved' }}</span>
         </BaseButton>
 
@@ -344,153 +355,144 @@ const sectionLabels: Record<SectionKey, string> = {
           variant="primary"
           @click="showPublishModal = true"
         >
-          <Globe class="h-3.5 w-3.5" />
           <span>Publish</span>
         </BaseButton>
       </div>
     </header>
 
-    <!-- Main Editor Split Workspace -->
+    <!-- Main Studio Split Area -->
     <div v-if="editorStore.content && editorStore.theme" class="flex flex-1 overflow-hidden">
-      <!-- Left Inspector Sidebar -->
-      <aside class="flex w-80 shrink-0 flex-col border-r border-brand-border bg-white sm:w-96">
-        <!-- Inspector Navigation Tabs -->
-        <div class="grid grid-cols-4 border-b border-brand-border bg-slate-50/70 p-1.5 text-xs font-semibold">
+      <!-- Left Inspector Panel (330px) -->
+      <aside class="flex w-80 shrink-0 flex-col border-r border-zinc-200 bg-white sm:w-[340px]">
+        <!-- Segmented Inspector Tabs -->
+        <div class="grid grid-cols-4 border-b border-zinc-200 bg-zinc-50/80 p-1 font-mono text-[11px] font-medium">
           <button
+            v-for="tab in (['sections', 'theme', 'media', 'seo'] as const)"
+            :key="tab"
             type="button"
-            class="flex items-center justify-center gap-1.5 rounded-lg py-2 transition"
-            :class="activeTab === 'sections' ? 'bg-white text-brand-primary shadow-2xs' : 'text-slate-600'"
-            @click="activeTab = 'sections'"
+            class="rounded py-1.5 uppercase tracking-wider transition"
+            :class="
+              activeTab === tab
+                ? 'bg-zinc-900 text-white shadow-2xs'
+                : 'text-zinc-500 hover:text-zinc-900'
+            "
+            @click="activeTab = tab"
           >
-            <Layers class="h-3.5 w-3.5" />
-            <span>Sections</span>
-          </button>
-          <button
-            type="button"
-            class="flex items-center justify-center gap-1.5 rounded-lg py-2 transition"
-            :class="activeTab === 'theme' ? 'bg-white text-brand-primary shadow-2xs' : 'text-slate-600'"
-            @click="activeTab = 'theme'"
-          >
-            <Palette class="h-3.5 w-3.5" />
-            <span>Theme</span>
-          </button>
-          <button
-            type="button"
-            class="flex items-center justify-center gap-1.5 rounded-lg py-2 transition"
-            :class="activeTab === 'media' ? 'bg-white text-brand-primary shadow-2xs' : 'text-slate-600'"
-            @click="activeTab = 'media'"
-          >
-            <ImageIcon class="h-3.5 w-3.5" />
-            <span>Media</span>
-          </button>
-          <button
-            type="button"
-            class="flex items-center justify-center gap-1.5 rounded-lg py-2 transition"
-            :class="activeTab === 'seo' ? 'bg-white text-brand-primary shadow-2xs' : 'text-slate-600'"
-            @click="activeTab = 'seo'"
-          >
-            <Search class="h-3.5 w-3.5" />
-            <span>SEO</span>
+            {{ tab }}
           </button>
         </div>
 
-        <!-- Inspector Scrollable Content -->
-        <div class="flex-1 overflow-y-auto p-4">
-          <!-- TAB 1: SECTIONS ORDER & CONTENT EDITOR -->
-          <div v-if="activeTab === 'sections'" class="space-y-6">
+        <!-- Scrollable Property Inspector -->
+        <div class="flex-1 overflow-y-auto p-3.5">
+          <!-- TAB 1: LAYERS & SECTION PROPERTIES -->
+          <div v-if="activeTab === 'sections'" class="space-y-5">
             <div>
-              <p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-400">
-                Section Order & Visibility
-              </p>
-              <div class="space-y-1.5">
+              <div class="mb-2 flex items-center justify-between">
+                <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                  Layer Stack (10)
+                </span>
+                <span class="font-mono text-[10px] text-zinc-400">ORDER / VISIBILITY</span>
+              </div>
+              <div class="divide-y divide-zinc-100 overflow-hidden rounded-md border border-zinc-200">
                 <div
                   v-for="(secKey, idx) in editorStore.content.sections_order"
                   :key="secKey"
-                  class="flex items-center justify-between rounded-lg border px-3 py-2 text-xs transition"
+                  class="flex items-center justify-between px-2.5 py-1.5 text-xs transition"
                   :class="
                     editorStore.activeSection === secKey
-                      ? 'border-brand-primary bg-indigo-50/70 font-semibold text-brand-primary'
-                      : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                      ? 'bg-zinc-900 text-white font-medium'
+                      : 'bg-white text-zinc-700 hover:bg-zinc-50'
                   "
                 >
                   <button
                     type="button"
-                    class="flex-1 text-left"
+                    class="flex flex-1 items-center gap-2 text-left"
                     @click="editorStore.activeSection = secKey"
                   >
-                    {{ sectionLabels[secKey] || secKey }}
+                    <span
+                      class="font-mono text-[10px]"
+                      :class="editorStore.activeSection === secKey ? 'text-zinc-400' : 'text-zinc-400'"
+                    >
+                      {{ String(idx + 1).padStart(2, '0') }}
+                    </span>
+                    <span class="truncate">{{ sectionLabels[secKey] || secKey }}</span>
                   </button>
 
-                  <div class="flex items-center gap-1">
+                  <div class="flex items-center gap-0.5">
                     <button
                       type="button"
                       :disabled="idx === 0"
-                      class="rounded p-1 text-slate-400 hover:bg-slate-200/60 hover:text-slate-700 disabled:opacity-25"
-                      title="Move section up"
+                      class="rounded p-1 opacity-70 hover:opacity-100 disabled:opacity-20"
+                      title="Move up"
                       @click="editorStore.moveSection(secKey, 'up')"
                     >
-                      <ArrowUp class="h-3.5 w-3.5" />
+                      <ArrowUp class="h-3 w-3" />
                     </button>
                     <button
                       type="button"
                       :disabled="idx === editorStore.content.sections_order.length - 1"
-                      class="rounded p-1 text-slate-400 hover:bg-slate-200/60 hover:text-slate-700 disabled:opacity-25"
-                      title="Move section down"
+                      class="rounded p-1 opacity-70 hover:opacity-100 disabled:opacity-20"
+                      title="Move down"
                       @click="editorStore.moveSection(secKey, 'down')"
                     >
-                      <ArrowDown class="h-3.5 w-3.5" />
+                      <ArrowDown class="h-3 w-3" />
                     </button>
                     <button
                       type="button"
-                      class="rounded p-1 text-slate-500 hover:bg-slate-200/60"
-                      :title="editorStore.content.sections[secKey].visible ? 'Hide section' : 'Show section'"
+                      class="rounded p-1 opacity-80 hover:opacity-100"
+                      :title="editorStore.content.sections[secKey].visible ? 'Hide layer' : 'Show layer'"
                       @click="editorStore.toggleSectionVisibility(secKey)"
                     >
-                      <Eye v-if="editorStore.content.sections[secKey].visible" class="h-3.5 w-3.5 text-brand-primary" />
-                      <EyeOff v-else class="h-3.5 w-3.5 text-slate-400" />
+                      <Eye v-if="editorStore.content.sections[secKey].visible" class="h-3 w-3" />
+                      <EyeOff v-else class="h-3 w-3 opacity-50" />
                     </button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Active Section Fields -->
-            <div class="border-t border-slate-200 pt-5">
-              <h3 class="mb-4 text-xs font-bold uppercase tracking-wider text-brand-primary">
-                Editing: {{ sectionLabels[editorStore.activeSection] }}
-              </h3>
+            <!-- Active Section Property Form -->
+            <div class="border-t border-zinc-200 pt-4">
+              <div class="mb-3 flex items-center justify-between">
+                <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                  Inspector
+                </span>
+                <span class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-medium text-zinc-800">
+                  {{ sectionLabels[editorStore.activeSection] }}
+                </span>
+              </div>
 
-              <!-- HERO EDITOR -->
-              <div v-if="editorStore.activeSection === 'hero'" class="space-y-4">
+              <!-- HERO -->
+              <div v-if="editorStore.activeSection === 'hero'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.hero.badge"
-                  label="Top Badge"
+                  label="Eyebrow Badge"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseInput
                   v-model="editorStore.content.sections.hero.headline"
-                  label="Hero Headline"
+                  label="Headline"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseTextarea
                   v-model="editorStore.content.sections.hero.subheadline"
-                  label="Hero Description"
+                  label="Subheadline"
                   :rows="3"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2">
                   <BaseInput
                     v-model="editorStore.content.sections.hero.primary_cta_text"
-                    label="Primary CTA Text"
+                    label="Primary CTA"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                   <BaseInput
                     v-model="editorStore.content.sections.hero.primary_cta_url"
-                    label="Primary CTA URL"
+                    label="Primary Target"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                 </div>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2">
                   <BaseInput
                     v-model="editorStore.content.sections.hero.secondary_cta_text"
                     label="Secondary CTA"
@@ -498,68 +500,70 @@ const sectionLabels: Record<SectionKey, string> = {
                   />
                   <BaseInput
                     v-model="editorStore.content.sections.hero.secondary_cta_url"
-                    label="Secondary URL"
+                    label="Secondary Target"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                 </div>
                 <BaseInput
                   v-model="editorStore.content.sections.hero.image_url"
-                  label="Hero Image URL (or upload in Media tab)"
-                  placeholder="https://..."
+                  label="Media Asset URL"
+                  placeholder="https://... or select from Media tab"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
               </div>
 
-              <!-- PROBLEM & SOLUTION EDITOR -->
-              <div v-else-if="editorStore.activeSection === 'problem_solution'" class="space-y-4">
+              <!-- PROBLEM & SOLUTION -->
+              <div v-else-if="editorStore.activeSection === 'problem_solution'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.problem_solution.title"
-                  label="Section Title"
+                  label="Section Heading"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseTextarea
                   v-model="editorStore.content.sections.problem_solution.subtitle"
-                  label="Subtitle"
+                  label="Subheading"
                   :rows="2"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseInput
                   v-model="editorStore.content.sections.problem_solution.problem_title"
-                  label="Problem Column Heading"
+                  label="Legacy Column Label"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseInput
                   v-model="editorStore.content.sections.problem_solution.solution_title"
-                  label="Solution Column Heading"
+                  label="Engineered Column Label"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
               </div>
 
-              <!-- FEATURES EDITOR -->
-              <div v-else-if="editorStore.activeSection === 'features'" class="space-y-4">
+              <!-- FEATURES -->
+              <div v-else-if="editorStore.activeSection === 'features'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.features.title"
-                  label="Features Heading"
+                  label="Section Heading"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseTextarea
                   v-model="editorStore.content.sections.features.subtitle"
-                  label="Features Subtitle"
+                  label="Subtitle"
                   :rows="2"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
 
-                <div class="space-y-3">
+                <div class="space-y-2.5">
                   <div
                     v-for="(item, fIdx) in editorStore.content.sections.features.items"
                     :key="fIdx"
-                    class="rounded-xl border border-slate-200 bg-slate-50/70 p-3 space-y-2"
+                    class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
                   >
                     <div class="flex items-center justify-between">
-                      <span class="text-xs font-bold text-slate-600">Feature #{{ fIdx + 1 }}</span>
+                      <span class="font-mono text-[10px] font-semibold text-zinc-500">
+                        BLOCK 0{{ fIdx + 1 }}
+                      </span>
                       <button
                         type="button"
-                        class="text-slate-400 hover:text-brand-error"
+                        class="text-zinc-400 hover:text-rose-600"
                         @click="removeFeatureItem(fIdx)"
                       >
                         <Trash2 class="h-3.5 w-3.5" />
@@ -572,7 +576,7 @@ const sectionLabels: Record<SectionKey, string> = {
                     />
                     <BaseTextarea
                       v-model="item.description"
-                      label="Description"
+                      label="Copy"
                       :rows="2"
                       @update:model-value="editorStore.recordSnapshot()"
                     />
@@ -580,36 +584,36 @@ const sectionLabels: Record<SectionKey, string> = {
                 </div>
                 <BaseButton size="sm" variant="outline" full-width @click="addFeatureItem">
                   <Plus class="h-3.5 w-3.5" />
-                  <span>Add Feature Card</span>
+                  <span>Add Capability Block</span>
                 </BaseButton>
               </div>
 
-              <!-- BENEFITS EDITOR -->
-              <div v-else-if="editorStore.activeSection === 'benefits'" class="space-y-4">
+              <!-- BENEFITS -->
+              <div v-else-if="editorStore.activeSection === 'benefits'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.benefits.title"
-                  label="Benefits Title"
+                  label="Heading"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseTextarea
                   v-model="editorStore.content.sections.benefits.subtitle"
-                  label="Benefits Subtitle"
+                  label="Subtitle"
                   :rows="2"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <div
                   v-for="(bItem, bIdx) in editorStore.content.sections.benefits.items"
                   :key="bIdx"
-                  class="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2"
+                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
                 >
                   <BaseInput
                     v-model="bItem.metric_label"
-                    label="Badge Label"
+                    label="Metric Tag"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                   <BaseInput
                     v-model="bItem.title"
-                    label="Benefit Headline"
+                    label="Outcome Title"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                   <BaseTextarea
@@ -621,11 +625,11 @@ const sectionLabels: Record<SectionKey, string> = {
                 </div>
               </div>
 
-              <!-- SOCIAL PROOF EDITOR -->
-              <div v-else-if="editorStore.activeSection === 'social_proof'" class="space-y-4">
+              <!-- SOCIAL PROOF -->
+              <div v-else-if="editorStore.activeSection === 'social_proof'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.social_proof.title"
-                  label="Social Proof Heading"
+                  label="Section Label"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <div
@@ -634,58 +638,58 @@ const sectionLabels: Record<SectionKey, string> = {
                 >
                   <BaseInput
                     v-model="editorStore.content.sections.social_proof.logos[lIdx]"
-                    :label="`Partner / Logo Name #${lIdx + 1}`"
+                    :label="`Partner Wordmark #${lIdx + 1}`"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                 </div>
               </div>
 
-              <!-- TESTIMONIALS EDITOR -->
-              <div v-else-if="editorStore.activeSection === 'testimonials'" class="space-y-4">
+              <!-- TESTIMONIALS -->
+              <div v-else-if="editorStore.activeSection === 'testimonials'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.testimonials.title"
-                  label="Testimonials Heading"
+                  label="Heading"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <div
                   v-for="(tItem, tIdx) in editorStore.content.sections.testimonials.items"
                   :key="tIdx"
-                  class="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2"
+                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
                 >
                   <BaseTextarea
                     v-model="tItem.quote"
-                    label="Quote"
+                    label="Pull Quote"
                     :rows="2"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                   <BaseInput
                     v-model="tItem.author_name"
-                    label="Author Name"
+                    label="Attribution"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                   <BaseInput
                     v-model="tItem.company"
-                    label="Company"
+                    label="Organization"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                 </div>
               </div>
 
-              <!-- PRICING EDITOR -->
-              <div v-else-if="editorStore.activeSection === 'pricing'" class="space-y-4">
+              <!-- PRICING -->
+              <div v-else-if="editorStore.activeSection === 'pricing'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.pricing.title"
-                  label="Pricing Title"
+                  label="Pricing Heading"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <div
                   v-for="(plan, pIdx) in editorStore.content.sections.pricing.plans"
                   :key="pIdx"
-                  class="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2"
+                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
                 >
                   <BaseInput
                     v-model="plan.name"
-                    label="Plan Name"
+                    label="Tier Name"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                   <div class="grid grid-cols-2 gap-2">
@@ -696,35 +700,37 @@ const sectionLabels: Record<SectionKey, string> = {
                     />
                     <BaseInput
                       v-model="plan.period"
-                      label="Period"
+                      label="Cadence"
                       @update:model-value="editorStore.recordSnapshot()"
                     />
                   </div>
                   <BaseInput
                     v-model="plan.cta_text"
-                    label="Button Text"
+                    label="Button Label"
                     @update:model-value="editorStore.recordSnapshot()"
                   />
                 </div>
               </div>
 
-              <!-- FAQ EDITOR -->
-              <div v-else-if="editorStore.activeSection === 'faq'" class="space-y-4">
+              <!-- FAQ -->
+              <div v-else-if="editorStore.activeSection === 'faq'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.faq.title"
-                  label="FAQ Heading"
+                  label="Heading"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <div
                   v-for="(faq, qIdx) in editorStore.content.sections.faq.items"
                   :key="qIdx"
-                  class="rounded-xl border border-slate-200 bg-slate-50 p-3 space-y-2"
+                  class="rounded-md border border-zinc-200 bg-zinc-50/60 p-2.5 space-y-2"
                 >
                   <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-600">Question #{{ qIdx + 1 }}</span>
+                    <span class="font-mono text-[10px] font-semibold text-zinc-500">
+                      Q0{{ qIdx + 1 }}
+                    </span>
                     <button
                       type="button"
-                      class="text-slate-400 hover:text-brand-error"
+                      class="text-zinc-400 hover:text-rose-600"
                       @click="removeFaqItem(qIdx)"
                     >
                       <Trash2 class="h-3.5 w-3.5" />
@@ -744,115 +750,114 @@ const sectionLabels: Record<SectionKey, string> = {
                 </div>
                 <BaseButton size="sm" variant="outline" full-width @click="addFaqItem">
                   <Plus class="h-3.5 w-3.5" />
-                  <span>Add FAQ Item</span>
+                  <span>Add FAQ Row</span>
                 </BaseButton>
               </div>
 
-              <!-- CTA EDITOR -->
-              <div v-else-if="editorStore.activeSection === 'cta'" class="space-y-4">
+              <!-- CTA -->
+              <div v-else-if="editorStore.activeSection === 'cta'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.cta.headline"
-                  label="CTA Headline"
+                  label="Headline"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseTextarea
                   v-model="editorStore.content.sections.cta.subheadline"
-                  label="CTA Subheadline"
+                  label="Subheadline"
                   :rows="2"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseInput
                   v-model="editorStore.content.sections.cta.button_text"
-                  label="Button Text"
+                  label="Button Label"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseInput
                   v-model="editorStore.content.sections.cta.button_url"
-                  label="Button URL"
+                  label="Target URL"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
               </div>
 
-              <!-- FOOTER EDITOR -->
-              <div v-else-if="editorStore.activeSection === 'footer'" class="space-y-4">
+              <!-- FOOTER -->
+              <div v-else-if="editorStore.activeSection === 'footer'" class="space-y-3">
                 <BaseInput
                   v-model="editorStore.content.sections.footer.brand_name"
-                  label="Brand Name"
+                  label="Brand Wordmark"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseInput
                   v-model="editorStore.content.sections.footer.tagline"
-                  label="Footer Tagline"
+                  label="Tagline"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
                 <BaseInput
                   v-model="editorStore.content.sections.footer.copyright_text"
-                  label="Copyright Text"
+                  label="Copyright Line"
                   @update:model-value="editorStore.recordSnapshot()"
                 />
               </div>
             </div>
           </div>
 
-          <!-- TAB 2: THEME COLORS & TYPOGRAPHY -->
-          <div v-else-if="activeTab === 'theme'" class="space-y-5">
-            <p class="text-xs font-bold uppercase tracking-wider text-slate-400">
+          <!-- TAB 2: DESIGN TOKENS (THEME) -->
+          <div v-else-if="activeTab === 'theme'" class="space-y-4">
+            <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
               Color Tokens
-            </p>
-            <div
-              v-for="(hex, colorKey) in editorStore.theme.colors"
-              :key="colorKey"
-              class="flex items-center justify-between rounded-xl border border-slate-200 p-3"
-            >
-              <div>
-                <p class="text-xs font-bold capitalize text-slate-800">{{ colorKey }}</p>
-                <p class="text-[11px] font-mono text-slate-500">{{ hex }}</p>
+            </span>
+            <div class="divide-y divide-zinc-100 rounded-md border border-zinc-200">
+              <div
+                v-for="(hex, colorKey) in editorStore.theme.colors"
+                :key="colorKey"
+                class="flex items-center justify-between px-3 py-2"
+              >
+                <div>
+                  <p class="text-xs font-medium capitalize text-zinc-800">{{ colorKey }}</p>
+                  <p class="font-mono text-[10px] text-zinc-400">{{ hex }}</p>
+                </div>
+                <input
+                  type="color"
+                  :value="hex"
+                  :aria-label="`Choose ${colorKey} color`"
+                  class="h-7 w-10 cursor-pointer rounded border border-zinc-200 bg-white p-0.5"
+                  @input="editorStore.updateColor(colorKey, ($event.target as HTMLInputElement).value)"
+                />
               </div>
-              <input
-                type="color"
-                :value="hex"
-                :aria-label="`Choose ${colorKey} color`"
-                class="h-9 w-12 cursor-pointer rounded border border-slate-200 bg-white p-0.5"
-                @input="editorStore.updateColor(colorKey, ($event.target as HTMLInputElement).value)"
-              />
             </div>
 
-            <div class="border-t border-slate-200 pt-4 space-y-3">
-              <p class="text-xs font-bold uppercase tracking-wider text-slate-400">
-                Typography Configuration
-              </p>
-              <div>
-                <label class="mb-1 block text-xs font-semibold text-slate-700">Font Family</label>
-                <select
-                  :value="editorStore.theme.typography.body_font"
-                  class="w-full rounded-lg border border-brand-border bg-white px-3 py-2 text-xs"
-                  @change="
-                    editorStore.updateTypography(
-                      'body_font',
-                      ($event.target as HTMLSelectElement).value
-                    )
-                  "
-                >
-                  <option value="Inter">Inter (Modern Sans)</option>
-                  <option value="system-ui">System UI Sans</option>
-                  <option value="Georgia, serif">Georgia (Editorial Serif)</option>
-                </select>
-              </div>
+            <div class="border-t border-zinc-200 pt-4 space-y-2">
+              <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                Typography Stack
+              </span>
+              <select
+                :value="editorStore.theme.typography.body_font"
+                class="h-8 w-full rounded-md border border-zinc-200 bg-white px-2.5 text-xs text-zinc-900"
+                @change="
+                  editorStore.updateTypography(
+                    'body_font',
+                    ($event.target as HTMLSelectElement).value
+                  )
+                "
+              >
+                <option value="Inter">Inter (Precision Sans)</option>
+                <option value="Plus Jakarta Sans">Plus Jakarta Sans</option>
+                <option value="Georgia, serif">Georgia (Editorial Serif)</option>
+              </select>
             </div>
           </div>
 
-          <!-- TAB 3: SECURE IMAGE UPLOADS -->
-          <div v-else-if="activeTab === 'media'" class="space-y-5">
-            <div class="rounded-xl border border-dashed border-brand-primary/50 bg-indigo-50/40 p-4 text-center">
-              <Upload class="mx-auto h-6 w-6 text-brand-primary" />
-              <p class="mt-2 text-xs font-bold text-brand-text">Upload Hero or Section Image</p>
-              <p class="mt-0.5 text-[11px] text-brand-muted">
-                Validated JPG, PNG, or WEBP up to 2MB
+          <!-- TAB 3: MEDIA ASSETS -->
+          <div v-else-if="activeTab === 'media'" class="space-y-4">
+            <div class="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-4 text-center">
+              <Upload class="mx-auto h-5 w-5 text-zinc-500" />
+              <p class="mt-1.5 text-xs font-semibold text-zinc-900">Upload Image Asset</p>
+              <p class="mt-0.5 font-mono text-[10px] text-zinc-400">
+                JPG, PNG, WEBP • MAX 2MB
               </p>
               <label
-                class="mt-3 inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-brand-primary px-3.5 py-2 text-xs font-semibold text-white hover:bg-brand-primary-hover"
+                class="mt-3 inline-flex h-7 cursor-pointer items-center rounded-md bg-zinc-900 px-3 text-xs font-medium text-white hover:bg-zinc-800"
               >
-                <span>{{ uploadingMedia ? 'Uploading...' : 'Select Image File' }}</span>
+                <span>{{ uploadingMedia ? 'Uploading...' : 'Select File' }}</span>
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
@@ -861,35 +866,35 @@ const sectionLabels: Record<SectionKey, string> = {
                   @change="handleImageUpload"
                 />
               </label>
-              <p v-if="mediaUploadError" role="alert" class="mt-2 text-xs text-brand-error">
+              <p v-if="mediaUploadError" role="alert" class="mt-2 text-xs text-rose-600">
                 {{ mediaUploadError }}
               </p>
             </div>
 
             <div>
-              <p class="mb-2 text-xs font-bold uppercase tracking-wider text-slate-400">
-                Uploaded Assets ({{ mediaAssets.length }})
-              </p>
-              <div v-if="mediaAssets.length === 0" class="py-6 text-center text-xs text-brand-muted">
-                No uploaded images yet.
+              <span class="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-400">
+                Workspace Library ({{ mediaAssets.length }})
+              </span>
+              <div v-if="mediaAssets.length === 0" class="py-6 text-center font-mono text-xs text-zinc-400">
+                No uploaded assets.
               </div>
-              <div v-else class="grid grid-cols-2 gap-2.5">
+              <div v-else class="mt-2 grid grid-cols-2 gap-2">
                 <div
                   v-for="asset in mediaAssets"
                   :key="asset.id"
-                  class="group relative overflow-hidden rounded-lg border border-slate-200 bg-slate-50"
+                  class="overflow-hidden rounded border border-zinc-200 bg-zinc-50"
                 >
                   <img
                     :src="asset.url"
                     :alt="asset.original_name"
-                    class="h-24 w-full object-cover"
+                    class="h-20 w-full object-cover"
                   />
                   <button
                     type="button"
-                    class="w-full bg-slate-900/80 py-1 text-[11px] font-semibold text-white hover:bg-brand-primary"
+                    class="w-full bg-zinc-900 py-1 font-mono text-[10px] font-medium text-white hover:bg-zinc-800"
                     @click="selectHeroImage(asset.url)"
                   >
-                    Use in Hero
+                    Bind to Hero
                   </button>
                 </div>
               </div>
@@ -897,36 +902,47 @@ const sectionLabels: Record<SectionKey, string> = {
           </div>
 
           <!-- TAB 4: SEO METADATA -->
-          <div v-else-if="activeTab === 'seo'" class="space-y-4">
+          <div v-else-if="activeTab === 'seo'" class="space-y-3">
             <BaseInput
               id="seo-title"
               v-model="editorStore.seoTitle"
-              label="Page Meta Title"
-              placeholder="Product Name — Value Proposition"
+              label="Meta Title (<title>)"
+              placeholder="Product — Value Proposition"
               @update:model-value="editorStore.recordSnapshot()"
             />
             <BaseTextarea
               id="seo-description"
               v-model="editorStore.seoDescription"
-              label="Page Meta Description"
+              label="Meta Description"
               :rows="4"
-              placeholder="150–160 character summary for search engines and social cards"
+              placeholder="150–160 character summary for search engines"
               @update:model-value="editorStore.recordSnapshot()"
             />
           </div>
         </div>
       </aside>
 
-      <!-- Right Live Preview Canvas -->
-      <main class="flex-1 overflow-y-auto bg-slate-200/70 p-4 sm:p-6">
+      <!-- Right Studio Canvas with Dot-Matrix & Ruler Bar -->
+      <main class="bg-studio-canvas flex-1 overflow-y-auto p-4 sm:p-6">
         <div
-          class="mx-auto overflow-hidden rounded-2xl border border-slate-300 bg-white shadow-elevated transition-all duration-200"
+          class="mx-auto overflow-hidden rounded-xl border border-zinc-300/90 bg-white shadow-elevated transition-all duration-200"
           :class="{
             'w-full': editorStore.viewport === 'desktop',
             'max-w-[768px]': editorStore.viewport === 'tablet',
             'max-w-[375px]': editorStore.viewport === 'mobile',
           }"
         >
+          <!-- Simulated Browser Frame Header Inside Canvas -->
+          <div class="flex h-8 items-center justify-between border-b border-zinc-200 bg-zinc-100/90 px-3 font-mono text-[11px] text-zinc-500">
+            <div class="flex items-center gap-1.5">
+              <span class="h-2 w-2 rounded-full bg-zinc-300" />
+              <span class="h-2 w-2 rounded-full bg-zinc-300" />
+              <span class="h-2 w-2 rounded-full bg-zinc-300" />
+            </div>
+            <span>/p/{{ projectStore.currentProject?.slug }}</span>
+            <span>{{ viewportWidthLabel }}</span>
+          </div>
+
           <LandingPageRenderer
             :content="editorStore.content"
             :theme="editorStore.theme"
@@ -938,60 +954,52 @@ const sectionLabels: Record<SectionKey, string> = {
       </main>
     </div>
 
-    <!-- Publish / Unpublish Modal -->
+    <!-- Publish Modal -->
     <BaseModal
       :open="showPublishModal"
-      title="Publish & Share Your Landing Page"
+      title="Publish Endpoint Configuration"
       max-width="lg"
       @close="showPublishModal = false"
     >
       <div v-if="projectStore.currentProject" class="space-y-4">
-        <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <div class="flex items-center justify-between">
-            <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-              Current Status
-            </span>
-            <BaseBadge :variant="projectStore.currentProject.status">
-              {{ projectStore.currentProject.status }}
-            </BaseBadge>
-          </div>
-          <p class="mt-2 text-xs text-slate-600">
-            Published pages are publicly viewable at their unique slug. Draft pages remain private to
-            your account.
-          </p>
+        <div class="flex items-center justify-between rounded-md border border-zinc-200 bg-zinc-50 p-3">
+          <span class="font-mono text-xs text-zinc-500">Current State</span>
+          <BaseBadge :variant="projectStore.currentProject.status">
+            {{ projectStore.currentProject.status }}
+          </BaseBadge>
         </div>
 
         <BaseInput
           id="publish-slug"
           v-model="publishSlug"
-          label="Public URL Slug"
+          label="Public Slug"
           placeholder="my-product-launch"
-          hint="Lowercase letters, numbers, and hyphens only. Will be served at /p/{slug}"
+          hint="Served publicly at /p/{slug} when published."
         />
 
         <div
           v-if="projectStore.currentProject.status === 'published'"
-          class="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs text-emerald-900"
+          class="flex items-center justify-between rounded-md border border-emerald-200 bg-emerald-50/70 px-3.5 py-2.5 text-xs text-emerald-900"
         >
-          <span>Live Public URL: <strong>/p/{{ projectStore.currentProject.slug }}</strong></span>
+          <span class="font-mono">/p/{{ projectStore.currentProject.slug }}</span>
           <RouterLink
             :to="`/p/${projectStore.currentProject.slug}`"
             target="_blank"
-            class="inline-flex items-center gap-1 font-bold text-emerald-700 hover:underline"
+            class="inline-flex items-center gap-1 font-semibold text-emerald-800 hover:underline"
           >
-            <span>Open Live Page</span>
-            <ExternalLink class="h-3.5 w-3.5" />
+            <span>Open Live Endpoint</span>
+            <ArrowUpRight class="h-3.5 w-3.5" />
           </RouterLink>
         </div>
 
-        <div class="mt-6 flex items-center justify-between border-t border-slate-100 pt-4">
+        <div class="mt-6 flex items-center justify-between border-t border-zinc-100 pt-4">
           <BaseButton
             v-if="projectStore.currentProject.status === 'published'"
             variant="danger"
             :loading="publishing"
             @click="handlePublishAction(false)"
           >
-            Unpublish (Revert to Draft)
+            Unpublish
           </BaseButton>
           <div v-else />
 
@@ -1002,12 +1010,11 @@ const sectionLabels: Record<SectionKey, string> = {
               :loading="publishing"
               @click="handlePublishAction(true)"
             >
-              <Globe class="h-4 w-4" />
               <span>
                 {{
                   projectStore.currentProject.status === 'published'
-                    ? 'Update Published Page'
-                    : 'Publish Live Now'
+                    ? 'Update Live Snapshot'
+                    : 'Publish Endpoint →'
                 }}
               </span>
             </BaseButton>
